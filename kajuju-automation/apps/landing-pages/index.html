@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kajuju Barn Suites & Café | Rates</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #FAFAF7;
+      color: #1A1A1A;
+    }
+
+    header {
+      background: #1A1A2E;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      color: #FFFFFF;
+      font-size: 1.6rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    header p {
+      color: #E94560;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      letter-spacing: 1px;
+    }
+
+    .hero {
+      width: 100%;
+      height: 260px;
+      background: #2C2C2C;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .hero img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .hero-placeholder {
+      color: #888;
+      font-size: 0.9rem;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .rooms {
+      padding: 32px 20px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .rooms h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #888;
+      margin-bottom: 20px;
+    }
+
+    .room-card {
+      background: #FFFFFF;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border-left: 4px solid #E94560;
+    }
+
+    .room-card h3 {
+      font-size: 1.1rem;
+      color: #1A1A2E;
+      margin-bottom: 6px;
+    }
+
+    .room-card .price {
+      font-size: 1.4rem;
+      font-weight: bold;
+      color: #E94560;
+    }
+
+    .room-card .price span {
+      font-size: 0.85rem;
+      color: #888;
+      font-weight: normal;
+    }
+
+    .room-card .includes {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .cta-section {
+      padding: 24px 20px 48px;
+      max-width: 480px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .cta-section p {
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    .whatsapp-btn {
+      display: inline-block;
+      background: #25D366;
+      color: #FFFFFF;
+      text-decoration: none;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      box-shadow: 0 4px 16px rgba(37,211,102,0.35);
+      transition: transform 0.2s;
+    }
+
+    .whatsapp-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn svg {
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+
+    footer {
+      background: #1A1A2E;
+      color: #888;
+      text-align: center;
+      padding: 20px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Kajuju Barn Suites & Café</h1>
+    <p>Kaju — Where comfort meets character</p>
+  </header>
+
+  <div class="hero">
+    <div class="hero-placeholder">
+      📸 Hero photo coming soon — replace with your best room shot
+    </div>
+  </div>
+
+  <section class="rooms">
+    <h2>Our Rooms & Rates</h2>
+
+    <div class="room-card">
+      <h3>Standard Suite</h3>
+      <div class="price">KES 8,500 <span>/ night</span></div>
+      <div class="includes">✓ Breakfast included &nbsp;·&nbsp; ✓ WiFi &nbsp;·&nbsp; ✓ Parking</div>
+    </div>
+
+    <div class="room-card">
+      <h3>Deluxe Suite</h3>
+      <div class="price">KES 12,000 <span>/ night</span></div>
+      <div class="includes">✓ Breakfast included &nbsp;·&nbsp; ✓ WiFi &nbsp;·&nbsp; ✓ Parking &nbsp;·&nbsp; ✓ Garden view</div>
+    </div>
+
+    <div class="room-card">
+      <h3>Family Suite</h3>
+      <div class="price">KES 15,500 <span>/ night</span></div>
+      <div class="includes">✓ Breakfast included &nbsp;·&nbsp; ✓ WiFi &nbsp;·&nbsp; ✓ Parking &nbsp;·&nbsp; ✓ Sleeps 4</div>
+    </div>
+
+  </section>
+
+  <section class="cta-section">
+    <p>Ready to book or have a question? Chat with us directly — we respond within 60 seconds.</p>
+    
+      class="whatsapp-btn"
+      href="https://wa.me/254700000000?text=Hi%20Kaju!%20I%20saw%20your%20rates%20and%20I%27d%20like%20to%20enquire%20about%20availability."
+      target="_blank"
+      data-testid="whatsapp-cta"
+    >
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.859L.057 23.428a.75.75 0 00.968.94l5.782-1.848A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 01-4.964-1.355l-.355-.212-3.686 1.178 1.07-3.565-.232-.368A9.724 9.724 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+      </svg>
+      Chat on WhatsApp
+    </a>
+  </section>
+
+  <footer>
+    &copy; 2026 Kajuju Barn Suites & Café &nbsp;·&nbsp; All rights reserved
+  </footer>
+
+</body>
+</html>
