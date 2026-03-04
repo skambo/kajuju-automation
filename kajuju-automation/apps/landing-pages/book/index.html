@@ -385,7 +385,7 @@
 
   phoneInput.addEventListener('blur', function() {
     if (this.value && !validatePhone(this.value)) {
-      showError(this, 'Please enter a valid phone number (e.g. +254 7xx xxx xxx or +44 791x xxxxxx) (e.g. +254 7xx xxx xxx or +44 791x xxxxxx)');
+      showError(this, 'Please enter a valid phone number (e.g. +254 7xx xxx xxx or +44 791x xxxxxx)');
     } else {
       clearError(this);
     }
