@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Idan Barn Suites & Café | Book Your Stay</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Georgia', serif; background: #FAFAF7; color: #1A1A1A; }
+
+    header { background: #1A1A2E; padding: 20px; text-align: center; }
+    header h1 { color: #FFFFFF; font-size: 1.4rem; letter-spacing: 2px; text-transform: uppercase; }
+    header p { color: #E94560; font-size: 0.85rem; margin-top: 4px; letter-spacing: 1px; }
+
+    .form-hero {
+      background: linear-gradient(135deg, #1A1A2E 0%, #2C2C54 100%);
+      padding: 32px 20px; text-align: center; color: white;
+    }
+    .form-hero h2 { font-size: 1.3rem; margin-bottom: 8px; }
+    .form-hero p { font-size: 0.85rem; color: #CCCCCC; line-height: 1.6; }
+
+    .form-section { padding: 28px 20px; max-width: 500px; margin: 0 auto; }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: 0.8rem; text-transform: uppercase;
+      letter-spacing: 1px; color: #555; margin-bottom: 6px;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%; padding: 12px 14px;
+      border: 1.5px solid #E0E0E0; border-radius: 8px;
+      font-family: 'Georgia', serif; font-size: 0.9rem;
+      background: #FFFFFF; color: #1A1A1A;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none; border-color: #E94560;
+    }
+    .form-group textarea { height: 100px; resize: vertical; }
+
+    .date-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    .required { color: #E94560; }
+
+    .info-box {
+      background: #FFFFFF; border-radius: 12px; padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .info-box .steps-title {
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;
+      color: #888; margin-bottom: 14px; text-align: center;
+    }
+    .info-box .step-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 8px 0; border-bottom: 1px solid #F5F5F5;
+      font-size: 0.83rem; color: #444; line-height: 1.5;
+    }
+    .info-box .step-row:last-child { border-bottom: none; }
+    .info-box .step-num {
+      background: #25D366; color: white;
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: bold; flex-shrink: 0;
+    }
+    .info-box strong { color: #1A1A2E; }
+    .info-box strong { color: #1A1A2E; }
+
+    .submit-btn {
+      width: 100%; padding: 16px;
+      background: #E94560; color: white;
+      border: none; border-radius: 50px;
+      font-family: 'Georgia', serif; font-size: 1rem;
+      font-weight: bold; letter-spacing: 0.5px;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(233,69,96,0.35);
+      transition: transform 0.2s, background 0.2s;
+    }
+    .submit-btn:hover { transform: translateY(-2px); background: #C73652; }
+    .submit-btn:disabled { background: #CCC; transform: none; cursor: not-allowed; }
+
+    .back-link {
+      display: block; text-align: center; margin-top: 20px;
+      font-size: 0.82rem; color: #888; text-decoration: none;
+    }
+    .back-link:hover { color: #1A1A2E; }
+
+    .policies {
+      max-width: 500px; margin: 0 auto;
+      padding: 0 20px 40px;
+      font-size: 0.78rem; color: #888; line-height: 1.8; text-align: center;
+    }
+    .policies a { color: #E94560; text-decoration: none; }
+
+    footer {
+      background: #1A1A2E; color: #888;
+      text-align: center; padding: 20px;
+      font-size: 0.78rem; line-height: 1.8;
+    }
+    footer a { color: #E94560; text-decoration: none; }
+
+    /* Thank you state */
+    .thankyou { display: none; text-align: center; padding: 40px 20px; max-width: 500px; margin: 0 auto; }
+    .thankyou .icon { font-size: 3rem; margin-bottom: 16px; }
+    .thankyou h2 { font-size: 1.3rem; color: #1A1A2E; margin-bottom: 12px; }
+    .thankyou p { font-size: 0.9rem; color: #555; line-height: 1.7; margin-bottom: 16px; }
+    .thankyou .next-steps {
+      background: #FFFFFF; border-radius: 12px; padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      text-align: left; margin-bottom: 20px;
+    }
+    .thankyou .next-steps h3 {
+      font-size: 0.8rem; text-transform: uppercase;
+      letter-spacing: 1px; color: #888; margin-bottom: 12px;
+    }
+    .thankyou .step {
+      display: flex; gap: 12px; align-items: flex-start;
+      padding: 8px 0; border-bottom: 1px solid #F5F5F5;
+      font-size: 0.85rem; color: #444;
+    }
+    .thankyou .step:last-child { border-bottom: none; }
+    .thankyou .step .num {
+      background: #E94560; color: white;
+      width: 22px; height: 22px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: bold; flex-shrink: 0;
+    }
+    .whatsapp-followup {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #25D366; color: white; text-decoration: none;
+      padding: 12px 24px; border-radius: 50px;
+      font-size: 0.9rem; font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Idan Barn Suites &amp; Café</h1>
+  <p>Mt. Kenya Base Camp · Naromoru</p>
+</header>
+
+<div class="form-hero">
+  <h2>📅 Check Availability & Book</h2>
+  <p>Fill in your details below and we'll confirm availability<br/>and send your invoice shortly.</p>
+</div>
+
+<!-- BOOKING FORM -->
+<div id="form-container">
+  <form
+    class="form-section"
+    action="https://formspree.io/f/mwvngwkd"
+    method="POST"
+    id="booking-form"
+  >
+
+    <!-- Hidden field to identify source -->
+    <input type="hidden" name="_subject" value="🏡 New Idan Barn Suites Booking Request" />
+    <input type="hidden" name="_next" value="thank-you" />
+
+    <div class="info-box">
+      <div class="steps-title">How it works</div>
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div>Submit your request below with your dates and room preference</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div>We confirm availability and get back to you shortly</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div>We send you an invoice with <strong>M-Pesa payment details</strong> — dates held for 24 hours</div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div><strong>50% deposit</strong> secures your booking — balance due on arrival</div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Full Name <span class="required">*</span></label>
+      <input
+        type="text"
+        name="name"
+        placeholder="Your full name"
+        required
+        data-testid="input-name"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Phone Number <span class="required">*</span></label>
+      <input
+        type="tel"
+        name="phone"
+        placeholder="+254 7XX XXX XXX"
+        required
+        data-testid="input-phone"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Email Address <span class="required">*</span></label>
+      <input
+        type="email"
+        name="email"
+        placeholder="your@email.com"
+        required
+        data-testid="input-email"
+      />
+    </div>
+
+    <div class="form-group">
+      <label>Preferred Room <span class="required">*</span></label>
+      <select name="room" required data-testid="select-room">
+        <option value="" disabled selected>Select a room</option>
+        <optgroup label="Standard Rooms">
+          <option value="Twin Garden Room — B&B">Twin Garden Room — B&amp;B</option>
+          <option value="Deluxe Room with Balcony — B&B">Deluxe Room with Balcony — B&amp;B</option>
+        </optgroup>
+        <optgroup label="Self-Catering Units">
+          <option value="Penthouse Loft — Self Catering">Penthouse Loft — Self Catering</option>
+          <option value="Cottage (3 bed, up to 6 guests) — Self Catering">Cottage (3 bed, up to 6 guests) — Self Catering</option>
+        </optgroup>
+        <optgroup label="Workation Packages">
+          <option value="Workation — Deluxe Room with Balcony (H/B)">Workation — Deluxe Room with Balcony (H/B)</option>
+          <option value="Workation — Twin Garden Room (H/B)">Workation — Twin Garden Room (H/B)</option>
+          <option value="Workation — Penthouse Loft">Workation — Penthouse Loft</option>
+          <option value="Workation — Team Cottage">Workation — Team Cottage</option>
+        </optgroup>
+        <option value="Not sure yet — please advise">Not sure yet — please advise</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Number of Guests <span class="required">*</span></label>
+      <select name="guests" required data-testid="select-guests">
+        <option value="" disabled selected>Select number of guests</option>
+        <option value="1 guest">1 guest</option>
+        <option value="2 guests">2 guests</option>
+        <option value="3 guests">3 guests</option>
+        <option value="4 guests">4 guests</option>
+        <option value="5 guests">5 guests</option>
+        <option value="6 guests">6 guests</option>
+        <option value="7+ guests">7+ guests</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Dates <span class="required">*</span></label>
+      <div class="date-row">
+        <div>
+          <input
+            type="date"
+            name="check_in"
+            required
+            data-testid="input-checkin"
+          />
+        </div>
+        <div>
+          <input
+            type="date"
+            name="check_out"
+            required
+            data-testid="input-checkout"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Meal Preference</label>
+      <select name="meal_preference" data-testid="select-meal">
+        <option value="Bed & Breakfast (B&B)">Bed &amp; Breakfast (B&amp;B)</option>
+        <option value="Half Board — Breakfast + Lunch or Dinner (+KES 2,500/person/day)">Half Board — Breakfast + Lunch or Dinner (+KES 2,500/person/day)</option>
+        <option value="Full Board — All meals (+KES 3,300/person/day)">Full Board — All meals (+KES 3,300/person/day)</option>
+        <option value="Self Catering — No meals">Self Catering — No meals</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Special Requests</label>
+      <textarea
+        name="special_requests"
+        placeholder="Early check-in, birthday surprise, dietary requirements, travelling with children..."
+        data-testid="input-special"
+      ></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn" data-testid="submit-btn">
+      Send Booking Request →
+    </button>
+
+    <a href="/workation" class="back-link">← Back to Workation Package</a>
+
+  </form>
+</div>
+
+<!-- THANK YOU STATE -->
+<div class="thankyou" id="thankyou">
+  <div class="icon">🎉</div>
+  <h2>Request Received!</h2>
+  <p>Thank you for choosing Idan Barn Suites &amp; Café.<br/>Here's what happens next:</p>
+
+  <div class="next-steps">
+    <h3>What to expect</h3>
+    <div class="step">
+      <div class="num">1</div>
+      <div>We'll confirm availability and get back to you shortly — usually same day</div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div>You'll receive an invoice with <strong>M-Pesa payment details</strong> — dates held for 24 hours pending deposit</div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div>A <strong>50% deposit</strong> confirms your reservation — balance due on arrival</div>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <div>We'll send you our <strong>Google Maps pin</strong> and arrival instructions</div>
+    </div>
+  </div>
+
+  <p>Have an urgent question? Chat with us directly:</p>
+  <a
+    class="whatsapp-followup"
+    href="https://wa.me/254762004417?text=Hi!%20I%20just%20submitted%20a%20booking%20request%20on%20your%20website%20and%20have%20a%20quick%20question."
+    target="_blank"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.126 1.533 5.859L.057 23.428a.75.75 0 00.968.94l5.782-1.848A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.75a9.726 9.726 0 01-4.964-1.355l-.355-.212-3.686 1.178 1.07-3.565-.232-.368A9.724 9.724 0 012.25 12C2.25 6.615 6.615 2.25 12 2.25S21.75 6.615 21.75 12 17.385 21.75 12 21.75z"/>
+    </svg>
+    Chat on WhatsApp
+  </a>
+</div>
+
+<div class="policies">
+  50% deposit required to confirm · Full refund if cancelled 72hrs+ before arrival<br/>
+  No refund within 48hrs · <a href="/">View full rate card &amp; room options</a>
+</div>
+
+<footer>
+  &copy; 2026 Idan Barn Suites &amp; Café · Naromoru, Kenya<br/>
+  <a href="tel:+254762004417">+254 762 004 417</a> &nbsp;·&nbsp;
+  <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a>
+</footer>
+
+<script>
+  // Set minimum date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelector('[data-testid="input-checkin"]').min = today;
+  document.querySelector('[data-testid="input-checkout"]').min = today;
+
+  // Auto set checkout to day after checkin
+  document.querySelector('[data-testid="input-checkin"]').addEventListener('change', function() {
+    const checkin = new Date(this.value);
+    checkin.setDate(checkin.getDate() + 2); // minimum 2 nights
+    const minCheckout = checkin.toISOString().split('T')[0];
+    const checkoutField = document.querySelector('[data-testid="input-checkout"]');
+    checkoutField.min = minCheckout;
+    if (!checkoutField.value || checkoutField.value <= this.value) {
+      checkoutField.value = minCheckout;
+    }
+  });
+
+  // Show thank you on successful submit
+  const form = document.getElementById('booking-form');
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.querySelector('[data-testid="submit-btn"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    const data = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        document.getElementById('form-container').style.display = 'none';
+        document.getElementById('thankyou').style.display = 'block';
+        window.scrollTo(0, 0);
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Send Booking Request →';
+        alert('Something went wrong. Please try again or WhatsApp us directly.');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Send Booking Request →';
+      alert('Something went wrong. Please try again or WhatsApp us directly.');
+    }
+  });
+</script>
+
+</body>
+</html>
