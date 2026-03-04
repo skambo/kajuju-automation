@@ -354,6 +354,68 @@
 </footer>
 
 <script>
+  // Phone and email validation
+  function validatePhone(value) {
+    const digits = value.replace(/[\s\-().+]/g, '');
+    return /^\d{7,15}$/.test(digits);
+  }
+
+  function validateEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
+  }
+
+  function showError(input, message) {
+    clearError(input);
+    input.style.borderColor = '#E94560';
+    const err = document.createElement('div');
+    err.className = 'field-error';
+    err.style.cssText = 'color:#E94560;font-size:0.75rem;margin-top:4px;';
+    err.textContent = message;
+    input.parentNode.appendChild(err);
+  }
+
+  function clearError(input) {
+    input.style.borderColor = '';
+    const existing = input.parentNode.querySelector('.field-error');
+    if (existing) existing.remove();
+  }
+
+  const phoneInput = document.querySelector('[data-testid="input-phone"]');
+  const emailInput = document.querySelector('[data-testid="input-email"]');
+
+  phoneInput.addEventListener('blur', function() {
+    if (this.value && !validatePhone(this.value)) {
+      showError(this, 'Please enter a valid phone number (e.g. +254 7xx xxx xxx or +44 791x xxxxxx) (e.g. +254 7xx xxx xxx or +44 791x xxxxxx)');
+    } else {
+      clearError(this);
+    }
+  });
+
+  emailInput.addEventListener('blur', function() {
+    if (this.value && !validateEmail(this.value)) {
+      showError(this, 'Please enter a valid email address (e.g. name@example.com)');
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Block submit if validation fails
+  form.addEventListener('submit', function(e) {
+    let valid = true;
+    if (!validatePhone(phoneInput.value)) {
+      showError(phoneInput, 'Please enter a valid phone number (e.g. +254 7xx xxx xxx or +44 791x xxxxxx)');
+      valid = false;
+    }
+    if (!validateEmail(emailInput.value)) {
+      showError(emailInput, 'Please enter a valid email address');
+      valid = false;
+    }
+    if (!valid) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    }
+  }, true);
+
   // Set minimum date to today
   const today = new Date().toISOString().split('T')[0];
   document.querySelector('[data-testid="input-checkin"]').min = today;
