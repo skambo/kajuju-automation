@@ -78,7 +78,8 @@ test.describe('Kajuju Rate Card Page — Synthetic Monitor', () => {
   test('navigation links present on all pages', async ({ page }) => {
     for (const path of ['/', '/workation', '/book']) {
       await page.goto(`${BASE_URL}${path}`);
-      await expect(page.locator('a[href="/book"]').first()).toBeVisible();
+      await page.waitForLoadState('domcontentloaded');
+      await expect(page.locator('a[href="/book"]').first()).toBeVisible({ timeout: 10000 });
     }
   });
 
