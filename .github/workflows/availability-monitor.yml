@@ -8,6 +8,10 @@ on:
 jobs:
   check-availability:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kajuju-automation
+
     steps:
       - uses: actions/checkout@v4
 
