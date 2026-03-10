@@ -11,7 +11,6 @@ jobs:
     defaults:
       run:
         working-directory: kajuju-automation
-
     steps:
       - uses: actions/checkout@v4
 
