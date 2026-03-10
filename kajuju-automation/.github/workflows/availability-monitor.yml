@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.GMAIL_USERNAME }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: '🚨 URGENT - Idan Barn Suites Double Booking Detected!'
-          to: idanbookings@gmail.com
+          to: ${{ secrets.ALERT_EMAIL }}
           from: Kajuju Monitor
           body: |
             A double booking or availability conflict has been detected!
