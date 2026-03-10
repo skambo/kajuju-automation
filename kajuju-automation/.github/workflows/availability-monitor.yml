@@ -2,8 +2,8 @@ name: Availability Monitor
 
 on:
   schedule:
-    - cron: '0 */4 * * *'  # Every 4 hours
-  workflow_dispatch:         # Also allow manual trigger
+    - cron: '0 */4 * * *'
+  workflow_dispatch:
 
 jobs:
   check-availability:
@@ -39,9 +39,9 @@ jobs:
           from: Kajuju Monitor
           body: |
             A double booking or availability conflict has been detected!
-            
+
             Please check your Smoobu calendar immediately at:
             https://login.smoobu.com/en/calendar
-            
+
             Run the full report locally:
             npx playwright test tests/api/availability.spec.ts
