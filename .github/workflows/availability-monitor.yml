@@ -27,7 +27,7 @@ jobs:
       - name: Run availability checks
         env:
           SMOOBU_API_KEY: ${{ secrets.SMOOBU_API_KEY }}
-        run: npx playwright test tests/api/availability.spec.ts --reporter=html
+        run: npx playwright test kajuju-automation/tests/api/availability.spec.ts --reporter=html
 
       - name: Send email on failure
         if: failure()
