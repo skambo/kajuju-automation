@@ -2,9 +2,7 @@
 
 **A production-grade QA automation framework built with Playwright + TypeScript, running against a live hospitality website.**
 
-This project monitors real pages, validates booking form behaviour, and detects double bookings via a channel manager API — all automated through GitHub Actions CI running every 4 hours.
-
-> Built as a portfolio project, the framework tests a live, revenue-generating website — not a demo app.
+This project monitors real pages, validates booking form behaviour, and detects double bookings via a channel manager API — all automated through GitHub Actions CI running every 4 hours. Built as a portfolio project, the framework tests a live, revenue-generating website — not a demo app.
 
 🔗 **Live site:** https://kajuju-automation.vercel.app  
 🔗 **GitHub:** https://github.com/skambo/kajuju-automation
