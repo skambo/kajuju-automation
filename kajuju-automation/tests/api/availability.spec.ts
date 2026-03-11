@@ -62,6 +62,9 @@ test.describe('Smoobu API — Availability Checks', () => {
     });
     const data = await response.json();
 
+    // Collect ALL overlaps across all rooms before failing
+    const allOverlaps: string[] = [];
+
     for (const [roomName, roomId] of Object.entries(ROOMS)) {
       const roomBookings = data.bookings
         .filter((b: any) => b.apartment.id === roomId)
@@ -70,16 +73,31 @@ test.describe('Smoobu API — Availability Checks', () => {
       for (let i = 0; i < roomBookings.length - 1; i++) {
         const current = roomBookings[i];
         const next = roomBookings[i + 1];
-        const currentDeparts = new Date(current.departure);
-        const nextArrives = new Date(next.arrival);
-        const overlap = currentDeparts > nextArrives;
+
+        // Compare date strings directly (YYYY-MM-DD) — avoids UTC midnight
+        // timezone false positives from using new Date().
+        // Back-to-back is fine: checkout March 14, checkin March 14 = NOT an overlap.
+        // Only flag when departure is strictly AFTER next arrival.
+        const overlap = current.departure > next.arrival;
+
         if (overlap) {
-          console.log(`⚠️ OVERLAP in ${roomName}: ${current.arrival}-${current.departure} overlaps ${next.arrival}-${next.departure}`);
+          const msg = `⚠️ OVERLAP in ${roomName}: booking #${current.id} (${current.arrival}→${current.departure}) overlaps booking #${next.id} (${next.arrival}→${next.departure})`;
+          console.log(msg);
+          allOverlaps.push(msg);
+        } else {
+          console.log(`✅ ${roomName}: #${current.id} (departs ${current.departure}) → #${next.id} (arrives ${next.arrival}) — OK`);
         }
-        expect(overlap).toBeFalsy();
       }
     }
-    console.log('✅ No overlapping bookings found');
+
+    if (allOverlaps.length > 0) {
+      // Fail once with a full summary — one clear error, not multiple
+      throw new Error(
+        `${allOverlaps.length} overlap(s) detected:\n\n${allOverlaps.join('\n')}\n\nCheck calendar: https://login.smoobu.com/en/calendar`
+      );
+    }
+
+    console.log('\n✅ No overlapping bookings found across all rooms');
   });
 
 });
