@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idan Barn Suites & Café | Explore & Things To Do</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --dark: #2c2c2c;
+      --olive: #4a5240;
+      --gold: #b5913a;
+      --light-olive: #6b7160;
+      --border: #d4cfc4;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--cream); color: var(--dark); font-family: 'Lato', sans-serif; }
+
+    nav { background: var(--olive); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+    .nav-brand { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { display: block; font-size: 0.7rem; font-family: 'Lato', sans-serif; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+    .nav-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    /* HERO */
+    .hero { background: var(--olive); padding: 4rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px); }
+    .hero-tag { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); color: #fff; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero p { color: rgba(255,255,255,0.8); font-weight: 300; font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
+
+    /* BODY */
+    .content { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    /* SECTION HEADER */
+    .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--olive); white-space: nowrap; }
+    .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ACTIVITY CARDS */
+    .activities { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem; margin-bottom: 3rem; }
+    .activity { background: #fff; border: 1px solid var(--border); padding: 1.5rem; }
+    .activity .act-icon { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .activity h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--dark); margin-bottom: 0.4rem; }
+    .activity p { font-size: 0.83rem; color: var(--light-olive); line-height: 1.55; }
+    .activity .tag { display: inline-block; margin-top: 0.6rem; font-size: 0.7rem; letter-spacing: 1px; text-transform: uppercase; background: var(--cream); color: var(--light-olive); padding: 0.2rem 0.6rem; }
+
+    /* MT KENYA CALLOUT */
+    .mt-kenya { background: var(--olive); color: #fff; padding: 2rem; margin-bottom: 3rem; display: flex; gap: 2rem; align-items: center; flex-wrap: wrap; }
+    .mt-kenya .badge { font-size: 3rem; flex-shrink: 0; }
+    .mt-kenya h3 { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold); margin-bottom: 0.5rem; }
+    .mt-kenya p { font-size: 0.88rem; font-weight: 300; line-height: 1.65; color: rgba(255,255,255,0.85); }
+    .mt-kenya ul { list-style: none; margin-top: 0.75rem; }
+    .mt-kenya ul li { font-size: 0.83rem; padding: 0.2rem 0; color: rgba(255,255,255,0.8); }
+    .mt-kenya ul li::before { content: '→ '; color: var(--gold); }
+
+    /* EBIKE SECTION */
+    .ebike { background: #fff; border: 1px solid var(--border); padding: 2rem; margin-bottom: 3rem; }
+    .ebike-header { display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem; }
+    .ebike-header div h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--olive); margin-bottom: 0.25rem; }
+    .ebike-header div p { font-size: 0.85rem; color: var(--light-olive); }
+    .partner-badge { background: var(--cream); border: 1px solid var(--border); padding: 0.4rem 1rem; font-size: 0.75rem; color: var(--light-olive); letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+
+    .ebike-rates { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem; }
+    .rate-block { border: 1px solid var(--border); padding: 1.25rem; }
+    .rate-block h4 { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; color: var(--light-olive); margin-bottom: 0.75rem; }
+    .rate-row { display: flex; justify-content: space-between; padding: 0.4rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+    .rate-row:last-child { border-bottom: none; }
+    .rate-label { color: var(--dark); }
+    .rate-price { font-weight: 700; color: var(--olive); }
+
+    .ebike-notes { background: var(--cream); padding: 1rem 1.25rem; font-size: 0.83rem; color: var(--light-olive); line-height: 1.6; }
+    .ebike-notes strong { color: var(--dark); }
+
+    .ebike-cta { margin-top: 1.25rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; }
+    .code-badge { background: var(--olive); color: #fff; padding: 0.4rem 1rem; font-family: monospace; font-size: 0.9rem; letter-spacing: 2px; }
+
+    /* NANYUKI RECS */
+    .recs { margin-bottom: 3rem; }
+    .recs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; }
+    .rec { background: #fff; border: 1px solid var(--border); padding: 1.25rem; }
+    .rec h4 { font-weight: 700; font-size: 0.9rem; color: var(--dark); margin-bottom: 0.3rem; }
+    .rec p { font-size: 0.8rem; color: var(--light-olive); line-height: 1.5; }
+    .rec .dist { font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-top: 0.5rem; }
+
+    /* CTA */
+    .cta-section { background: var(--dark); color: #fff; padding: 3rem 2rem; text-align: center; }
+    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .cta-section p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 1.5rem; font-weight: 300; }
+    .btn { display: inline-block; padding: 0.85rem 2rem; background: var(--gold); color: #fff; text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.2s; margin: 0.4rem; }
+    .btn:hover { background: var(--olive); }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(255,255,255,0.5); color: #fff; }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+
+    @media (max-width: 540px) {
+      .ebike-rates { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">Idan Barn Suites & Café <span>Mt. Kenya Base Camp · Naromoru</span></a>
+  <div class="nav-links">
+    <a href="/">Rates</a>
+    <a href="/workation">Workation</a>
+    <a href="/gatherings">Gatherings</a>
+    <a href="/explore" class="active">Explore</a>
+    <a href="/menu">Menu</a>
+    <a href="/book">Book Now</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Activities & Things To Do</div>
+  <h1>Explore Idan Barn<br><em>& Beyond</em></h1>
+  <p>From river walks on the property to game drives and e-bike rides — there's always something to do at the foot of Mt. Kenya.</p>
+</div>
+
+<div class="content">
+
+  <!-- ON PROPERTY -->
+  <div class="section-header"><h2>On the Property</h2></div>
+  <div class="activities" style="margin-bottom:2.5rem;">
+    <div class="activity">
+      <div class="act-icon">🌊</div>
+      <h3>River Burguret</h3>
+      <p>A gentle stroll from the lodge to the river — the perfect spot to dip your toes and unwind in nature.</p>
+      <span class="tag">Walking distance</span>
+    </div>
+    <div class="activity">
+      <div class="act-icon">🐦</div>
+      <h3>Nature Walks & Birdwatching</h3>
+      <p>The grounds and surrounding area are rich with birdlife. A peaceful way to start any morning.</p>
+      <span class="tag">On property</span>
+    </div>
+    <div class="activity">
+      <div class="act-icon">🔥</div>
+      <h3>Campfire Evenings</h3>
+      <p>Wind down under the Mt. Kenya sky with a campfire and good company. Ask us to set one up.</p>
+      <span class="tag">On property</span>
+    </div>
+    <div class="activity">
+      <div class="act-icon">👶</div>
+      <h3>Kids' Corner</h3>
+      <p>A sandpit, sprawling safe compound, and board games keep the little ones happy while you relax.</p>
+      <span class="tag">Family friendly</span>
+    </div>
+  </div>
+
+  <!-- MT KENYA -->
+  <div class="mt-kenya">
+    <div class="badge">🏔️</div>
+    <div>
+      <h3>Mt. Kenya Basecamp</h3>
+      <p>We're just <strong>20km from the Naromoru Gate</strong> — one of the most popular entry points to Mt. Kenya National Park. Perfect for pre- or post-hike rest and recovery.</p>
+      <ul>
+        <li>Pack lunches for your hike — inform the restaurant the evening before</li>
+        <li>Early breakfasts available before your climb — let us know the night before</li>
+        <li>Game drives and guided hikes can be arranged on request</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- NEARBY ACTIVITIES -->
+  <div class="section-header"><h2>Nearby Activities</h2></div>
+  <div class="activities" style="margin-bottom:3rem;">
+    <div class="activity">
+      <div class="act-icon">🦁</div>
+      <h3>Game Drives & Safaris</h3>
+      <p>Day trips to Ol Pejeta Conservancy or the Aberdare Ranges. Rent a safari vehicle through us.</p>
+      <span class="tag">~45 min away</span>
+    </div>
+    <div class="activity">
+      <div class="act-icon">🕳️</div>
+      <h3>Mau Mau Caves</h3>
+      <p>A historic hike to hidden waterfalls and caves via Bantu Lodge — one of the most memorable experiences in the region.</p>
+      <span class="tag">Guided hike</span>
+    </div>
+    <div class="activity">
+      <div class="act-icon">🐟</div>
+      <h3>Trout Fishing</h3>
+      <p>Trout fishing at farms along the Mt. Kenya foothills — great for a slow, peaceful afternoon.</p>
+      <span class="tag">Nearby</span>
+    </div>
+    <div class="activity">
+      <div class="act-icon">🛒</div>
+      <h3>Nanyuki Town</h3>
+      <p>Local market, shops, and restaurants just a short drive away for when you want to explore the town.</p>
+      <span class="tag">~20 min away</span>
+    </div>
+  </div>
+
+  <!-- EBIKE -->
+  <div class="section-header"><h2>🚴 E-Bike Exploration</h2></div>
+  <div class="ebike">
+    <div class="ebike-header">
+      <div>
+        <h2>E-Bike Rides with Paiskeli</h2>
+        <p>Scenic e-bike rides starting right from Idan Barn — via our partners at Paiskeli.</p>
+      </div>
+      <div class="partner-badge">Partner: Paiskeli</div>
+    </div>
+
+    <div class="ebike-rates">
+      <div class="rate-block">
+        <h4>Full Day · 06:00 – 19:00</h4>
+        <div class="rate-row"><span class="rate-label">Weekdays (Mon–Fri)</span><span class="rate-price">KES 4,400 / bike</span></div>
+        <div class="rate-row"><span class="rate-label">Weekends (Sat–Sun)</span><span class="rate-price">KES 5,200 / bike</span></div>
+      </div>
+      <div class="rate-block">
+        <h4>Half Day · 06:00–13:00 or 13:00–20:00</h4>
+        <div class="rate-row"><span class="rate-label">Weekdays (Mon–Fri)</span><span class="rate-price">KES 3,200 / bike</span></div>
+        <div class="rate-row"><span class="rate-label">Weekends (Sat–Sun)</span><span class="rate-price">KES 3,600 / bike</span></div>
+      </div>
+    </div>
+
+    <div class="ebike-notes">
+      <strong>Guide add-on:</strong> KES 1,000 per ride if you'd like a guide to show you the trails.<br>
+      <strong>Nanyuki tours:</strong> You can also join defined e-bike tours departing from Nanyuki — use code <strong>IDANBARN</strong> when booking for a special rate.
+    </div>
+
+    <div class="ebike-cta">
+      <span style="font-size:0.85rem; color:var(--light-olive);">Book direct with Paiskeli, mention Idan Barn or use code:</span>
+      <span class="code-badge">IDANBARN</span>
+      <a href="https://wa.me/254762004417?text=Hi!%20I'd%20like%20to%20arrange%20an%20e-bike%20ride%20during%20my%20stay." class="btn" style="padding:0.5rem 1.25rem; font-size:0.8rem; margin:0;">Ask Us to Arrange It</a>
+    </div>
+  </div>
+
+  <!-- NANYUKI RECOMMENDATIONS -->
+  <div class="recs">
+    <div class="section-header"><h2>Nanyuki Recommendations</h2></div>
+    <div class="recs-grid">
+      <div class="rec">
+        <h4>🧗 Mt. Kenya Climbing Gym</h4>
+        <p>Train or warm up before your climb. Well-equipped facility for climbers of all levels.</p>
+        <div class="dist">Nanyuki town</div>
+      </div>
+      <div class="rec">
+        <h4>🧴 Butterfly Spa</h4>
+        <p>Treat yourself to a massage or treatment after a long hike. Popular with guests for post-trek recovery.</p>
+        <div class="dist">Nanyuki town</div>
+      </div>
+      <div class="rec">
+        <h4>🦏 Ol Pejeta Conservancy</h4>
+        <p>Home to the last northern white rhinos, lions, and a chimpanzee sanctuary. A must-visit.</p>
+        <div class="dist">~45 min drive</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-section">
+  <h2>Want help planning your activities?</h2>
+  <p>Message us on WhatsApp — we can help arrange game drives, e-bike rides, guided hikes, and more.</p>
+  <a href="https://wa.me/254762004417?text=Hi%20Idan%20Barn!%20I'd%20like%20help%20planning%20activities%20during%20my%20stay." class="btn">📱 Chat on WhatsApp</a>
+  <a href="/book" class="btn btn-outline">Book Your Stay</a>
+</div>
+
+<footer>
+  © 2026 Idan Barn Suites & Café · Naromoru, Kenya &nbsp;·&nbsp;
+  <a href="tel:+254762004417">+254 762 004 417</a> &nbsp;·&nbsp;
+  <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a>
+</footer>
+
+</body>
+</html>

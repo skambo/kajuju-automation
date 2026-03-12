@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idan Barn Suites & Café | Menu</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --dark: #2c2c2c;
+      --olive: #4a5240;
+      --gold: #b5913a;
+      --light-olive: #6b7160;
+      --border: #d4cfc4;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--cream); color: var(--dark); font-family: 'Lato', sans-serif; }
+
+    /* NAV */
+    nav { background: var(--olive); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+    .nav-brand { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { display: block; font-size: 0.7rem; font-family: 'Lato', sans-serif; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+    .nav-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    /* HERO */
+    .hero { background: var(--olive); padding: 3.5rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px); }
+    .hero-tag { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); color: #fff; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero p { color: rgba(255,255,255,0.75); font-weight: 300; font-size: 1rem; max-width: 480px; margin: 0 auto 1rem; }
+    .hours-badge { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 0.4rem 1.2rem; border-radius: 2rem; font-size: 0.8rem; letter-spacing: 1px; }
+
+    /* ALLERGY NOTE */
+    .allergy-note { background: #fff; border-left: 3px solid var(--gold); max-width: 820px; margin: 2rem auto 0; padding: 0.75rem 1.25rem; font-size: 0.85rem; color: var(--light-olive); }
+
+    /* MENU BODY */
+    .menu-body { max-width: 860px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    /* SECTION */
+    .section { margin-bottom: 2.5rem; }
+    .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--olive); white-space: nowrap; }
+    .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* ITEMS */
+    .menu-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.7rem 0; border-bottom: 1px solid var(--border); gap: 1rem; }
+    .menu-item:last-child { border-bottom: none; }
+    .item-info { flex: 1; }
+    .item-name { font-weight: 700; font-size: 0.9rem; color: var(--dark); margin-bottom: 0.2rem; }
+    .item-desc { font-size: 0.8rem; color: var(--light-olive); font-weight: 300; line-height: 1.45; }
+    .item-price { font-weight: 700; font-size: 0.9rem; color: var(--olive); white-space: nowrap; }
+
+    /* SIDES GRID */
+    .sides-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem; }
+    .side-item { display: flex; justify-content: space-between; padding: 0.5rem 0.75rem; background: #fff; border: 1px solid var(--border); font-size: 0.82rem; }
+    .side-name { color: var(--dark); }
+    .side-price { color: var(--olive); font-weight: 700; }
+
+    /* MEAL PACKAGES */
+    .packages { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-top: 0.5rem; }
+    .package-card { background: #fff; border: 1px solid var(--border); padding: 1.25rem; }
+    .package-card h3 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--olive); margin-bottom: 0.3rem; }
+    .package-card .price { font-size: 1.1rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+    .package-card ul { list-style: none; }
+    .package-card ul li { font-size: 0.8rem; color: var(--light-olive); padding: 0.2rem 0; }
+    .package-card ul li::before { content: '✓ '; color: var(--gold); }
+
+    /* ORDERING NOTE */
+    .ordering-note { background: var(--olive); color: #fff; padding: 1.5rem 2rem; margin: 2rem 0; border-radius: 2px; }
+    .ordering-note h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-bottom: 0.75rem; color: var(--gold); }
+    .ordering-note ul { list-style: none; }
+    .ordering-note ul li { font-size: 0.875rem; padding: 0.3rem 0; font-weight: 300; }
+    .ordering-note ul li::before { content: '→ '; }
+
+    /* CTA */
+    .cta-section { text-align: center; background: #fff; border: 1px solid var(--border); padding: 2.5rem 1.5rem; margin-top: 2rem; }
+    .cta-section p { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--olive); margin-bottom: 1rem; }
+    .btn { display: inline-block; padding: 0.8rem 2rem; background: var(--olive); color: #fff; text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.2s; margin: 0.4rem; }
+    .btn:hover { background: var(--dark); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--olive); color: var(--olive); }
+    .btn-outline:hover { background: var(--olive); color: #fff; }
+
+    /* FOOTER */
+    footer { background: var(--dark); color: rgba(255,255,255,0.6); text-align: center; padding: 2rem; font-size: 0.8rem; }
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .sides-grid { grid-template-columns: 1fr 1fr; }
+      .packages { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">Idan Barn Suites & Café <span>Mt. Kenya Base Camp · Naromoru</span></a>
+  <div class="nav-links">
+    <a href="/">Rates</a>
+    <a href="/workation">Workation</a>
+    <a href="/gatherings">Gatherings</a>
+    <a href="/explore">Explore</a>
+    <a href="/menu" class="active">Menu</a>
+    <a href="/book">Book Now</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Idan Barn Café</div>
+  <h1>Our Menu</h1>
+  <p>Fresh, hearty food served all day at the foot of Mt. Kenya</p>
+  <div class="hours-badge">Open daily · Breakfast through Dinner · Last orders 9pm</div>
+  <div class="allergy-note">⚠️ Please inform our chef of any food allergies or dietary requirements. Plant-based milk available at KES 150 extra.</div>
+</div>
+
+<div class="menu-body">
+
+  <!-- MEAL PACKAGES -->
+  <div class="section">
+    <div class="section-header"><h2>Meal Packages for Guests</h2></div>
+    <div class="packages">
+      <div class="package-card">
+        <h3>Bed & Breakfast</h3>
+        <div class="price">Included in room rate</div>
+        <ul><li>Breakfast daily</li><li>In-room tea tray</li><li>1 barista coffee (workation)</li></ul>
+      </div>
+      <div class="package-card">
+        <h3>Half Board</h3>
+        <div class="price">+KES 2,500 / person / night</div>
+        <ul><li>Breakfast + lunch or dinner</li><li>Your choice each day</li></ul>
+      </div>
+      <div class="package-card">
+        <h3>Full Board</h3>
+        <div class="price">+KES 3,300 / person / night</div>
+        <ul><li>Breakfast + lunch + dinner</li><li>All meals included</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREAKFAST -->
+  <div class="section">
+    <div class="section-header"><h2>🍳 Breakfast</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Classic English Breakfast</div><div class="item-desc">Oatmeal or cereal, fried potatoes, two eggs (your style), beef sausage, bacon, baked beans, toasted bread, seasonal fruits, tea or house coffee</div></div><div class="item-price">KES 1,500</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Eggs Benedict</div><div class="item-desc">Two poached eggs on avocado and bacon, on warm artisan toast with hollandaise sauce</div></div><div class="item-price">KES 1,000</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Spanish Omelette</div><div class="item-desc">Three fluffy eggs with Mediterranean vegetables, toasted bread and side salad</div></div><div class="item-price">KES 550</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Mushroom & Spinach Omelette</div><div class="item-desc">Three eggs with crispy mushroom and spinach, seasoned with black pepper, toasted bread and side salad</div></div><div class="item-price">KES 550</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Avo on Toast</div><div class="item-desc">Smashed avocado with two eggs (your style), hollandaise sauce on warm artisan bread</div></div><div class="item-price">KES 550</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Healthy Breakfast</div><div class="item-desc">Oatmeal porridge, two eggs (your style), sweet potatoes, seasonal fruits, mixed tea or house coffee</div></div><div class="item-price">KES 800</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">French Toast</div><div class="item-desc">Classic French toast with butter, seasonal fruits and maple syrup</div></div><div class="item-price">KES 600</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Pancakes</div><div class="item-desc">Three soft pancakes with pancake syrup</div></div><div class="item-price">KES 600</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Fruit Bowl</div><div class="item-desc">Seasonal fresh fruits with natural yogurt and honey</div></div><div class="item-price">KES 500</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Oatmeal Porridge</div><div class="item-desc">Oatmeal spiced with cinnamon, topped with bananas and berries</div></div><div class="item-price">KES 500</div></div>
+  </div>
+
+  <!-- SOUPS -->
+  <div class="section">
+    <div class="section-header"><h2>🍲 Soups</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Roasted Butternut Squash</div><div class="item-desc">Creamy roasted squash with caramelized leeks, carrots and spices, served with toasted bread</div></div><div class="item-price">KES 600</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Chicken Soup</div><div class="item-desc">Boneless chicken in clear broth, can be made with chili on request. Served with toasted bread</div></div><div class="item-price">KES 650</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Soup of the Day</div><div class="item-desc">Chef's blended soup, perfect for any season. Served with toasted bread</div></div><div class="item-price">KES 700</div></div>
+  </div>
+
+  <!-- MAINS -->
+  <div class="section">
+    <div class="section-header"><h2>🍽️ Mains</h2></div>
+    <p style="font-size:0.8rem; color:var(--light-olive); margin-bottom:1rem;">Served with your choice of: French fries, chapati, steamed rice, ugali, plain naan, mashed potatoes, or potato wedges, plus vegetables or salad</p>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Butter Chicken</div><div class="item-desc">Boneless chicken marinated in spiced Greek yogurt, in a tomato-based sauce with aromatic butter</div></div><div class="item-price">KES 1,200</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Stir Fry Beef</div><div class="item-desc">Shallow-fried beef with vegetables, seasoned with savoury spices</div></div><div class="item-price">KES 800</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Stir Fry Chicken</div><div class="item-desc">Shallow-fried boneless chicken with vegetables, seasoned with savoury spices</div></div><div class="item-price">KES 850</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Grilled Lamb Chops</div><div class="item-desc">Char-grilled lamb chops to your liking, served with mint sauce</div></div><div class="item-price">KES 1,600</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Grilled Rump Steak</div><div class="item-desc">Tender rump steak (on bone), grilled to your liking, with pepper sauce</div></div><div class="item-price">KES 1,700</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Grilled T-Bone Steak</div><div class="item-desc">T-bone grilled to your liking, served with pepper sauce</div></div><div class="item-price">KES 1,800</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Grilled Chicken Breast</div><div class="item-desc">Juicy chicken breast served with mushroom sauce</div></div><div class="item-price">KES 1,250</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Pan Seared Chicken Ballotine</div><div class="item-desc">Chicken breast stuffed with bacon, spinach, herbs and spices</div></div><div class="item-price">KES 1,600</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Red Snapper</div><div class="item-desc">Pan-seared fish fillet with buttered vegetables and lemon-butter sauce</div></div><div class="item-price">KES 1,300</div></div>
+  </div>
+
+  <!-- SIZZLERS -->
+  <div class="section">
+    <div class="section-header"><h2>🔥 Sizzling Plates</h2></div>
+    <p style="font-size:0.8rem; color:var(--light-olive); margin-bottom:1rem;">Served with steamed rice and seasonal vegetables</p>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Sweet & Sour Chicken Sizzler</div><div class="item-desc">Crispy chicken in tangy sweet & sour sauce with pineapple and peppers</div></div><div class="item-price">KES 1,400</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Beef Chop Suey</div><div class="item-desc">Tender strips of beef glazed with onions and peppers</div></div><div class="item-price">KES 1,300</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Garlic Butter Red Snapper Sizzler</div><div class="item-desc">Fresh red snapper fillet seared in garlic butter and herbs</div></div><div class="item-price">KES 1,500</div></div>
+  </div>
+
+  <!-- SHARING -->
+  <div class="section">
+    <div class="section-header"><h2>🤝 Sharing Platters</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Mixed Grill Platter for Two</div><div class="item-desc">Lamb chops ×2, grilled chicken breast, grilled rump steak, choma sausage ×1, seasonal vegetables, one side of your choice</div></div><div class="item-price">KES 3,000</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Mixed Grill Platter for Four</div><div class="item-desc">Lamb chops ×4, grilled chicken breast strips, grilled rump steak, choma sausages ×2, seasonal vegetables, two sides of your choice</div></div><div class="item-price">KES 5,500</div></div>
+  </div>
+
+  <!-- PIZZA -->
+  <div class="section">
+    <div class="section-header"><h2>🍕 Pizzas</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Classic Margherita</div><div class="item-desc">Crispy golden crust, tomato base, mozzarella and basil</div></div><div class="item-price">KES 1,000</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Meat Fest</div><div class="item-desc">Bacon, sausage and grilled chicken strips on tomato base with mozzarella</div></div><div class="item-price">KES 1,400</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Al Pollo</div><div class="item-desc">Grilled chicken, mushroom, sweet corn with mozzarella on tomato base</div></div><div class="item-price">KES 1,300</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Hawaiian</div><div class="item-desc">Chicken ham, pineapple and mozzarella on tomato base</div></div><div class="item-price">KES 1,200</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Vegetarian Garden</div><div class="item-desc">Seasonal vegetables on crispy crust with rich tomato sauce and mozzarella</div></div><div class="item-price">KES 1,100</div></div>
+  </div>
+
+  <!-- PASTA -->
+  <div class="section">
+    <div class="section-header"><h2>🍝 Pastas</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Carbonara</div><div class="item-desc">Penne in creamy white sauce with grilled chicken strips, topped with Parmesan</div></div><div class="item-price">KES 1,300</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Penne Arrabiata</div><div class="item-desc">Penne in tomato-based sauce, topped with Parmesan. Add grilled chicken strips +KES 250</div></div><div class="item-price">KES 1,150</div></div>
+  </div>
+
+  <!-- SALADS -->
+  <div class="section">
+    <div class="section-header"><h2>🥗 Salads</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Caesar Salad</div><div class="item-desc">Romaine lettuce, cucumber, onion, cherry tomatoes, grilled chicken strips, croutons, Parmesan and dressing</div></div><div class="item-price">KES 1,200</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Chef's Vegetable Salad</div><div class="item-desc">Lettuce, cucumber, onion, sweet corn, black olives, cherry tomatoes, avocado, feta cheese and dressing</div></div><div class="item-price">KES 1,000</div></div>
+  </div>
+
+  <!-- FAVOURITES & STARTERS -->
+  <div class="section">
+    <div class="section-header"><h2>⭐ Favourites & Starters</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Club Sandwich</div><div class="item-desc">Spicy marinated chicken breast, egg (optional), lettuce, tomato and fries</div></div><div class="item-price">KES 800</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">BLT Sandwich</div><div class="item-desc">Bacon, lettuce and tomato sandwich with fries</div></div><div class="item-price">KES 780</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Beef Samosas (3 pcs)</div><div class="item-desc">Served with salsa</div></div><div class="item-price">KES 350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">BBQ Wings (6 pcs)</div><div class="item-desc"></div></div><div class="item-price">KES 650</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Buffalo Wings (6 pcs)</div><div class="item-desc"></div></div><div class="item-price">KES 650</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Crispy Wings (6 pcs)</div><div class="item-desc"></div></div><div class="item-price">KES 700</div></div>
+  </div>
+
+  <!-- BURGERS -->
+  <div class="section">
+    <div class="section-header"><h2>🍔 Burgers</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Beef Burger</div><div class="item-desc">Beef patty with lettuce, tomato, gherkins, caramelized onions, coleslaw and fries</div></div><div class="item-price">KES 1,200</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Beef Burger with Cheese</div><div class="item-desc">Beef patty with lettuce, tomato, gherkins, caramelized onions, cheddar cheese, coleslaw and fries</div></div><div class="item-price">KES 1,350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Double Beef Burger</div><div class="item-desc">Two beef patties with lettuce, tomato, gherkins, caramelized onions, cheddar cheese, coleslaw and fries</div></div><div class="item-price">KES 1,500</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Chicken Burger</div><div class="item-desc">Grilled chicken breast with lettuce, coleslaw and fries. Add cheddar cheese +KES 150</div></div><div class="item-price">KES 1,100</div></div>
+  </div>
+
+  <!-- KIDS CORNER -->
+  <div class="section">
+    <div class="section-header"><h2>👶 Kids' Corner</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Fish Fingers</div><div class="item-desc">Served with chips and coleslaw or salad</div></div><div class="item-price">KES 650</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Chips and Cheese</div><div class="item-desc">Topped with beef or chicken strips, served with coleslaw or salad</div></div><div class="item-price">KES 800</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Pasta Bolognese</div><div class="item-desc">Pasta or spaghetti with seasoned minced beef in tomato sauce</div></div><div class="item-price">KES 650</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Chicken Tenders</div><div class="item-desc">Served with chips and coleslaw or salad</div></div><div class="item-price">KES 650</div></div>
+  </div>
+
+  <!-- DESSERTS -->
+  <div class="section">
+    <div class="section-header"><h2>🍰 Desserts</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Cake of the Day</div><div class="item-desc">Homemade and seasonal</div></div><div class="item-price">KES 380</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Seasonal Fresh Fruit Bowl</div><div class="item-desc"></div></div><div class="item-price">KES 390</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Ice Cream</div><div class="item-desc">Per scoop</div></div><div class="item-price">KES 200</div></div>
+  </div>
+
+  <!-- SIDES -->
+  <div class="section">
+    <div class="section-header"><h2>🍟 Sides & Add-ons</h2></div>
+    <div class="sides-grid">
+      <div class="side-item"><span class="side-name">French Fries</span><span class="side-price">300</span></div>
+      <div class="side-item"><span class="side-name">Masala Chips</span><span class="side-price">350</span></div>
+      <div class="side-item"><span class="side-name">Potato Wedges</span><span class="side-price">400</span></div>
+      <div class="side-item"><span class="side-name">Roast Potatoes</span><span class="side-price">400</span></div>
+      <div class="side-item"><span class="side-name">Ugali</span><span class="side-price">200</span></div>
+      <div class="side-item"><span class="side-name">Chapati (2 pcs)</span><span class="side-price">300</span></div>
+      <div class="side-item"><span class="side-name">Steamed Rice</span><span class="side-price">200</span></div>
+      <div class="side-item"><span class="side-name">Vegetable Rice</span><span class="side-price">250</span></div>
+      <div class="side-item"><span class="side-name">Beef Sausages (2 pcs)</span><span class="side-price">250</span></div>
+      <div class="side-item"><span class="side-name">Choma Sausage (1 pc)</span><span class="side-price">250</span></div>
+      <div class="side-item"><span class="side-name">Plain Naan</span><span class="side-price">250</span></div>
+      <div class="side-item"><span class="side-name">Butter Naan</span><span class="side-price">280</span></div>
+      <div class="side-item"><span class="side-name">Steamed Vegetables</span><span class="side-price">200</span></div>
+      <div class="side-item"><span class="side-name">Kachumbari</span><span class="side-price">200</span></div>
+      <div class="side-item"><span class="side-name">Creamy Spinach Bowl</span><span class="side-price">250</span></div>
+    </div>
+  </div>
+
+  <!-- BEVERAGES -->
+  <div class="section">
+    <div class="section-header"><h2>☕ Coffee</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">House Coffee</div></div><div class="item-price">KES 200</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Cappuccino</div><div class="item-desc">Single / Double</div></div><div class="item-price">KES 300 / 350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Latte</div><div class="item-desc">Single / Double</div></div><div class="item-price">KES 300 / 350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Americano</div><div class="item-desc">Single / Double</div></div><div class="item-price">KES 200 / 250</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Espresso</div><div class="item-desc">Single / Double</div></div><div class="item-price">KES 250 / 300</div></div>
+    <p style="font-size:0.8rem;color:var(--light-olive);margin-top:0.5rem;">Add almond/plant-based milk +KES 150</p>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><h2>🍵 Teas & Hot Drinks</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Mixed Tea</div></div><div class="item-price">KES 250</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Masala Tea</div></div><div class="item-price">KES 250</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Herbal Tea Selection</div></div><div class="item-price">KES 200</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Ginger, Lemon & Honey (Dawa)</div></div><div class="item-price">KES 300</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Lemon Tea</div></div><div class="item-price">KES 150</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Hot Chocolate</div></div><div class="item-price">KES 400</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Babycinno</div></div><div class="item-price">KES 250</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><h2>🥤 Cold Drinks</h2></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Banana & Chocolate Milkshake</div></div><div class="item-price">KES 350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Vanilla Milkshake</div></div><div class="item-price">KES 350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Fruit Smoothie (seasonal)</div></div><div class="item-price">KES 350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Fresh Juice</div></div><div class="item-price">KES 300</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Del Monte Juices (assorted)</div></div><div class="item-price">KES 350</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Sodas / Tonic Water / Soda Water</div></div><div class="item-price">KES 200</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Still Water 500ml / 1L</div></div><div class="item-price">KES 150 / 300</div></div>
+    <div class="menu-item"><div class="item-info"><div class="item-name">Sparkling Water 500ml / 1L</div></div><div class="item-price">KES 200 / 350</div></div>
+  </div>
+
+  <!-- ORDERING NOTE -->
+  <div class="ordering-note">
+    <h3>Good to Know</h3>
+    <ul>
+      <li>Kitchen open daily from breakfast through dinner — last food orders at 9pm</li>
+      <li>Pack lunches for Mt. Kenya hikes available — please inform the restaurant the evening before</li>
+      <li>Early breakfasts (pre-hike) available — inform the restaurant the evening before</li>
+      <li>Please inform our chef of any food allergies or dietary requirements</li>
+      <li>Plant-based milk available at KES 150 extra on all coffee and tea drinks</li>
+    </ul>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <p>Ready to dine with a Mt. Kenya view?</p>
+    <a href="https://wa.me/254762004417?text=Hi%20Idan%20Barn!%20I'd%20like%20to%20make%20a%20reservation%20or%20ask%20about%20the%20menu." class="btn">📱 WhatsApp Us</a>
+    <a href="/book" class="btn btn-outline">Book a Stay</a>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 Idan Barn Suites & Café · Naromoru, Kenya &nbsp;·&nbsp;
+  <a href="tel:+254762004417">+254 762 004 417</a> &nbsp;·&nbsp;
+  <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a>
+</footer>
+
+</body>
+</html>
