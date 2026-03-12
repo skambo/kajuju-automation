@@ -5,7 +5,6 @@ A hospitality-grade QA automation framework built with Playwright + TypeScript, 
 🔗 **Live site:** https://kajuju-automation.vercel.app  
 🔗 **GitHub:** https://github.com/skambo/kajuju-automation
 
----
 
 ## The Problem
 
@@ -20,7 +19,6 @@ Kaju — a boutique property near Mt. Kenya — receives booking inquiries acros
 | 5 | No automated guest feedback loop | Post-stay follow-up and review solicitation is manual and inconsistent |
 | 6 | Manual invoice creation | Ad hoc with no templated guest data pre-population |
 
----
 
 ## The Solution
 
@@ -40,9 +38,8 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 - Write date-boundary and double-booking detection test suites
 - Implement synthetic monitoring for all live production pages
 - Build a Vercel serverless availability check wired to the booking form
-- Produce a portfolio-grade GitHub repo with CI/CD and automated alerting
+- Run on a GitHub repo with CI/CD and automated alerting
 
----
 
 ## What's Been Built
 
@@ -61,13 +58,13 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 
 **Formspree form backend**
 - Booking requests are submitted to Formspree, which emails the team immediately
-- Chosen deliberately over a custom email backend — no server to maintain, free tier covers current volume, and it's swappable in Phase 2
-- Every `data-testid` attribute in the form HTML is intentional — built for testability from day one
+- Chosen deliberately over a custom email backend — no server to maintain, free tier covers current volume, and we can review and make changes when/if volume increases. 
+- Use of `data-testid` attributes in the HTML form
 
 **GitHub Actions CI pipeline**
 - Availability monitor runs every 4 hours via cron
 - Detects double bookings across all 5 room types using soft assertions — collects every conflict across all rooms before failing, so one run displays the complete picture rather than stopping at the first problem found
-- Sends a single summary alert email on failure with a link to the Actions log
+- Sends a summary alert email on failure with a link to the actions log
 - Manual trigger available via `workflow_dispatch`
 
 **Playwright test suites**
@@ -76,13 +73,11 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 - Smoobu API reachability and property fetch tests
 - Double booking detection across all 5 rooms
 
-### Phase 2 — Planned
+### Phase 2 (WIP)
 - Twilio WhatsApp auto-responses and AI FAQ handling
-- OpenAI GPT-4o booking summary generation
+- OpenAI GPT - booking summary generation
 - Wave invoice automation with guest data pre-population
 - WordPress → Smoobu webhook for automatic date blocking on confirmed payment
-
----
 
 ## Tech Stack
 
@@ -98,7 +93,6 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 | Secrets (local) | dotenv | Local `.env` for API keys |
 | Phase 2 | Twilio · OpenAI GPT-4o · Wave | WhatsApp automation, AI, invoicing |
 
----
 
 ## Project Structure
 
@@ -118,17 +112,14 @@ kajuju-automation/                          ← git root
     │       └── book/index.html             ← Booking form  →  /book
     └── tests/
         ├── monitoring/
-        │   └── health-check.spec.ts        ← Synthetic monitors (10 tests)
+        │   └── health-check.spec.ts        ← Synthetic monitors
         ├── e2e/
-        │   └── booking-form.spec.ts        ← Form E2E (8 tests)
+        │   └── booking-form.spec.ts        ← Form E2E 
         └── api/
             ├── smoobu.spec.ts              ← API reachability + property fetch
-            └── availability.spec.ts        ← Double booking detection (3 tests)
+            └── availability.spec.ts        ← Double booking detection 
 ```
 
-> **Why nested?** The repo was initialised with a nested folder structure. The `.github/` workflows folder and `api/` serverless folder must stay at the git root — Vercel and GitHub Actions both look there. The `defaults: run: working-directory: kajuju-automation` setting in the workflow compensates for this.
-
----
 
 ## Key Engineering Decisions
 
@@ -157,8 +148,6 @@ The main `package.json` sets `"type": "module"` for Playwright compatibility. A 
 **Testability built into the HTML**
 Interactive elements in the landing pages all have `data-testid` attributes. This allows us to separate test selectors from styling or structural changes.
 
----
-
 ## Secrets & Where They Live
 
 | Secret | Where | Purpose |
@@ -169,7 +158,6 @@ Interactive elements in the landing pages all have `data-testid` attributes. Thi
 | `GMAIL_APP_PASSWORD` | GitHub Secrets | Gmail app password (16 chars, no spaces) |
 | `ALERT_EMAIL` | GitHub Secrets | Recipient for double booking alerts |
 
----
 
 ## Local Setup
 
@@ -197,8 +185,6 @@ npx playwright test --reporter=list    # with visible console output
 npx playwright test --ui               # interactive mode
 ```
 
----
-
 ## Current Test Status
 
 | Suite | Tests | Passing | Skipped | Notes |
@@ -209,7 +195,6 @@ npx playwright test --ui               # interactive mode
 | `availability.spec.ts` | 3 | 3 | 0 | |
 | **Total** | **22** | **20** | **2** | **91% passing** |
 
----
 
 ## Tech Debt
 
@@ -223,7 +208,6 @@ npx playwright test --ui               # interactive mode
 | TD-007 | Workation page slow load — image needs to be compressed (5.4MB) | Low |
 | TD-008 | 2-night minimum checkout test skipped — might need unit test approach | Low |
 
----
 
 ## About
 
@@ -231,4 +215,4 @@ Built by Sandra — a QA engineer with 10 years of experience across manual and 
 
 The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, and serverless architecture. 
 
-AI is part of this project honestly and intentionally.The problem framing, design choices, testing decisions and engineering judgement are mine. I believe this reflects how QA engineering is moving toward, not AI replacing testing, but engineers who know how to work effectively alongside AI producing better outcomes faster.
+AI is part of this project honestly and intentionally.The problem framing, design choices, testing decisions and engineering judgement are mine. I believe this reflects how QA engineering is evolving, not AI replacing testing, but engineers who know how to work effectively alongside AI producing better outcomes faster.
