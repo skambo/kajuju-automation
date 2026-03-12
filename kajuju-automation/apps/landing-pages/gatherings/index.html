@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Idan Barn Suites & Café | Gatherings & Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --dark: #2c2c2c;
+      --olive: #4a5240;
+      --gold: #b5913a;
+      --light-olive: #6b7160;
+      --border: #d4cfc4;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--cream); color: var(--dark); font-family: 'Lato', sans-serif; }
+
+    nav { background: var(--olive); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+    .nav-brand { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { display: block; font-size: 0.7rem; font-family: 'Lato', sans-serif; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+    .nav-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    /* HERO */
+    .hero { background: var(--olive); padding: 4rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px); }
+    .hero-tag { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); color: #fff; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero p { color: rgba(255,255,255,0.8); font-weight: 300; font-size: 1.05rem; max-width: 520px; margin: 0 auto; }
+
+    /* CONTENT */
+    .content { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    /* INTRO */
+    .intro { text-align: center; margin-bottom: 3rem; }
+    .intro p { font-size: 1.05rem; color: var(--light-olive); max-width: 600px; margin: 0 auto; line-height: 1.7; }
+
+    /* OCCASION TYPES */
+    .occasions { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+    .occasion-card { background: #fff; border: 1px solid var(--border); padding: 1.5rem 1.25rem; text-align: center; }
+    .occasion-card .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .occasion-card h3 { font-family: 'Playfair Display', serif; font-size: 0.95rem; color: var(--olive); }
+
+    /* PACKAGES */
+    .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--olive); margin-bottom: 0.3rem; }
+    .section-sub { color: var(--light-olive); font-size: 0.875rem; margin-bottom: 1.5rem; }
+
+    .packages { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 3rem; }
+    .pkg { background: #fff; border: 1px solid var(--border); padding: 1.75rem; }
+    .pkg h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--dark); margin-bottom: 0.25rem; }
+    .pkg .day { font-size: 0.75rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--light-olive); margin-bottom: 0.75rem; }
+    .pkg .price { font-size: 1.4rem; font-weight: 700; color: var(--gold); margin-bottom: 0.25rem; }
+    .pkg .price-note { font-size: 0.78rem; color: var(--light-olive); margin-bottom: 1rem; font-style: italic; }
+    .pkg ul { list-style: none; }
+    .pkg ul li { font-size: 0.85rem; padding: 0.3rem 0; color: var(--dark); border-bottom: 1px solid var(--border); }
+    .pkg ul li:last-child { border-bottom: none; }
+    .pkg ul li::before { content: '→ '; color: var(--gold); }
+
+    /* OVERNIGHT */
+    .overnight { background: var(--olive); color: #fff; padding: 2rem; margin-bottom: 3rem; display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+    .overnight h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; margin-bottom: 0.5rem; color: var(--gold); }
+    .overnight p { font-size: 0.9rem; font-weight: 300; line-height: 1.65; color: rgba(255,255,255,0.85); }
+    .overnight-details ul { list-style: none; }
+    .overnight-details ul li { font-size: 0.85rem; padding: 0.35rem 0; color: rgba(255,255,255,0.85); border-bottom: 1px solid rgba(255,255,255,0.15); }
+    .overnight-details ul li:last-child { border-bottom: none; }
+    .overnight-details ul li::before { content: '✓ '; color: var(--gold); }
+
+    /* ADD-ONS */
+    .addons { margin-bottom: 3rem; }
+    .addon-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; }
+    .addon { background: #fff; border: 1px solid var(--border); padding: 1.25rem; display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+    .addon-info h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.2rem; }
+    .addon-info p { font-size: 0.78rem; color: var(--light-olive); }
+    .addon-price { font-weight: 700; color: var(--olive); white-space: nowrap; font-size: 0.9rem; }
+
+    /* WHAT'S INCLUDED */
+    .includes { background: #fff; border: 1px solid var(--border); padding: 2rem; margin-bottom: 3rem; }
+    .includes h2 { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--olive); margin-bottom: 1.25rem; }
+    .includes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+    .include-item { display: flex; gap: 0.75rem; align-items: flex-start; }
+    .include-item .tick { color: var(--gold); font-weight: 700; flex-shrink: 0; }
+    .include-item p { font-size: 0.85rem; color: var(--dark); }
+
+    /* CTA */
+    .cta-section { background: var(--dark); color: #fff; padding: 3rem 2rem; text-align: center; }
+    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .cta-section p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 1.5rem; font-weight: 300; }
+    .btn { display: inline-block; padding: 0.85rem 2rem; background: var(--gold); color: #fff; text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.2s; margin: 0.4rem; }
+    .btn:hover { background: var(--olive); }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(255,255,255,0.5); color: #fff; }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+
+    @media (max-width: 640px) {
+      .packages { grid-template-columns: 1fr; }
+      .overnight { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">Idan Barn Suites & Café <span>Mt. Kenya Base Camp · Naromoru</span></a>
+  <div class="nav-links">
+    <a href="/">Rates</a>
+    <a href="/workation">Workation</a>
+    <a href="/gatherings" class="active">Gatherings</a>
+    <a href="/explore">Explore</a>
+    <a href="/menu">Menu</a>
+    <a href="/book">Book Now</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Intimate Gatherings & Special Events</div>
+  <h1>Celebrate at<br><em>Idan Barn</em></h1>
+  <p>A boutique escape for birthdays, couples getaways, team retreats, and friends & family gatherings — at the foot of Mt. Kenya.</p>
+</div>
+
+<div class="content">
+
+  <div class="intro">
+    <p>Whether you're planning a birthday celebration, a romantic escape, or a full lodge takeover with your crew — Idan Barn offers an intimate, beautifully set space unlike any other in the region.</p>
+  </div>
+
+  <!-- OCCASIONS -->
+  <div class="occasions">
+    <div class="occasion-card"><div class="icon">🎂</div><h3>Birthdays & Celebrations</h3></div>
+    <div class="occasion-card"><div class="icon">💑</div><h3>Couples Getaways</h3></div>
+    <div class="occasion-card"><div class="icon">👨‍👩‍👧‍👦</div><h3>Family Gatherings</h3></div>
+    <div class="occasion-card"><div class="icon">🤝</div><h3>Team Retreats</h3></div>
+  </div>
+
+  <!-- DAY PACKAGES -->
+  <h2 class="section-title">Day Packages</h2>
+  <p class="section-sub">Reserved exclusively for your group, up to 10 people. Enquire for larger groups.</p>
+  <div class="packages">
+    <div class="pkg">
+      <div class="day">Weekdays · Mon – Fri</div>
+      <h3>Weekday Gathering</h3>
+      <div class="price">From KES 2,500</div>
+      <div class="price-note">per person · groups up to 10 pax</div>
+      <ul>
+        <li>Reserved dining & lounge area (Fireside)</li>
+        <li>Chef-prepared set menu or family-style lunch</li>
+        <li>High-speed Starlink Wi-Fi</li>
+        <li>Peaceful garden access for breakouts or photos</li>
+      </ul>
+    </div>
+    <div class="pkg">
+      <div class="day">Weekends · Sat – Sun</div>
+      <h3>Weekend Gathering</h3>
+      <div class="price">From KES 4,500</div>
+      <div class="price-note">per person · groups up to 10 pax</div>
+      <ul>
+        <li>Reserved dining & lounge area (Fireside)</li>
+        <li>Chef-prepared set menu or family-style lunch</li>
+        <li>High-speed Starlink Wi-Fi</li>
+        <li>Peaceful garden access for breakouts or photos</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- OVERNIGHT -->
+  <div class="overnight">
+    <div>
+      <h2>Overnight Retreats</h2>
+      <p>Take over the entire lodge — exclusively yours for the night. Ideal for milestone birthdays, family reunions, and team offsites that need more than a day.</p>
+    </div>
+    <div class="overnight-details">
+      <ul>
+        <li>Full lodge takeover — up to 14 guests (sharing)</li>
+        <li>5 rooms: Coral, Jade, Pebble, Penthouse Loft, Cottage</li>
+        <li>Exclusive use of all grounds and the café</li>
+        <li>Customised meal packages available</li>
+        <li>Starlink Wi-Fi throughout</li>
+        <li>Free parking for all guests</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- WHAT'S INCLUDED -->
+  <div class="includes">
+    <h2>What's Always Included</h2>
+    <div class="includes-grid">
+      <div class="include-item"><span class="tick">✓</span><p>Reserved Fireside dining & lounge area</p></div>
+      <div class="include-item"><span class="tick">✓</span><p>Chef-prepared meals (set menu or family-style)</p></div>
+      <div class="include-item"><span class="tick">✓</span><p>High-speed Starlink Wi-Fi</p></div>
+      <div class="include-item"><span class="tick">✓</span><p>Garden & grounds access</p></div>
+      <div class="include-item"><span class="tick">✓</span><p>Free parking</p></div>
+      <div class="include-item"><span class="tick">✓</span><p>Mt. Kenya backdrop for photos</p></div>
+    </div>
+  </div>
+
+  <!-- ADD-ONS -->
+  <div class="addons">
+    <h2 class="section-title">Celebration Add-Ons</h2>
+    <p class="section-sub">Make it extra special — add these to any package</p>
+    <div class="addon-grid">
+      <div class="addon">
+        <div class="addon-info"><h4>🎂 Birthday Cake Surprise</h4><p>Homemade cake, timed to perfection. 48hr notice required.</p></div>
+        <div class="addon-price">KES 2,500</div>
+      </div>
+      <div class="addon">
+        <div class="addon-info"><h4>🌹 Room Decor Package</h4><p>Rose petals, candles, romantic setup. 24hr notice required.</p></div>
+        <div class="addon-price">KES 3,500</div>
+      </div>
+      <div class="addon">
+        <div class="addon-info"><h4>🌅 Early Check-In</h4><p>From 12pm, subject to availability.</p></div>
+        <div class="addon-price">KES 1,500</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <h2>Ready to plan your gathering?</h2>
+  <p>Tell us your date, group size and the occasion — we'll take care of the rest.</p>
+  <a href="https://wa.me/254762004417?text=Hi%20Idan%20Barn!%20I'd%20like%20to%20enquire%20about%20hosting%20a%20gathering%20or%20event." class="btn">📱 Enquire on WhatsApp</a>
+  <a href="/book" class="btn btn-outline">Check Room Availability</a>
+</div>
+
+<footer>
+  © 2026 Idan Barn Suites & Café · Naromoru, Kenya &nbsp;·&nbsp;
+  <a href="tel:+254762004417">+254 762 004 417</a> &nbsp;·&nbsp;
+  <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a>
+</footer>
+
+</body>
+</html>
