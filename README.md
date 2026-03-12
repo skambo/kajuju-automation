@@ -162,7 +162,7 @@ Interactive elements in the landing pages all have `data-testid` attributes. Thi
 ## Local Setup
 
 ```bash
-git clone https://github.com/skambo/kajuju-automation.git
+git clone
 cd kajuju-automation/kajuju-automation
 npm install
 npx playwright install chromium
@@ -200,19 +200,25 @@ npx playwright test --ui               # interactive mode
 
 | ID | Issue | Priority |
 |---|---|---|
-| TD-009 | WordPress bookings don't sync to Smoobu — manual blocking required until Phase 2 webhook is built | High |
-| TD-003 | Alert email doesn't specify which room has the conflict | Medium |
-| TD-004 | Page titles show incorrect brand name on public pages | Medium |
-| TD-005 | Images not fitting correctly on desktop | Low |
-| TD-006 | Nav link Playwright test flaky — skipped with TODO | Low |
-| TD-007 | Workation page slow load — image needs to be compressed (5.4MB) | Low |
-| TD-008 | 2-night minimum checkout test skipped — might need unit test approach | Low |
+| TD-001 | WordPress bookings don't sync to Smoobu — manual blocking required until Phase 2 webhook is built | High |
+| TD-002 | Alert email doesn't specify which room has the conflict | Medium |
+| TD-003 | Page titles show incorrect brand name on public pages | Medium |
+| TD-004 | Images not fitting correctly on desktop | Low |
+| TD-005 | Nav link Playwright test flaky — skipped with TODO | Low |
+| TD-006 | Workation page slow load — image needs to be compressed (5.4MB) | Low |
+| TD-007 | 2-night minimum checkout test skipped — might need unit test approach | Low |
 
+
+
+## Development Methodology
+This project was built using an augmented engineering approach.
+
+- **Strategy:** Test strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine
+- **AI as collaborator:** Claude is used as a thinking partner — working through edge cases and debugging. 
+- **Quality control:** Code is reviewed, debugged, and validated by me before merging — including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic
+- **Why it matters?:** This reflects how QA engineering is evolving. Engineers who can work effectively alongside AI while maintaining full ownership of quality decisions to produce better outcomes faster
 
 ## About
-
 Built by Sandra — a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business itself as the test subject.
 
 The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, and serverless architecture. 
-
-AI is part of this project honestly and intentionally.The problem framing, design choices, testing decisions and engineering judgement are mine. I believe this reflects how QA engineering is evolving, not AI replacing testing, but engineers who know how to work effectively alongside AI producing better outcomes faster.
