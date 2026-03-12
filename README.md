@@ -1,123 +1,173 @@
-# Kajuju Automation
+# Kajuju Automation Framework
 
-**A production-grade QA automation framework built with Playwright + TypeScript, running against a live hospitality website.**
-
-This project monitors real pages, validates booking form behaviour, and detects double bookings via a channel manager API — all automated through GitHub Actions CI running every 4 hours. Built as a portfolio project, the framework tests a live, revenue-generating website — not a demo app.
+A hospitality-grade QA automation framework built with Playwright + TypeScript, solving real operational problems for a live accommodation business.
 
 🔗 **Live site:** https://kajuju-automation.vercel.app  
 🔗 **GitHub:** https://github.com/skambo/kajuju-automation
 
 ---
 
-## What This Project Demonstrates
+## The Problem
 
-| Skill | Implementation |
-|---|---|
-| Playwright + TypeScript | Strict mode, typed API responses, scoped locators |
-| API test automation | Live third-party REST API (channel manager) with auth headers |
-| CI/CD pipeline | GitHub Actions — cron schedule, env secrets, email alerting |
-| Synthetic monitoring | Page load thresholds, element presence, CTA validation |
-| E2E form testing | Validation logic, date constraints, dropdown coverage |
-| Double booking detection | Reservation overlap algorithm across 5 room types |
-| Test architecture | Suite separation, skip strategy, no third-party testing |
-| Real deployment | Vercel hosting, Formspree form backend, live production traffic |
+Kaju — a boutique property near Mt. Kenya — receives booking inquiries across WhatsApp, phone, and social media. Availability is manually tracked across Airbnb, Booking.com, a WordPress booking site, and direct bookings, with no single source of truth. Rate information is shared as PDFs. The result: overbooking risk, slow guest response times, and high manual overhead for a small team.
+
+| # | Pain Point | Impact |
+|---|---|---|
+| 1 | No single source of truth | Bookings tracked separately across 4 channels — any lag causes overbooking |
+| 2 | Manual rate card distribution | Staff send the same PDF and photos multiple times daily — no tracking, poor mobile UX |
+| 3 | Three inbound inquiry channels | WhatsApp, phone, and social media each require different manual handling |
+| 4 | Slow inquiry-to-response time | Guests wait minutes to hours for basic availability or rate information |
+| 5 | No automated guest feedback loop | Post-stay follow-up and review solicitation is manual and inconsistent |
+| 6 | Manual invoice creation | Ad hoc with no templated guest data pre-population |
+
+---
+
+## The Solution
+
+This project defines and builds the Kajuju Automation Framework — a QA-engineered system that automates the inquiry-to-confirmation workflow while keeping human judgment in the loop for invoicing, payment verification, and channel management.
+
+### Business Goals
+- Respond to all inquiries within 60 seconds
+- Eliminate double-booking risk with a central availability source
+- Replace PDF rate cards with fast, mobile-first landing pages
+- Automate post-stay feedback and Google review solicitation
+- Reduce manual WhatsApp responses by 80% via AI FAQ handling
+- Keep human oversight for invoicing and payment confirmation
+
+### QA Engineering Goals
+- Demonstrate E2E testing with Playwright and TypeScript (strict mode)
+- Build an API testing layer against a live channel manager
+- Write date-boundary and double-booking detection test suites
+- Implement synthetic monitoring for all live production pages
+- Build a Vercel serverless availability check wired to the booking form
+- Produce a portfolio-grade GitHub repo with CI/CD and automated alerting
+
+---
+
+## What's Been Built
+
+### Phase 1 — Live and Running
+
+**Mobile-first landing pages** (live on Vercel)
+- Rate card page with weekday / weekend / peak tab toggle
+- Workation packages page
+- Booking form with phone/email validation, 2-night minimum enforcement, and real-time availability check
+
+**Smoobu availability integration**
+- Vercel serverless function proxies availability checks to the Smoobu channel manager API
+- Guests are blocked from submitting requests for already-booked dates
+- Fails open on API errors — if Smoobu is unreachable, the form submits and the team reviews the request manually rather than blocking a genuine guest due to an infrastructure problem
+- API key kept server-side, never exposed to the browser
+
+**Formspree form backend**
+- Booking requests are submitted to Formspree, which emails the team immediately
+- Chosen deliberately over a custom email backend — no server to maintain, free tier covers current volume, and it's swappable in Phase 2
+- Every `data-testid` attribute in the form HTML is intentional — built for testability from day one
+
+**GitHub Actions CI pipeline**
+- Availability monitor runs every 4 hours via cron
+- Detects double bookings across all 5 room types using soft assertions — collects every conflict across all rooms before failing, so one run displays the complete picture rather than stopping at the first problem found
+- Sends a single summary alert email on failure with a link to the Actions log
+- Manual trigger available via `workflow_dispatch`
+
+**Playwright test suites**
+- Synthetic monitors for all 3 production pages (load time, CTA presence, nav links)
+- E2E booking form validation (phone formats, email regex, date constraints, dropdown coverage)
+- Smoobu API reachability and property fetch tests
+- Double booking detection across all 5 rooms
+
+### Phase 2 — Planned
+- Twilio WhatsApp auto-responses and AI FAQ handling
+- OpenAI GPT-4o booking summary generation
+- Wave invoice automation with guest data pre-population
+- WordPress → Smoobu webhook for automatic date blocking on confirmed payment
 
 ---
 
 ## Tech Stack
 
-**Testing:** Playwright · TypeScript (strict) · Node.js 20  
-**CI/CD:** GitHub Actions · cron scheduling · email alerting  
-**Frontend:** HTML/CSS/JS · Vercel  
-**APIs:** Smoobu channel manager · Formspree  
-**Phase 2:** Twilio WhatsApp · OpenAI GPT-4o · Wave invoicing
+| Layer | Technology | Purpose |
+|---|---|---|
+| Test framework | Playwright + TypeScript (strict mode) | E2E, API, and synthetic monitoring tests |
+| Runtime | Node.js 20 | Test execution and serverless functions |
+| CI/CD | GitHub Actions | Cron availability monitoring, alerting |
+| Serverless | Vercel | Hosting + availability check proxy function |
+| Channel manager | Smoobu API | Single source of truth for availability |
+| Form backend | Formspree | Booking request emails — no custom server needed |
+| Frontend | HTML / CSS / JS | Static pages, no build step required |
+| Secrets (local) | dotenv | Local `.env` for API keys |
+| Phase 2 | Twilio · OpenAI GPT-4o · Wave | WhatsApp automation, AI, invoicing |
 
 ---
 
 ## Project Structure
 
 ```
-kajuju-automation/
+kajuju-automation/                          ← git root
 ├── .github/
 │   └── workflows/
-│       └── availability-monitor.yml   ← Cron CI pipeline
-└── kajuju-automation/
+│       └── availability-monitor.yml        ← Cron CI pipeline
+├── api/                                    ← Vercel serverless functions
+│   ├── check-availability.js               ← Smoobu availability proxy
+│   └── package.json                        ← CommonJS override (see architecture decisions)
+└── kajuju-automation/                      ← all application and test code
     ├── apps/
-    │   └── landing-pages/             ← 3 live Vercel pages
-    │       ├── index.html             ← Rate card with tab toggle
-    │       ├── workation/index.html   ← Workation packages page
-    │       └── book/index.html        ← Booking form with validation
+    │   └── landing-pages/
+    │       ├── index.html                  ← Rate card  →  /
+    │       ├── workation/index.html        ← Workation  →  /workation
+    │       └── book/index.html             ← Booking form  →  /book
     └── tests/
         ├── monitoring/
-        │   └── health-check.spec.ts   ← Synthetic monitors (10 tests)
+        │   └── health-check.spec.ts        ← Synthetic monitors (10 tests)
         ├── e2e/
-        │   └── booking-form.spec.ts   ← Form validation E2E (8 tests)
+        │   └── booking-form.spec.ts        ← Form E2E (8 tests)
         └── api/
-            ├── smoobu.spec.ts         ← API reachability + property fetch
-            └── availability.spec.ts   ← Double booking detection (3 tests)
+            ├── smoobu.spec.ts              ← API reachability + property fetch
+            └── availability.spec.ts        ← Double booking detection (3 tests)
 ```
 
----
-
-## Test Suites
-
-### Synthetic Monitoring — `health-check.spec.ts`
-Monitors all three production pages on every CI run:
-- Page loads successfully with correct status
-- Load time within threshold (5s standard, 15s for image-heavy page)
-- Critical CTAs present and pointing to correct URLs
-- Rate toggle tabs visible and interactive
-- Navigation links present across all pages
-
-### Booking Form E2E — `booking-form.spec.ts`
-Validates the guest-facing booking form end to end:
-- All fields render correctly on load
-- Phone validation: rejects short/invalid numbers, accepts Kenyan (+254) and international formats
-- Email validation: rejects malformed addresses, accepts valid formats
-- Date picker enforces today as minimum check-in
-- All room types present in dropdown
-- Submit button enabled with correct form state
-
-### API Tests — `smoobu.spec.ts` + `availability.spec.ts`
-Tests against the live Smoobu channel manager API:
-- API key authentication and endpoint reachability
-- All 5 properties returned with correct IDs
-- Full reservation list fetched and parsed
-- Overlap detection across all rooms using date string comparison (avoids UTC midnight false positives from `new Date()`)
-- Produces a full conflict report before failing — all overlaps surfaced, not just the first
+> **Why nested?** The repo was initialised with a nested folder structure. The `.github/` workflows folder and `api/` serverless folder must stay at the git root — Vercel and GitHub Actions both look there. The `defaults: run: working-directory: kajuju-automation` setting in the workflow compensates for this.
 
 ---
 
-## CI Pipeline
+## Key Engineering Decisions
 
-```yaml
-# .github/workflows/availability-monitor.yml
-on:
-  schedule:
-    - cron: '0 */4 * * *'   # Every 4 hours
-  workflow_dispatch:          # Manual trigger
-```
+**Smoobu as single source of truth**
+All date blocking flows through the channel manager — never directly on Airbnb or Booking.com. Direct platform blocks don't sync back to Smoobu. This is enforced through monitoring and documented as a business rule.
 
-The pipeline installs dependencies, runs the availability suite, and sends a single summary email alert if any overlap is detected. Secrets are stored in GitHub Actions — never in the repo.
+**Fail open on availability errors**
+When something goes wrong in a system, it can either fail closed (block everything) or fail open (let things through for a human to handle). Our availability check fails open: if the Smoobu API is unreachable, the booking form submits and the team reviews manually. 
+
+**Date string comparison over `new Date()`**
+Comparing `YYYY-MM-DD` strings directly avoids UTC midnight timezone drift that caused false positive double-booking alerts in early builds. Back-to-back bookings (checkout and check-in on the same date) correctly return no conflict.
+
+**Soft assertions for overlap detection**
+Rather than stopping at the first double-booking found, the availability test collects every conflict across all rooms, so one CI run surfaces the complete picture — all affected rooms in a single alert rather than requiring multiple fix-and-rerun cycles.
+
+
+**Static HTML over a framework**
+No build step, instant Vercel deploys, and easy for non-engineers to read and edit. The business logic lives in the serverless function and test suite — the pages don't need a framework.
+
+**Formspree over a custom email backend**
+No server to maintain, the free tier covers current booking volumes, and the integration is a single `action` attribute on a form. When Phase 2 requires more control, we can review this again.
+
+**CommonJS in the `api/` folder**
+The main `package.json` sets `"type": "module"` for Playwright compatibility. A local `package.json` with `"type": "commonjs"` in the `api/` folder overrides this for Vercel serverless functions without affecting the test suite.
+
+**Testability built into the HTML**
+Interactive elements in the landing pages all have `data-testid` attributes. This allows us to separate test selectors from styling or structural changes.
 
 ---
 
-## Key Architecture Decisions
+## Secrets & Where They Live
 
-**Date string comparison over `new Date()`**  
-Comparing `YYYY-MM-DD` strings directly avoids UTC midnight timezone drift that caused false positive double-booking alerts. Back-to-back bookings (checkout and check-in on the same date) correctly return no conflict.
-
-**Collect all failures before asserting**  
-The overlap test gathers every conflict across all rooms before throwing, so one run surfaces the complete picture rather than stopping at the first failure.
-
-**`test.skip` over deleting**  
-Two tests are skipped with TODO comments explaining exactly why — a flaky nav locator and a date constraint that needs a unit test approach. Deleted tests are invisible technical debt.
-
-**Don't test third-party reliability**  
-Tests assert that our code behaves correctly — not that Formspree responds fast or that the channel manager API has 100% uptime.
-
-**CommonJS not ESNext**  
-`"type": "module"` breaks Playwright test discovery. Documented here to avoid re-encountering it.
+| Secret | Where | Purpose |
+|---|---|---|
+| `SMOOBU_API_KEY` | Local `.env` + GitHub Secrets + Vercel Env Vars | Smoobu API authentication |
+| `SMOOBU_*_ROOM_ID` | Local `.env` + Vercel Env Vars | Room ID mapping for availability checks |
+| `GMAIL_USERNAME` | GitHub Secrets | Alert email sender |
+| `GMAIL_APP_PASSWORD` | GitHub Secrets | Gmail app password (16 chars, no spaces) |
+| `ALERT_EMAIL` | GitHub Secrets | Recipient for double booking alerts |
 
 ---
 
@@ -142,9 +192,9 @@ SMOOBU_COTTAGE_ID=your_id
 ```
 
 ```bash
-npx playwright test                                              # all tests
-npx playwright test tests/api/availability.spec.ts --reporter=list  # one suite
-npx playwright test --ui                                         # interactive mode
+npx playwright test                    # all tests
+npx playwright test --reporter=list    # with visible console output
+npx playwright test --ui               # interactive mode
 ```
 
 ---
@@ -153,26 +203,32 @@ npx playwright test --ui                                         # interactive m
 
 | Suite | Tests | Passing | Skipped | Notes |
 |---|---|---|---|---|
-| `health-check.spec.ts` | 10 | 9 | 1 | Nav link needs `data-testid` |
-| `booking-form.spec.ts` | 8 | 7 | 1 | 2-night minimum — needs unit test |
+| `health-check.spec.ts` | 10 | 9 | 1 | Nav link needs `data-testid` — TODO |
+| `booking-form.spec.ts` | 8 | 7 | 1 | 2-night minimum — might need unit test approach |
 | `smoobu.spec.ts` | 1 | 1 | 0 | |
 | `availability.spec.ts` | 3 | 3 | 0 | |
 | **Total** | **22** | **20** | **2** | **91% passing** |
 
 ---
 
-## Roadmap
+## Tech Debt
 
-- **Next:** Smoobu availability check wired into booking form pre-submission
-- **Week 3:** Page object model refactor · 2-night minimum unit test
-- **Phase 2:** Twilio WhatsApp alerts · OpenAI booking summaries · Wave invoice automation
+| ID | Issue | Priority |
+|---|---|---|
+| TD-009 | WordPress bookings don't sync to Smoobu — manual blocking required until Phase 2 webhook is built | High |
+| TD-003 | Alert email doesn't specify which room has the conflict | Medium |
+| TD-004 | Page titles show incorrect brand name on public pages | Medium |
+| TD-005 | Images not fitting correctly on desktop | Low |
+| TD-006 | Nav link Playwright test flaky — skipped with TODO | Low |
+| TD-007 | Workation page slow load — image needs to be compressed (5.4MB) | Low |
+| TD-008 | 2-night minimum checkout test skipped — might need unit test approach | Low |
 
 ---
 
 ## About
 
-Built by Sandra — QA engineer with 10 years of experience, currently running a hospitality business.
+Built by Sandra — a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business itself as the test subject.
 
-Rather than stepping away from tech during this chapter, I've used it as an opportunity to automate the real operational problems I face as a business owner — availability monitoring, double booking detection, guest-facing booking flows, and CI alerting. Everything here runs against live production traffic, not a toy app.
+The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, and serverless architecture. 
 
-This project keeps me hands-on with current tooling and reflects how I've always approached QA: find the real problem, build something that actually solves it, and make sure it doesn't break quietly.
+AI is part of this project honestly and intentionally.The problem framing, design choices, testing decisions and engineering judgement are mine. I believe this reflects how QA engineering is moving toward, not AI replacing testing, but engineers who know how to work effectively alongside AI producing better outcomes faster.
