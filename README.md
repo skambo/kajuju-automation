@@ -1,6 +1,6 @@
 # Kajuju Automation Framework
 
-A hospitality-grade QA automation framework built with Playwright + TypeScript, solving real operational problems for a live accommodation business.
+A hospitality-grade QA automationframework built with Playwright + TypeScript, solving operational problems for a hospitality business.
 
 🔗 **Live site:** https://idan-barn-suites-git-main-skambo-2710s-projects.vercel.app/
 🔗 **GitHub:** https://github.com/skambo/kajuju-automation
@@ -258,10 +258,9 @@ node index.js
 | TD-005 | Nav link Playwright test flaky — skipped with TODO | Low |
 | TD-006 | Workation page slow load — image needs to be compressed (5.4MB) | Low |
 | TD-007 | 2-night minimum checkout for workation package test skipped — might need unit test approach | Low |
-| TD-008 | Bot repo (kajuju-bot) has node_modules committed — should be removed and .gitignore enforced | Low |
-| TD-009 | Bot currently replies identically to all messages — no keyword detection or smart routing yet | Medium |
-| TD-010 | Twilio Sandbox requires manual opt-in from each guest (join code) — blocked on Meta approval for production | High |
-| TD-011 | Known channel users (Airbnb, Booking.com guests) need proactive outreach template once Meta approved | Medium |
+| TD-008 | Bot currently replies identically to all messages — no keyword detection or smart routing yet | Medium |
+| TD-009 | Twilio Sandbox requires manual opt-in from each guest (join code) — blocked on Meta approval for production | High |
+| TD-010 | Known channel users (Airbnb, Booking.com guests) need proactive outreach template once Meta approved | Medium |
 
 ---
 
@@ -275,7 +274,7 @@ This project was built using an augmented engineering approach.
 
 **Quality control:** Code is reviewed, debugged, and validated by me before merging — including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic.
 
-**Why it matters:** This reflects how QA engineering is evolving. Engineers who can work effectively alongside AI while maintaining full ownership of quality decisions produce better outcomes faster.
+**Why it matters:** This reflects how QA engineering is evolving. Engineers who can work effectively alongside AI while maintaining full ownership of quality decisions produce faster.
 
 ---
 
