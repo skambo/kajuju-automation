@@ -266,17 +266,9 @@ node index.js
 
 ## Development Methodology
 
-This project was built using an augmented engineering approach.
+Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner — working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging — including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic. This reflects how I work: AI handles the repetitive thinking, I own the decisions and the quality bar.
 
-**Strategy:** Test strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine.
-
-**AI as collaborator:** Claude is used as a thinking partner — working through edge cases and debugging.
-
-**Quality control:** Code is reviewed, debugged, and validated by me before merging — including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic.
-
-**Why it matters:** This reflects how QA engineering is evolving. Engineers who can work effectively alongside AI while maintaining full ownership of quality decisions produce faster.
-
----
+--
 
 ## About
 
