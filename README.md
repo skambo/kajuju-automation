@@ -3,9 +3,9 @@
 A hospitality-grade QA automationframework built with Playwright + TypeScript, solving operational problems for a hospitality business.
 
 🔗 **Live site:** https://idan-barn-suites-git-main-skambo-2710s-projects.vercel.app/
+
 🔗 **GitHub:** https://github.com/skambo/kajuju-automation
 
----
 
 ## The Problem
 
@@ -20,7 +20,7 @@ Kaju — a boutique property near Mt. Kenya — receives booking inquiries acros
 | 5 | No automated guest feedback loop | Post-stay follow-up and review solicitation is manual and inconsistent |
 | 6 | Manual invoice creation | Ad hoc with no templated guest data pre-population |
 
----
+
 
 ## The Solution
 
@@ -42,7 +42,6 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 - Build a Vercel serverless availability check wired to the booking form
 - Run on a GitHub repo with CI/CD and automated alerting
 
----
 
 ## What's Been Built
 
@@ -75,7 +74,6 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 - Smoobu API reachability and property fetch tests
 - Double booking detection across all 5 rooms
 
----
 
 ### Phase 2 — WhatsApp Bot: LIVE ✅
 
@@ -106,7 +104,6 @@ Questions about availability, meals, or special requests? Just reply here and we
 **Bot repo:** `https://github.com/skambo/kajuju-bot`
 **Railway project:** `https://railway.com/project/705ac21c-7bc0-46da-bdb9-f4d03a2f0530`
 
----
 
 ### Phase 2 (WIP — Remaining)
 - Move from Twilio Sandbox to WhatsApp Business API (Meta approval required)
@@ -115,7 +112,6 @@ Questions about availability, meals, or special requests? Just reply here and we
 - Wave invoice automation with guest data pre-population
 - WordPress → Smoobu webhook for automatic date blocking on confirmed payment
 
----
 
 ## Tech Stack
 
@@ -132,8 +128,6 @@ Questions about availability, meals, or special requests? Just reply here and we
 | Bot hosting | Railway | Permanent deployment, auto-redeploy on push |
 | Secrets (local) | dotenv | Local .env for API keys |
 | Phase 2 (next) | OpenAI GPT-4o · Wave | AI FAQ handling, invoicing |
-
----
 
 ## Project Structure
 
@@ -164,7 +158,6 @@ kajuju-automation/                          ← git root
             └── availability.spec.ts        ← Double booking detection
 ```
 
----
 
 ## Key Engineering Decisions
 
@@ -186,7 +179,6 @@ kajuju-automation/                          ← git root
 
 **Twilio Sandbox first** — Allows full end-to-end testing without Meta WhatsApp Business API approval. Sandbox requires recipients to opt in via a join code.
 
----
 
 ## Secrets & Where They Live
 
@@ -198,7 +190,7 @@ kajuju-automation/                          ← git root
 | GMAIL_APP_PASSWORD | GitHub Secrets | Gmail app password (16 chars, no spaces) |
 | ALERT_EMAIL | GitHub Secrets | Recipient for double booking alerts |
 
----
+
 
 ## Local Setup
 
@@ -233,7 +225,6 @@ node index.js
 # Bot runs on port 3000
 ```
 
----
 
 ## Current Test Status
 
@@ -245,7 +236,6 @@ node index.js
 | availability.spec.ts | 3 | 3 | 0 | |
 | **Total** | **22** | **20** | **2** | **91% passing** |
 
----
 
 ## Tech Debt
 
@@ -262,13 +252,10 @@ node index.js
 | TD-009 | Twilio Sandbox requires manual opt-in from each guest (join code) — blocked on Meta approval for production | High |
 | TD-010 | Known channel users (Airbnb, Booking.com guests) need proactive outreach template once Meta approved | Medium |
 
----
 
 ## Development Methodology
 
 Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner — working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging — including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic. This reflects how I work: AI handles the repetitive thinking, I own the decisions and the quality bar.
-
---
 
 ## About
 
