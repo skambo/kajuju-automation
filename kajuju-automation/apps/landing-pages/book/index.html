@@ -139,17 +139,11 @@
   </style>
 </head>
 <body>
-<nav style="background:#4a5240;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
-  <a href="/" style="color:#fff;font-family:'Playfair Display',serif;font-size:1.1rem;text-decoration:none;">Idan Barn Suites & Café <span style="display:block;font-size:0.7rem;font-family:'Lato',sans-serif;font-weight:300;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);">Mt. Kenya Base Camp · Naromoru</span></a>
-  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
-    <a href="/" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Rates</a>
-    <a href="/workation" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Workation</a>
-    <a href="/gatherings" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Gatherings</a>
-    <a href="/explore" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Explore</a>
-    <a href="/menu" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Menu</a>
-    <a href="/book" style="color:#fff;text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;">Book Now</a>
-  </div>
-</nav>
+
+<header>
+  <h1>Idan Barn Suites &amp; Café</h1>
+  <p>Mt. Kenya Base Camp · Naromoru</p>
+</header>
 
 <div class="form-hero">
   <h2>📅 Check Availability & Book</h2>
@@ -359,89 +353,117 @@
   <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a>
 </footer>
 
-// api/check-availability.js
-// Vercel serverless function — proxies availability check to Smoobu API.
-// Keeps the Smoobu API key server-side, never exposed to the browser.
-
-const SMOOBU_API = 'https://login.smoobu.com/api';
-
-// Maps room dropdown values (from the booking form) to Smoobu apartment IDs.
-// Update these IDs if rooms are added or renamed in Smoobu.
-const ROOM_ID_MAP = {
-  'Twin Garden Room — B&B':                          process.env.SMOOBU_CORAL_ROOM_ID,
-  'Deluxe Room with Balcony — B&B':                  process.env.SMOOBU_JADE_ROOM_ID,
-  'Penthouse Loft — Self Catering':                  process.env.SMOOBU_PENTHOUSE_ID,
-  'Cottage (3 bed, up to 6 guests) — Self Catering': process.env.SMOOBU_COTTAGE_ID,
-  'Workation — Deluxe Room with Balcony (H/B)':      process.env.SMOOBU_JADE_ROOM_ID,
-  'Workation — Twin Garden Room (H/B)':              process.env.SMOOBU_CORAL_ROOM_ID,
-  'Workation — Penthouse Loft':                      process.env.SMOOBU_PENTHOUSE_ID,
-  'Workation — Team Cottage':                        process.env.SMOOBU_COTTAGE_ID,
-  'Not sure yet — please advise':                    null,
-};
-
-export default async function handler(req, res) {
-  // Only allow POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+<script>
+  // Phone and email validation
+  function validatePhone(value) {
+    const digits = value.replace(/[\s\-().+]/g, '');
+    return /^\d{7,15}$/.test(digits);
   }
 
-  const { room, checkIn, checkOut } = req.body;
-
-  // If guest selected "Not sure yet", skip the check and let the form through
-  if (!room || room === 'Not sure yet — please advise') {
-    return res.status(200).json({ available: true, skipped: true });
+  function validateEmail(value) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value);
   }
 
-  // Validate we have dates
-  if (!checkIn || !checkOut) {
-    return res.status(400).json({ error: 'Check-in and check-out dates are required' });
+  function showError(input, message) {
+    clearError(input);
+    input.style.borderColor = '#E94560';
+    const err = document.createElement('div');
+    err.className = 'field-error';
+    err.style.cssText = 'color:#E94560;font-size:0.75rem;margin-top:4px;';
+    err.textContent = message;
+    input.parentNode.appendChild(err);
   }
 
-  // Look up the Smoobu room ID for the selected room
-  const apartmentId = ROOM_ID_MAP[room];
-  if (!apartmentId) {
-    // Unknown room name — let it through and Sandra will handle manually
-    console.warn(`No Smoobu ID mapped for room: ${room}`);
-    return res.status(200).json({ available: true, skipped: true });
+  function clearError(input) {
+    input.style.borderColor = '';
+    const existing = input.parentNode.querySelector('.field-error');
+    if (existing) existing.remove();
   }
 
-  try {
-    const response = await fetch(`${SMOOBU_API}/reservations?pageSize=100&apartmentId=${apartmentId}`, {
-      headers: {
-        'Api-Key': process.env.SMOOBU_API_KEY,
-        'Content-Type': 'application/json',
-      },
-    });
+  const phoneInput = document.querySelector('[data-testid="input-phone"]');
+  const emailInput = document.querySelector('[data-testid="input-email"]');
 
-    if (!response.ok) {
-      console.error(`Smoobu API error: ${response.status}`);
-      // If Smoobu is unreachable, fail open — let the booking through
-      // Sandra will catch conflicts manually. Better than blocking guests.
-      return res.status(200).json({ available: true, skipped: true, reason: 'smoobu_unreachable' });
+  phoneInput.addEventListener('blur', function() {
+    if (this.value && !validatePhone(this.value)) {
+      showError(this, 'Please enter a valid phone number (e.g. +254 7xx xxx xxx or +44 791x xxxxxx)');
+    } else {
+      clearError(this);
     }
+  });
 
-    const data = await response.json();
-    const bookings = data.bookings || [];
+  emailInput.addEventListener('blur', function() {
+    if (this.value && !validateEmail(this.value)) {
+      showError(this, 'Please enter a valid email address (e.g. name@example.com)');
+    } else {
+      clearError(this);
+    }
+  });
 
-    // Check for overlaps using string comparison (YYYY-MM-DD).
-    // Back-to-back is fine: existing checkout == requested checkin = no conflict.
-    // Overlap only when an existing booking's departure is strictly after our arrival
-    // AND an existing booking's arrival is strictly before our departure.
-    const hasConflict = bookings.some((booking) => {
-      const existingArrival   = booking.arrival;
-      const existingDeparture = booking.departure;
+  // Block submit if validation fails
+  form.addEventListener('submit', function(e) {
+    let valid = true;
+    if (!validatePhone(phoneInput.value)) {
+      showError(phoneInput, 'Please enter a valid phone number (e.g. +254 7xx xxx xxx or +44 791x xxxxxx)');
+      valid = false;
+    }
+    if (!validateEmail(emailInput.value)) {
+      showError(emailInput, 'Please enter a valid email address');
+      valid = false;
+    }
+    if (!valid) {
+      e.stopImmediatePropagation();
+      e.preventDefault();
+    }
+  }, true);
 
-      return existingArrival < checkOut && existingDeparture > checkIn;
-    });
+  // Set minimum date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.querySelector('[data-testid="input-checkin"]').min = today;
+  document.querySelector('[data-testid="input-checkout"]').min = today;
 
-    return res.status(200).json({ available: !hasConflict });
+  // Auto set checkout to day after checkin
+  document.querySelector('[data-testid="input-checkin"]').addEventListener('change', function() {
+    const checkin = new Date(this.value);
+    checkin.setDate(checkin.getDate() + 2); // minimum 2 nights
+    const minCheckout = checkin.toISOString().split('T')[0];
+    const checkoutField = document.querySelector('[data-testid="input-checkout"]');
+    checkoutField.min = minCheckout;
+    if (!checkoutField.value || checkoutField.value <= this.value) {
+      checkoutField.value = minCheckout;
+    }
+  });
 
-  } catch (err) {
-    console.error('Availability check failed:', err);
-    // Network error — fail open so guests aren't blocked by our infra problems
-    return res.status(200).json({ available: true, skipped: true, reason: 'network_error' });
-  }
-}
+  // Show thank you on successful submit
+  const form = document.getElementById('booking-form');
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const btn = document.querySelector('[data-testid="submit-btn"]');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    const data = new FormData(form);
+    try {
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        document.getElementById('form-container').style.display = 'none';
+        document.getElementById('thankyou').style.display = 'block';
+        window.scrollTo(0, 0);
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Send Booking Request →';
+        alert('Something went wrong. Please try again or WhatsApp us directly.');
+      }
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Send Booking Request →';
+      alert('Something went wrong. Please try again or WhatsApp us directly.');
+    }
+  });
+</script>
 
 </body>
 </html>
