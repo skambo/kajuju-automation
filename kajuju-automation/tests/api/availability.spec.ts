@@ -33,6 +33,7 @@ test.describe('Smoobu API — Availability Checks', () => {
       arrival: b.arrival,
       departure: b.departure,
       channel: b.channel.name,
+      type: b.type,
       guest: b['guest-name']
     })), null, 2));
   });
@@ -68,6 +69,8 @@ test.describe('Smoobu API — Availability Checks', () => {
     for (const [roomName, roomId] of Object.entries(ROOMS)) {
       const roomBookings = data.bookings
         .filter((b: any) => b.apartment.id === roomId)
+        .filter((b: any) => b.channel.name !== 'Blocked channel') // exclude manual blocks
+        .filter((b: any) => b.type !== 0)                         // exclude cancelled bookings
         .sort((a: any, b: any) => a.arrival.localeCompare(b.arrival));
 
       for (let i = 0; i < roomBookings.length - 1; i++) {
@@ -81,7 +84,7 @@ test.describe('Smoobu API — Availability Checks', () => {
         const overlap = current.departure > next.arrival;
 
         if (overlap) {
-          const msg = `⚠️ OVERLAP in ${roomName}: booking #${current.id} (${current.arrival}→${current.departure}) overlaps booking #${next.id} (${next.arrival}→${next.departure})`;
+          const msg = `⚠️ OVERLAP in ${roomName}: booking #${current.id} (${current.arrival}→${current.departure}) overlaps booking #${next.id} (${next.arrival}→${next.departure}) — guests: "${current['guest-name']}" and "${next['guest-name']}"`;
           console.log(msg);
           allOverlaps.push(msg);
         } else {
