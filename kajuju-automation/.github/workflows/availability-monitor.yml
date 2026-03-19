@@ -5,10 +5,6 @@ on:
     - cron: '0 */4 * * *'
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: kajuju-automation
-
 jobs:
   check-availability:
     runs-on: ubuntu-latest
@@ -26,10 +22,9 @@ jobs:
         run: npx playwright install chromium
 
       - name: Run availability checks
-        id: availability
         env:
           SMOOBU_API_KEY: ${{ secrets.SMOOBU_API_KEY }}
-        run: npx playwright test tests/api/availability.spec.ts --reporter=list
+        run: npx playwright test tests/api/availability.spec.ts --reporter=html
 
       - name: Send email on failure
         if: failure()
@@ -43,12 +38,10 @@ jobs:
           to: ${{ secrets.ALERT_EMAIL }}
           from: Kajuju Monitor
           body: |
-            A double booking has been detected in your Smoobu calendar.
+            A double booking or availability conflict has been detected!
 
-            Check the overlap details in the GitHub Actions run log:
-            https://github.com/skambo/kajuju-automation/actions
-
-            Then fix it immediately in Smoobu:
+            Please check your Smoobu calendar immediately at:
             https://login.smoobu.com/en/calendar
 
-            Remember: always block dates in Smoobu — never directly on Airbnb or Booking.com.
+            Run the full report locally:
+            npx playwright test tests/api/availability.spec.ts
