@@ -48,7 +48,17 @@ Any issues finding us, call or WhatsApp us directly: +254 762 004 417`
     response: `We have free on-site parking — secure and within the property grounds. 🅿️`
   },
   {
-    keywords: ['wifi', 'internet', 'connectivity', 'work remotely', 'starlink', 'speeds'],
+    keywords: ['workation', 'work from', 'working from', 'remote work', 'work remotely', 'work and stay', 'workcation'],
+    response: `Our Workation package is perfect for remote workers! 💻🏔️
+
+Fast Starlink WiFi, peaceful surroundings, great coffee, and Mt. Kenya views (when she'd not hiding), out the window.
+
+👉 Full details here: https://rates.idanbarnsuites.com/workation
+
+Share your preferred dates and we'll sort you out!`
+  },
+  {
+    keywords: ['wifi', 'internet', 'connectivity', 'starlink', 'speeds'],
     response: `We run on Starlink — fast, reliable internet throughout the property 📶
 
 Perfect for remote work, video calls, and everything in between. It's one of the reasons our Workation package is so popular!`
@@ -66,18 +76,18 @@ Perfect for remote work, video calls, and everything in between. It's one of the
     response: `Our cancellation policy:
 
 • 72 hours or more before arrival: full refund ✅
-• Within 48 hours of arrival: no refund ❌
+• Within 48 hours of arrival: no refund 
 • Date changes are subject to availability — message us and we'll do our best`
   },
   {
     keywords: ['quiet hours', 'noise', 'music', 'loud', 'generator', 'curfew'],
-    response: `Quiet hours are from 9pm to 7am 🌙
+    response: `Quiet hours are from 9pm to 7am 
 
-We're a retreat property — we ask all guests to be mindful of noise during these hours so everyone can enjoy the peace and the Mt. Kenya night sky ✨`
+We request guests to be mindful of noise during these hours`
   },
   {
-    keywords: ['activities', 'things to do', 'what to do', 'hike', 'horseback', 'excursions', 'explore', 'birdwatching'],
-    response: `There's plenty to keep you busy! 🏔️
+    keywords: ['activities', 'things to do', 'what to do', 'hike', 'horseback', 'excursions', 'birdwatching'],
+    response: `There's plenty to keep you busy! 
 
 *On the property:*
 • Nature walks and birdwatching
@@ -93,10 +103,31 @@ We're a retreat property — we ask all guests to be mindful of noise during the
 • Nanyuki town — local market and shopping
 • Trout fishing at nearby farms
 
+👉 Full activities guide: https://rates.idanbarnsuites.com/explore
+
 Let us know if you'd like help arranging any excursions!`
   },
   {
-    keywords: ['food', 'meals', 'breakfast', 'lunch', 'dinner', 'menu', 'restaurant', 'dining', 'eat', 'half board', 'full board'],
+    keywords: ['group', 'groups', 'team building', 'teambuilding', 'corporate', 'gathering', 'gatherings', 'conference', 'retreat', 'offsite', 'off-site'],
+    response: `We'd love to host your group! 🤝
+
+Whether it's a team offsite, corporate retreat, or a special gathering — we have packages tailored for groups.
+
+👉 See what we offer: https://rates.idanbarnsuites.com/gatherings
+
+Share your group size and dates and we'll put together something great for you!`
+  },
+  {
+    keywords: ['menu', 'share your menu', 'see the menu', 'view the menu', 'what\'s on the menu', 'food menu', 'what do you serve'],
+    response: `Here's our menu 🍽️
+https://rates.idanbarnsuites.com/menu
+
+We serve freshly prepared meals and drinks. Last food orders at 9pm.
+
+Any dietary requirements? Just let us know!`
+  },
+  {
+    keywords: ['food', 'meals', 'breakfast', 'lunch', 'dinner', 'restaurant', 'dining', 'eat', 'half board', 'full board'],
     response: `We have an on-site café serving freshly prepared meals and drinks. Last food orders at 9pm 🍽️
 
 *Meal packages:*
@@ -104,6 +135,8 @@ Let us know if you'd like help arranging any excursions!`
 • Half Board — breakfast + lunch or dinner (+KES 2,500/person/day)
 • Full Board — all meals (+KES 3,300/person/day)
 • Self Catering — kitchen access in Penthouse Loft and Cottage
+
+👉 View our menu: https://rates.idanbarnsuites.com/menu
 
 Let us know your preference when booking!`
   },
@@ -119,8 +152,15 @@ Let us know your preference when booking!`
   {
     keywords: ['pool', 'swimming', 'gym', 'spa', 'facilities'],
     response: `We don't have a swimming pool just yet — but it's in progress and construction is halfway done! 🏊
+`
+  },
+  {
+    keywords: ['available', 'availability', 'any rooms', 'is there space', 'do you have rooms', 'free on', 'vacant', 'book for', 'i want to book', 'make a booking'],
+    response: `To check availability and book your dates, head to our booking page 📅
 
-In the meantime, the Mt. Kenya views are pretty hard to beat 😊`
+👉 https://rates.idanbarnsuites.com/book
+
+Or just share your preferred dates and room type here and we'll get back to you!`
   },
   {
     keywords: ['rates', 'prices', 'how much', 'cost', 'pricing', 'nightly rate', 'weekend rate'],
@@ -129,7 +169,10 @@ https://rates.idanbarnsuites.com
 
 Rates vary by room type and season (weekday / weekend / peak).
 
-Want a quote for specific dates? Just share your dates and preferred room and I'll check availability!`
+📅 Ready to book? Pick your dates here:
+https://rates.idanbarnsuites.com/book
+
+Or share your preferred dates and room type and we'll get back to you!`
   },
 ];
 
