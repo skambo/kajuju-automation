@@ -4,8 +4,8 @@ const twilio = require('twilio');
 const app = express();
 app.use(express.urlencoded({ extended: false }));
 
-const RATE_CARD_URL = 'https://idan-barn-suites-git-main-skambo-2710s-projects.vercel.app/';
-const BOOK_URL = 'https://idan-barn-suites-git-main-skambo-2710s-projects.vercel.app/book';
+const RATE_CARD_URL = 'https://rates.idanbarnsuites.com';
+const BOOK_URL = 'https://rates.idanbarnsuites.com/book';
 
 app.post('/webhook', (req, res) => {
   const incomingMsg = (req.body.Body || '').trim().toLowerCase();

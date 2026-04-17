@@ -1,4 +1,4 @@
-name: Availability Monitor
+name: Site Uptime Monitor
 
 on:
   schedule:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-availability:
+  check-uptime:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,10 +21,8 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install chromium
 
-      - name: Run availability checks
-        env:
-          SMOOBU_API_KEY: ${{ secrets.SMOOBU_API_KEY }}
-        run: npx playwright test tests/api/availability.spec.ts --reporter=html
+      - name: Run site uptime checks
+        run: npx playwright test tests/monitoring/health-check.spec.ts --reporter=html
 
       - name: Send email on failure
         if: failure()
@@ -34,14 +32,13 @@ jobs:
           server_port: 465
           username: ${{ secrets.GMAIL_USERNAME }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject: '🚨 URGENT - Idan Barn Suites Double Booking Detected!'
+          subject: '🚨 URGENT - Idan Barn Suites Site Down!'
           to: ${{ secrets.ALERT_EMAIL }}
           from: Kajuju Monitor
           body: |
-            A double booking or availability conflict has been detected!
+            One or more pages on rates.idanbarnsuites.com failed the uptime check!
 
-            Please check your Smoobu calendar immediately at:
-            https://login.smoobu.com/en/calendar
+            Check the site: https://rates.idanbarnsuites.com
 
             Run the full report locally:
-            npx playwright test tests/api/availability.spec.ts
+            npx playwright test tests/monitoring/health-check.spec.ts
