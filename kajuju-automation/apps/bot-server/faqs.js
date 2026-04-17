@@ -21,9 +21,7 @@ const FAQS = [
   },
   {
     keywords: ['early check in', 'arrive early', 'check in before', 'early arrival'],
-    response: `Standard check-in is from 1pm. Early check-in is available subject to room availability on the day.
-
-We can't guarantee it in advance, but message us on the morning of your arrival and we'll do our best! 😊`
+    response: `Standard check-in is from 1pm. Early check-in is available subject to room availability on the day.`
   },
   {
     keywords: ['late check out', 'stay longer', 'check out time', 'extend stay', 'checkout', 'check out'],
@@ -55,13 +53,13 @@ Fast Starlink WiFi, peaceful surroundings, great coffee, and Mt. Kenya views (wh
 
 👉 Full details here: https://rates.idanbarnsuites.com/workation
 
-Share your preferred dates and we'll sort you out!`
+You may share your preferred dates and we'll get back to you`
   },
   {
     keywords: ['wifi', 'internet', 'connectivity', 'starlink', 'speeds'],
     response: `We run on Starlink — fast, reliable internet throughout the property 📶
 
-Perfect for remote work, video calls, and everything in between. It's one of the reasons our Workation package is so popular!`
+Perfect for remote work, video calls, and everything in between.`
   },
   {
     keywords: ['pets', 'dog', 'cat', 'bring my pet', 'animal', 'puppy'],
@@ -75,7 +73,7 @@ Perfect for remote work, video calls, and everything in between. It's one of the
     keywords: ['cancel', 'cancellation', 'refund', 'change dates', 'cancel booking'],
     response: `Our cancellation policy:
 
-• 72 hours or more before arrival: full refund ✅
+• 72 hours or more before arrival: full refund 
 • Within 48 hours of arrival: no refund 
 • Date changes are subject to availability — message us and we'll do our best`
   },
@@ -94,28 +92,26 @@ We request guests to be mindful of noise during these hours`
 • Cosy fireplace evenings
 • Café with freshly prepared meals and drinks
 
-*Nearby (within 30–45 mins):*
-• Mt. Kenya National Park — hiking trails, game drives
-• Mau Mau caves nature walk starting from Bantu
+*Nearby (within 10–30 mins):*
+• Mt. Kenya National Park — hiking trails, game drives - we're located 20km from the Naro Moru Mt Kenya gate.
+• Mau Mau caves nature walk starting from Bantu Africa
 • Ebike rides
-• Horseback riding along the foothills
+• Horseback riding
 • Ol Pejeta Conservancy — rhinos, lions, chimpanzee sanctuary
 • Nanyuki town — local market and shopping
-• Trout fishing at nearby farms
+• Walks to the nearby River Burguret
 
-👉 Full activities guide: https://rates.idanbarnsuites.com/explore
+Full activities guide: https://rates.idanbarnsuites.com/explore
 
 Let us know if you'd like help arranging any excursions!`
   },
   {
     keywords: ['group', 'groups', 'team building', 'teambuilding', 'corporate', 'gathering', 'gatherings', 'conference', 'retreat', 'offsite', 'off-site'],
-    response: `We'd love to host your group! 🤝
+    response: `We'd love to host your group!
 
-Whether it's a team offsite, corporate retreat, or a special gathering — we have packages tailored for groups.
+Please see below our packages tailored for groups — you can share your group size and dates and we'll put together something great for you.
 
-👉 See what we offer: https://rates.idanbarnsuites.com/gatherings
-
-Share your group size and dates and we'll put together something great for you!`
+https://rates.idanbarnsuites.com/gatherings`
   },
   {
     keywords: ['menu', 'share your menu', 'see the menu', 'view the menu', 'what\'s on the menu', 'food menu', 'what do you serve'],
@@ -124,7 +120,7 @@ https://rates.idanbarnsuites.com/menu
 
 We serve freshly prepared meals and drinks. Last food orders at 9pm.
 
-Any dietary requirements? Just let us know!`
+Any dietary requirements? Just let us know`
   },
   {
     keywords: ['food', 'meals', 'breakfast', 'lunch', 'dinner', 'restaurant', 'dining', 'eat', 'half board', 'full board'],
@@ -136,13 +132,13 @@ Any dietary requirements? Just let us know!`
 • Full Board — all meals (+KES 3,300/person/day)
 • Self Catering — kitchen access in Penthouse Loft and Cottage
 
-👉 View our menu: https://rates.idanbarnsuites.com/menu
+View our menu: https://rates.idanbarnsuites.com/menu
 
-Let us know your preference when booking!`
+Let us know your preference when booking`
   },
   {
     keywords: ['children', 'kids', 'family', 'baby', 'toddler', 'child friendly'],
-    response: `We're family-friendly! 👶
+    response: `We're family-friendly! 
 
 • Children of all ages are welcome
 • The Cottage (3-bed, sleeps up to 6) is perfect for families
@@ -156,6 +152,7 @@ Let us know your preference when booking!`
   },
   {
     keywords: ['available', 'availability', 'any rooms', 'is there space', 'do you have rooms', 'free on', 'vacant', 'book for', 'i want to book', 'make a booking'],
+    isAvailability: true,
     response: `To check availability and book your dates, head to our booking page 📅
 
 👉 https://rates.idanbarnsuites.com/book
@@ -172,14 +169,19 @@ Rates vary by room type and season (weekday / weekend / peak).
 📅 Ready to book? Pick your dates here:
 https://rates.idanbarnsuites.com/book
 
-Or share your preferred dates and room type and we'll get back to you!`
+Or share your preferred dates and room type and we'll get back to you`
   },
 ];
 
+const SPECIFIC_DATE_PATTERN = /\b(january|february|march|april|may|june|july|august|september|october|november|december|jan|feb|mar|apr|jun|jul|aug|sep|oct|nov|dec|\d{1,2}(st|nd|rd|th)|\d{1,2}[\/\-]\d{1,2}|today|tomorrow|tonight|this weekend|next weekend|this week|next week|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/i;
+
 function matchFaq(message) {
   const lower = message.toLowerCase();
+  const hasSpecificDate = SPECIFIC_DATE_PATTERN.test(lower);
+
   for (const faq of FAQS) {
     if (faq.keywords.some(kw => lower.includes(kw))) {
+      if (faq.isAvailability && hasSpecificDate) return null;
       return faq.response;
     }
   }
