@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mt Kenya Base Camp Stay | Idan Barn Suites & Café</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #f5f0e8;
+      --dark: #2c2c2c;
+      --olive: #4a5240;
+      --gold: #b5913a;
+      --light-olive: #6b7160;
+      --border: #d4cfc4;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: var(--cream); color: var(--dark); font-family: 'Lato', sans-serif; }
+
+    /* NAV */
+    nav { background: var(--olive); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem; }
+    .nav-brand { color: #fff; font-family: 'Playfair Display', serif; font-size: 1.1rem; text-decoration: none; }
+    .nav-brand span { display: block; font-size: 0.7rem; font-family: 'Lato', sans-serif; font-weight: 300; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.7); }
+    .nav-links { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+
+    /* HERO */
+    .hero { background: var(--olive); padding: 4rem 2rem 3.5rem; text-align: center; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(255,255,255,0.02) 40px, rgba(255,255,255,0.02) 80px); }
+    .hero-tag { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem; }
+    .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); color: #fff; line-height: 1.15; margin-bottom: 0.75rem; }
+    .hero p { color: rgba(255,255,255,0.8); font-weight: 300; font-size: 1.05rem; max-width: 540px; margin: 0 auto; }
+
+    /* CONTENT */
+    .content { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 4rem; }
+
+    /* SECTION HEADER */
+    .section-header { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--olive); white-space: nowrap; }
+    .section-header::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+    /* INTRO */
+    .intro { font-size: 0.95rem; color: var(--light-olive); line-height: 1.8; margin-bottom: 3rem; max-width: 680px; }
+
+    /* PACKAGE CARDS */
+    .packages { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 3rem; }
+    .package { background: #fff; border: 1px solid var(--border); padding: 1.75rem; }
+    .package-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .package h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--dark); margin-bottom: 0.25rem; }
+    .package .room-types { font-size: 0.78rem; letter-spacing: 1px; text-transform: uppercase; color: var(--light-olive); margin-bottom: 1.25rem; }
+    .package-rate { background: var(--cream); border: 1px solid var(--border); padding: 1rem 1.25rem; margin-bottom: 1.25rem; }
+    .package-rate .from { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--light-olive); margin-bottom: 0.5rem; }
+    .package-rate .price { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--olive); font-weight: 600; line-height: 1.5; }
+    .package-rate .price-note { font-size: 0.75rem; color: var(--light-olive); margin-top: 0.3rem; }
+    .package h4 { font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; color: var(--light-olive); margin-bottom: 0.75rem; }
+    .includes { list-style: none; margin-bottom: 1rem; }
+    .includes li { font-size: 0.83rem; color: var(--dark); padding: 0.3rem 0; border-bottom: 1px solid var(--border); display: flex; gap: 0.6rem; align-items: flex-start; line-height: 1.5; }
+    .includes li:last-child { border-bottom: none; }
+    .includes li::before { content: '✓'; color: var(--gold); font-weight: 700; flex-shrink: 0; margin-top: 0.05rem; }
+    .best-for { display: inline-block; font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; background: var(--cream); color: var(--light-olive); padding: 0.25rem 0.7rem; border: 1px solid var(--border); }
+
+    /* ADD-ONS */
+    .addons { background: #fff; border: 1px solid var(--border); padding: 1.5rem; margin-bottom: 3rem; }
+    .addon-row { display: flex; justify-content: space-between; align-items: flex-start; padding: 0.65rem 0; border-bottom: 1px solid var(--border); gap: 1rem; }
+    .addon-row:last-child { border-bottom: none; }
+    .addon-label { font-size: 0.88rem; color: var(--dark); line-height: 1.5; }
+    .addon-label span { display: block; font-size: 0.78rem; color: var(--light-olive); margin-top: 0.2rem; font-weight: 300; }
+    .addon-note { font-size: 0.78rem; color: var(--light-olive); text-align: right; white-space: nowrap; }
+
+    /* NEARBY */
+    .nearby-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin-bottom: 3rem; }
+    .nearby { background: #fff; border: 1px solid var(--border); padding: 1.25rem; }
+    .nearby h4 { font-weight: 700; font-size: 0.9rem; color: var(--dark); margin-bottom: 0.3rem; }
+    .nearby p { font-size: 0.8rem; color: var(--light-olive); line-height: 1.5; }
+    .nearby .dist { font-size: 0.72rem; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-top: 0.5rem; }
+
+    /* SEASON NOTE */
+    .season-box { background: var(--olive); color: #fff; padding: 2rem; margin-bottom: 3rem; display: flex; gap: 2rem; align-items: flex-start; flex-wrap: wrap; }
+    .season-box .badge { font-size: 2.5rem; flex-shrink: 0; }
+    .season-box h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--gold); margin-bottom: 0.5rem; }
+    .season-box p { font-size: 0.88rem; font-weight: 300; line-height: 1.7; color: rgba(255,255,255,0.88); }
+
+    /* CTA */
+    .cta-section { background: var(--dark); color: #fff; padding: 3rem 2rem; text-align: center; }
+    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 0.5rem; }
+    .cta-section p { color: rgba(255,255,255,0.7); font-size: 0.9rem; margin-bottom: 1.5rem; font-weight: 300; }
+    .cta-contacts { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem; margin-bottom: 1.5rem; font-size: 0.88rem; color: rgba(255,255,255,0.6); }
+    .cta-contacts a { color: rgba(255,255,255,0.8); text-decoration: none; }
+    .cta-contacts a:hover { color: #fff; }
+    .btn { display: inline-block; padding: 0.85rem 2rem; background: var(--gold); color: #fff; text-decoration: none; font-size: 0.85rem; letter-spacing: 1.5px; text-transform: uppercase; transition: background 0.2s; margin: 0.4rem; }
+    .btn:hover { background: var(--olive); }
+    .btn-outline { background: transparent; border: 1.5px solid rgba(255,255,255,0.5); color: #fff; }
+    .btn-outline:hover { background: rgba(255,255,255,0.1); }
+
+    footer { background: var(--dark); color: rgba(255,255,255,0.5); text-align: center; padding: 1.5rem; font-size: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); }
+    footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+
+    @media (max-width: 600px) {
+      .packages { grid-template-columns: 1fr; }
+      .addon-row { flex-direction: column; gap: 0.25rem; }
+      .addon-note { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-brand">Idan Barn Suites & Café <span>Mt. Kenya Base Camp · Naromoru</span></a>
+  <div class="nav-links">
+    <a href="/">Rates</a>
+    <a href="/workation">Workation</a>
+    <a href="/gatherings">Gatherings</a>
+    <a href="/explore">Explore</a>
+    <a href="/climb" class="active">Climb Mt Kenya</a>
+    <a href="/menu">Menu</a>
+    <a href="/book">Book Now</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">Base Camp Package · Naromoru, Kenya</div>
+  <h1>Mt Kenya Base Camp<br><em>Stay</em></h1>
+  <p>Your highland base, 19km from Naro Moru Gate — the classic starting point for Mt Kenya climbs.</p>
+</div>
+
+<div class="content">
+
+  <p class="intro">
+    Idan Barn sits in the cool highlands outside Naromoru — 19km from Naro Moru Gate - Mt Kenya, the classic starting point for Mt Kenya climbs. We know the rhythm: dinner the evening before, early wake-up, early or packed breakfast and lunch, ready for your day out in nature.
+  </p>
+
+  <!-- PACKAGES -->
+  <div class="section-header"><h2>Stay Packages</h2></div>
+  <div class="packages">
+
+    <div class="package">
+      <div class="package-icon">🌄</div>
+      <h3>Climber's B&B</h3>
+      <div class="room-types">Deluxe Room · Twin Garden Room</div>
+      <div class="package-rate">
+        <div class="from">From</div>
+        <div class="price">
+          KES 10,500 / single<br>
+          KES 11,500 / double
+        </div>
+        <div class="price-note">Weekday rates</div>
+      </div>
+      <h4>Includes</h4>
+      <ul class="includes">
+        <li>Full breakfast from 6am — arrange the evening before</li>
+        <li>KWS-licensed guide referral</li>
+        <li>Early check-in / late check-out flexibility</li>
+      </ul>
+      <span class="best-for">Solo climbers & pairs</span>
+    </div>
+
+    <div class="package">
+      <div class="package-icon">🏕️</div>
+      <h3>Base Camp Self-Catering</h3>
+      <div class="room-types">Penthouse Loft · 3-Bedroom Cottage</div>
+      <div class="package-rate">
+        <div class="from">From</div>
+        <div class="price">
+          KES 12,500 / Penthouse<br>
+          KES 10,000 / Cottage
+        </div>
+        <div class="price-note">Weekday rates, per night</div>
+      </div>
+      <h4>Includes</h4>
+      <ul class="includes">
+        <li>Fully equipped kitchen</li>
+        <li>Early breakfast arranged on request</li>
+        <li>KWS-licensed guide referral</li>
+      </ul>
+      <span class="best-for">Groups, climbing teams & families</span>
+    </div>
+
+  </div>
+
+  <!-- ADD-ONS -->
+  <div class="section-header"><h2>Add-Ons</h2></div>
+  <div class="addons">
+    <div class="addon-row">
+      <div class="addon-label">
+        🌅 Early breakfast
+        <span>Arranged from 6am — let us know the evening before</span>
+      </div>
+      <div class="addon-note">On request</div>
+    </div>
+    <div class="addon-row">
+      <div class="addon-label">
+        🥪 Packed lunch box
+        <span>Place your order the evening before departure</span>
+      </div>
+      <div class="addon-note">On request</div>
+    </div>
+    <div class="addon-row">
+      <div class="addon-label">
+        🚐 Transfer to Naro Moru Gate
+        <span>Ask us when booking — we'll arrange it for you</span>
+      </div>
+      <div class="addon-note">On request</div>
+    </div>
+    <div class="addon-row">
+      <div class="addon-label">
+        🧗 KWS-licensed guide referral
+        <span>We can connect you with experienced, licensed guides for the mountain</span>
+      </div>
+      <div class="addon-note">On request</div>
+    </div>
+  </div>
+
+  <!-- WHAT'S NEARBY -->
+  <div class="section-header"><h2>What's Nearby</h2></div>
+  <div class="nearby-grid">
+    <div class="nearby">
+      <h4>🏔️ Naro Moru Gate</h4>
+      <p>Mt Kenya National Park — the classic entry point for the Naro Moru Route to Point Lenana.</p>
+      <div class="dist">19km · ~25 min drive</div>
+    </div>
+    <div class="nearby">
+      <h4>🦏 Ol Pejeta Conservancy</h4>
+      <p>Home to the last northern white rhinos, lions, and a chimpanzee sanctuary.</p>
+      <div class="dist">~50 min drive</div>
+    </div>
+    <div class="nearby">
+      <h4>🐟 Trout Tree Restaurant</h4>
+      <p>A beloved highland landmark — dining in the trees above a trout stream.</p>
+      <div class="dist">10 min drive</div>
+    </div>
+    <div class="nearby">
+      <h4>🛫 Nanyuki Town & Airstrip</h4>
+      <p>Town centre, shops, airstrip connections to Nairobi and the Mara.</p>
+      <div class="dist">20 min drive</div>
+    </div>
+    <div class="nearby">
+      <h4>🕳️ Mau Mau Caves</h4>
+      <p>A historic hike to hidden waterfalls and caves — one of the most memorable experiences in the region.</p>
+      <div class="dist">Arranged on request</div>
+    </div>
+  </div>
+
+  <!-- SEASON NOTE -->
+  <div class="season-box">
+    <div class="badge">☀️</div>
+    <div>
+      <h3>Best Time to Climb</h3>
+      <p>June to September is our dry season — the best months for clear mountain views, good hiking conditions, and cool highland weather. This is when we're at our best.</p>
+    </div>
+  </div>
+
+</div>
+
+<div class="cta-section">
+  <h2>Book Direct</h2>
+  <p>Tell us your climb dates and we'll sort the rest — early breakfast, packed lunch, guide referral, transfer.</p>
+  <div class="cta-contacts">
+    <span>📞 <a href="tel:+254762004417">+254 762 004 417</a></span>
+    <span style="opacity:0.4; padding: 0 0.25rem;">·</span>
+    <span>✉️ <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a></span>
+  </div>
+  <a href="https://www.idanbarnsuites.com/rooms/" class="btn">Book Your Room</a>
+  <a href="https://wa.me/254762004417?text=Hi%20Idan%20Barn!%20I'd%20like%20to%20book%20a%20Mt%20Kenya%20Base%20Camp%20stay." class="btn btn-outline">📱 WhatsApp Us</a>
+</div>
+
+<footer>
+  © 2026 Idan Barn Suites & Café · Naromoru, Kenya &nbsp;·&nbsp;
+  <a href="tel:+254762004417">+254 762 004 417</a> &nbsp;·&nbsp;
+  <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a>
+</footer>
+
+</body>
+</html>
