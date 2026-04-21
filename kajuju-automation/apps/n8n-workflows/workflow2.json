@@ -1,0 +1,658 @@
+{
+  "name": "QA Job Alert Digest",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 4 * * *"
+            }
+          ]
+        }
+      },
+      "id": "node-01",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        200,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://weworkremotely.com/remote-jobs.rss",
+        "options": {}
+      },
+      "id": "node-02",
+      "name": "RSS Feed - WeWorkRemotely",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://himalayas.app/jobs/rss",
+        "options": {}
+      },
+      "id": "node-03",
+      "name": "RSS Feed - Himalayas",
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        440,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://remotive.com/api/remote-jobs?category=qa",
+        "options": {}
+      },
+      "id": "node-04",
+      "name": "HTTP Request - Remotive",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://remocate.app/sitemap.xml",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "node-05",
+      "name": "HTTP Request - Remocate Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://testdevjobs.com/sitemap.xml",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "node-06",
+      "name": "HTTP Request - TestDevJobs Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://nodesk.co/sitemap.xml",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "node-07",
+      "name": "HTTP Request - Nodesk Sitemap",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;\nreturn $input.all()\n  .filter(item => {\n    const pub = item.json.pubDate;\n    if (!pub) return true;\n    return new Date(pub).getTime() >= cutoff;\n  })\n  .map(item => {\n    const raw = (item.json.title || '').trim();\n    const colonIdx = raw.indexOf(':');\n    let company = '', title = '';\n    if (colonIdx > -1) {\n      company = raw.substring(0, colonIdx).trim();\n      title = raw.substring(colonIdx + 1).trim();\n    } else {\n      title = raw;\n    }\n    return { json: { title, company, url: item.json.link || '', source: 'WeWorkRemotely' } };\n  });"
+      },
+      "id": "node-08",
+      "name": "Normalize - WeWorkRemotely",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        60
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;\nreturn $input.all()\n  .filter(item => {\n    const pub = item.json.pubDate;\n    if (!pub) return true;\n    return new Date(pub).getTime() >= cutoff;\n  })\n  .map(item => {\n    const raw = (item.json.title || '').trim();\n    const atIdx = raw.lastIndexOf(' at ');\n    let title = raw, company = '';\n    if (atIdx > -1) {\n      title = raw.substring(0, atIdx).trim();\n      company = raw.substring(atIdx + 4).trim();\n    }\n    return { json: { title, company, url: item.json.link || '', source: 'Himalayas' } };\n  });"
+      },
+      "id": "node-09",
+      "name": "Normalize - Himalayas",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;\nconst raw = $input.first().json;\nconst jobs = Array.isArray(raw.jobs) ? raw.jobs : [];\nreturn jobs\n  .filter(job => !!job.title)\n  .filter(job => {\n    if (!job.publication_date) return true;\n    return new Date(job.publication_date).getTime() >= cutoff;\n  })\n  .map(job => ({\n    json: {\n      title: job.title || '',\n      company: job.company_name || '',\n      url: job.url || '',\n      source: 'Remotive'\n    }\n  }));"
+      },
+      "id": "node-10",
+      "name": "Normalize - Remotive",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const xmlText = $input.first().json.data || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet'];\nconst cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;\nconst locMatches = [...xmlText.matchAll(/<loc>(.*?)<\\/loc>/g)];\nconst jobs = locMatches\n  .map(m => m[1].trim())\n  .filter(url => {\n    const slug = url.toLowerCase();\n    return qaTerms.some(t => slug.includes(t));\n  })\n  .filter(url => {\n    const m = url.match(/\\/(20\\d{2})[\\/\\-](0[1-9]|1[0-2])/) || url.match(/\\/(20\\d{2})\\//);\n    if (!m) return true;\n    const year = parseInt(m[1], 10);\n    const month = m[2] ? parseInt(m[2], 10) - 1 : 0;\n    return new Date(year, month, 1).getTime() >= cutoff;\n  })\n  .map(url => ({\n    json: {\n      title: url.split('/').pop().replace(/-/g, ' '),\n      company: '',\n      url,\n      source: 'Remocate'\n    }\n  }));\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
+      },
+      "id": "node-11",
+      "name": "Parse Sitemap - Remocate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const xmlText = $input.first().json.data || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet'];\nconst cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;\nconst locMatches = [...xmlText.matchAll(/<loc>(.*?)<\\/loc>/g)];\nconst jobs = locMatches\n  .map(m => m[1].trim())\n  .filter(url => {\n    const slug = url.toLowerCase();\n    return qaTerms.some(t => slug.includes(t));\n  })\n  .filter(url => {\n    const m = url.match(/\\/(20\\d{2})[\\/\\-](0[1-9]|1[0-2])/) || url.match(/\\/(20\\d{2})\\//);\n    if (!m) return true;\n    const year = parseInt(m[1], 10);\n    const month = m[2] ? parseInt(m[2], 10) - 1 : 0;\n    return new Date(year, month, 1).getTime() >= cutoff;\n  })\n  .map(url => ({\n    json: {\n      title: url.split('/').pop().replace(/-/g, ' '),\n      company: '',\n      url,\n      source: 'TestDevJobs'\n    }\n  }));\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
+      },
+      "id": "node-12",
+      "name": "Parse Sitemap - TestDevJobs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        620
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const xmlText = $input.first().json.data || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet'];\nconst cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;\nconst locMatches = [...xmlText.matchAll(/<loc>(.*?)<\\/loc>/g)];\nconst jobs = locMatches\n  .map(m => m[1].trim())\n  .filter(url => {\n    const slug = url.toLowerCase();\n    return qaTerms.some(t => slug.includes(t));\n  })\n  .filter(url => {\n    const m = url.match(/\\/(20\\d{2})[\\/\\-](0[1-9]|1[0-2])/) || url.match(/\\/(20\\d{2})\\//);\n    if (!m) return true;\n    const year = parseInt(m[1], 10);\n    const month = m[2] ? parseInt(m[2], 10) - 1 : 0;\n    return new Date(year, month, 1).getTime() >= cutoff;\n  })\n  .map(url => ({\n    json: {\n      title: url.split('/').pop().replace(/-/g, ' '),\n      company: '',\n      url,\n      source: 'Nodesk'\n    }\n  }));\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
+      },
+      "id": "node-13",
+      "name": "Parse Sitemap - Nodesk",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        760
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "id": "node-14",
+      "name": "Merge RSS Sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        920,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "id": "node-15",
+      "name": "Merge API and Remocate",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        920,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "id": "node-16",
+      "name": "Merge Sitemap Sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        920,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "id": "node-17",
+      "name": "Merge Group 1",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1160,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "append",
+        "options": {}
+      },
+      "id": "node-18",
+      "name": "Merge All Sources",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3,
+      "position": [
+        1380,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const items = $input.all().filter(item => !item.json._empty);\nconst qaTerms = ['qa', 'quality', 'test', 'sdet', 'tester', 'automation'];\n\nconst excludeTitleTerms = [\n  'us only', 'usa only', 'united states only', 'united states',\n  'uk only', 'canada only', 'australia only',\n  'latam only', 'latin america only', 'apac only', 'india only',\n  'no sponsorship', 'us work authorization', 'authorized to work in'\n];\n\nconst excludeUrlPatterns = [\n  '/us/', '/usa/', '/united-states/', '/uk/', '/canada/'\n];\n\nconst keepTerms = [\n  'remote', 'worldwide', 'global', 'anywhere', 'international',\n  'emea', 'europe', 'european', 'africa', 'kenya'\n];\n\nconst seen = new Set();\nconst filtered = items.filter(item => {\n  const title = (item.json.title || '').toLowerCase();\n  const url = (item.json.url || '').toLowerCase();\n  if (!title || !item.json.url) return false;\n  if (seen.has(item.json.url)) return false;\n  seen.add(item.json.url);\n\n  const isQA = qaTerms.some(t => title.includes(t));\n  if (!isQA) return false;\n\n  const hasKeepSignal = keepTerms.some(t => title.includes(t));\n  if (hasKeepSignal) return true;\n\n  const isTitleExcluded = excludeTitleTerms.some(t => title.includes(t));\n  if (isTitleExcluded) return false;\n\n  const isUrlExcluded = excludeUrlPatterns.some(p => url.includes(p));\n  if (isUrlExcluded) return false;\n\n  return true;\n});\n\nif (filtered.length === 0) return [{ json: { _empty: true } }];\nreturn filtered.map(item => ({ json: item.json }));"
+      },
+      "id": "node-19",
+      "name": "Filter and Dedupe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "maxItems": 20
+      },
+      "id": "node-23",
+      "name": "Limit 20 Jobs",
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        1710,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "check-has-title",
+              "leftValue": "={{ $json.title }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "node-20",
+      "name": "Has Jobs?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1820,
+        420
+      ]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const jobs = $input.all();\nconst lines = jobs.map(j => {\n  const company = j.json.company ? ` â ${j.json.company}` : '';\n  const source = j.json.source ? ` [${j.json.source}]` : '';\n  return `*${j.json.title}*${company}${source}\\n${j.json.url}`;\n});\nconst body = `\\uD83D\\uDCCB *QA Jobs Today (${jobs.length})*\\n\\n` + lines.join('\\n\\n');\nreturn [{ json: { body } }];"
+      },
+      "id": "node-21",
+      "name": "Format Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2040,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "sendSms",
+        "from": "whatsapp:+14155238886",
+        "to": "whatsapp:+254757690925",
+        "message": "={{ $json.body }}"
+      },
+      "id": "node-22",
+      "name": "Send WhatsApp",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [
+        2260,
+        300
+      ],
+      "credentials": {
+        "twilioApi": {
+          "id": "",
+          "name": "Twilio account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "RSS Feed - WeWorkRemotely",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "RSS Feed - Himalayas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request - Remotive",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request - Remocate Sitemap",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request - TestDevJobs Sitemap",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "HTTP Request - Nodesk Sitemap",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed - WeWorkRemotely": {
+      "main": [
+        [
+          {
+            "node": "Normalize - WeWorkRemotely",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "RSS Feed - Himalayas": {
+      "main": [
+        [
+          {
+            "node": "Normalize - Himalayas",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Remotive": {
+      "main": [
+        [
+          {
+            "node": "Normalize - Remotive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Remocate Sitemap": {
+      "main": [
+        [
+          {
+            "node": "Parse Sitemap - Remocate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - TestDevJobs Sitemap": {
+      "main": [
+        [
+          {
+            "node": "Parse Sitemap - TestDevJobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Nodesk Sitemap": {
+      "main": [
+        [
+          {
+            "node": "Parse Sitemap - Nodesk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize - WeWorkRemotely": {
+      "main": [
+        [
+          {
+            "node": "Merge RSS Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize - Himalayas": {
+      "main": [
+        [
+          {
+            "node": "Merge RSS Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Normalize - Remotive": {
+      "main": [
+        [
+          {
+            "node": "Merge API and Remocate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Sitemap - Remocate": {
+      "main": [
+        [
+          {
+            "node": "Merge API and Remocate",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Parse Sitemap - TestDevJobs": {
+      "main": [
+        [
+          {
+            "node": "Merge Sitemap Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Sitemap - Nodesk": {
+      "main": [
+        [
+          {
+            "node": "Merge Sitemap Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge RSS Sources": {
+      "main": [
+        [
+          {
+            "node": "Merge Group 1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge API and Remocate": {
+      "main": [
+        [
+          {
+            "node": "Merge Group 1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Group 1": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Sitemap Sources": {
+      "main": [
+        [
+          {
+            "node": "Merge All Sources",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge All Sources": {
+      "main": [
+        [
+          {
+            "node": "Filter and Dedupe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter and Dedupe": {
+      "main": [
+        [
+          {
+            "node": "Limit 20 Jobs",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit 20 Jobs": {
+      "main": [
+        [
+          {
+            "node": "Has Jobs?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Has Jobs?": {
+      "main": [
+        [
+          {
+            "node": "Format Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Format Message": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "qa-job-alert-digest-v2"
+}

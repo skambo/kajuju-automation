@@ -1,0 +1,355 @@
+{
+  "name": "Idan Barn \u2014 Monday Demand Intelligence",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 4 * * 1"
+            }
+          ]
+        }
+      },
+      "id": "a1111111-0000-0000-0000-000000000001",
+      "name": "Every Monday 07:00 EAT",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        260,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const now = new Date();\nconst months = ['January','February','March','April','May','June','July','August','September','October','November','December'];\nconst currentMonth = months[now.getMonth()];\nconst nextMonth = months[(now.getMonth() + 1) % 12];\n\nconst fmtHuman = d => d.toLocaleDateString('en-GB', {\n  weekday: 'short', day: 'numeric', month: 'long'\n});\n\nconst weekends = [];\nconst base = new Date(now);\nconst dow = base.getDay();\nlet daysToFri = (5 - dow + 7) % 7;\nif (daysToFri === 0) daysToFri = 7;\nbase.setDate(base.getDate() + daysToFri);\n\nfor (let i = 0; i < 3; i++) {\n  const fri = new Date(base);\n  const sun = new Date(base);\n  sun.setDate(sun.getDate() + 2);\n  weekends.push({ label: `${fmtHuman(fri)} \u2013 ${fmtHuman(sun)}`, index: i + 1 });\n  base.setDate(base.getDate() + 7);\n}\n\nconst mondayDate = now.toLocaleDateString('en-GB', {\n  weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'\n});\n\nconst queries = [\n  {\n    id: 1, label: 'Motorsport & 4x4',\n    q: `Kenya car rally OR motorsport OR 4x4 OR overlanding event Nanyuki OR Laikipia OR Nyeri ${currentMonth} OR ${nextMonth} 2026`\n  },\n  {\n    id: 2, label: 'Running & Outdoor Events',\n    q: `marathon OR fun run OR cycling OR hiking event Nanyuki OR Nyeri OR \"Mt Kenya\" OR Laikipia 2026 ${currentMonth} OR ${nextMonth}`\n  },\n  {\n    id: 3, label: 'Conservancy Events',\n    q: `\"Ol Pejeta\" OR \"Solio Ranch\" OR Lewa OR Laikipia event OR \"open day\" OR festival OR marathon 2026 ${currentMonth} OR ${nextMonth}`\n  },\n  {\n    id: 4, label: 'Public Holidays & School Terms',\n    q: 'Kenya public holidays school holiday term dates 2026 April May June'\n  },\n  {\n    id: 5, label: 'Major Annual Events',\n    q: '\"Nanyuki Airshow 2026\" OR \"Lewa Safari Marathon 2026\" OR \"Mt Kenya Marathon 2026\" OR \"Rhino Charge Kenya 2026\" OR \"East African Safari Classic 2026\"'\n  },\n  {\n    id: 6, label: 'General Nanyuki Demand',\n    q: `Nanyuki events ${currentMonth} 2026 Laikipia festival OR event ${nextMonth} 2026`\n  },\n  {\n    id: 7, label: 'Facebook Group Signals',\n    q: `site:facebook.com Nanyuki hiking OR climbing OR \"road trip\" ${currentMonth} 2026`\n  }\n];\n\nreturn queries.map(q => ({ json: { ...q, currentMonth, nextMonth, mondayDate, weekends } }));"
+      },
+      "id": "a1111111-0000-0000-0000-000000000002",
+      "name": "Prepare Dates & Queries",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "batchSize": 1,
+        "options": {}
+      },
+      "id": "a1111111-0000-0000-0000-000000000003",
+      "name": "Search Loop",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        700,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.tavily.com/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "={{ $json.q }}"
+            },
+            {
+              "name": "search_depth",
+              "value": "basic"
+            },
+            {
+              "name": "max_results",
+              "value": "5"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "a1111111-0000-0000-0000-000000000004",
+      "name": "Tavily Search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        920,
+        500
+      ],
+      "continueOnFail": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_TAVILY_CRED_ID",
+          "name": "Tavily API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const queryMeta = $('Search Loop').item.json;\nconst resp = $input.item.json;\n\nconst results = Array.isArray(resp.results) ? resp.results : [];\nconst success = results.length > 0;\n\nconst snippets = results.slice(0, 5).map(r =>\n  `\u2022 ${r.title || '(no title)'}\\n  ${r.content || ''}\\n  ${r.url || ''}`\n).join('\\n\\n');\n\nreturn [{\n  json: {\n    queryId: queryMeta.id,\n    label: queryMeta.label,\n    success,\n    resultCount: results.length,\n    snippets: snippets || '(no results found)',\n    currentMonth: queryMeta.currentMonth,\n    nextMonth: queryMeta.nextMonth,\n    mondayDate: queryMeta.mondayDate,\n    weekends: queryMeta.weekends\n  }\n}];"
+      },
+      "id": "a1111111-0000-0000-0000-000000000005",
+      "name": "Package Search Result",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1140,
+        500
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst meta = items[0].json;\nconst failures = items.filter(i => !i.json.success).length;\n\nconst searchResults = items.map(item => {\n  const { label, success, resultCount, snippets } = item.json;\n  if (!success) return `### ${label}\\n(no results or search failed)`;\n  return `### ${label}\\nResults (${resultCount} found):\\n${snippets}`;\n}).join('\\n\\n---\\n\\n');\n\nconst weekendLines = meta.weekends.map(w => `- Weekend ${w.index}: ${w.label}`).join('\\n');\n\nconst failureNote = failures >= 3\n  ? `\\u26a0\\ufe0f Note: ${failures} searches returned no results this week \\u2014 intelligence may be incomplete.\\n\\n`\n  : '';\n\nconst prompt = `You are Sandra's Monday morning demand briefing.\\nSandra owns Idan Barn Suites & Caf\\u00e9 \\u2014 a small boutique lodge in Naromoru, Kenya, 20km from Naromoru Gate on Mt. Kenya.\\n\\nShe has 5 rooms. Weekends mostly fill. Weekdays are her problem. She needs to know what is coming to the Nanyuki, Laikipia, Nyeri and Mt. Kenya region so she can be in the right place \\u2014 the right Facebook group, the right conversation \\u2014 before the bookings happen elsewhere.\\n\\nToday is ${meta.mondayDate}.\\n\\nThe next 3 weekends are:\\n${weekendLines}\\n\\nImportant: today's date is ${meta.mondayDate}. Only surface events that are upcoming from this date. If a search result refers to an event from 2024 or 2025, or any past date in 2026, ignore it entirely. When in doubt about whether an event is current or upcoming, discard it and note that the search returned unclear dates for that topic.\\n\\nRaw search results from this morning:\\n\\n${searchResults}\\n\\nWrite exactly this report. Nothing added.\\n\\n---\\n\\nDEMAND CALENDAR\\n\\nFor each of the 3 weekends, write:\\n\\nWEEKEND [date range]\\nEvent or signal: What is happening, if anything. If nothing detected, say 'Nothing detected \\u2014 treat as a standard weekend.'\\nDemand signal: HIGH / MEDIUM / LOW / UNKNOWN\\nOne line of context: Why this matters or doesn't for Idan Barn.\\n\\n---\\n\\nFACEBOOK GROUPS TO CHECK THIS WEEK\\nBased on what you found above, list the specific Facebook groups Sandra should open today and look through for relevant conversations.\\n\\nFormat each as:\\n- Group name\\n- What to look for (one sentence)\\n- Whether to post, reply to existing threads, or just monitor\\n\\nOnly list groups that are genuinely relevant to what was found this week. Do not list generic groups every single week unless there is a specific reason.\\n\\nGroups Sandra is already in:\\n- Nairobi Hikers\\n- Kenya Hikers & Adventurers\\n- Mt. Kenya Climbing & Hiking Community\\n- Kenya Motor Sports\\n- Nanyuki & Laikipia \\u2014 Events, Tourism & Travel\\n- Kenya Weekend Getaways\\n- Magical Kenya Experiences\\n- HR Professionals Kenya\\n- Kenya Running & Athletics Community\\n- Lewa Safari Marathon community (if Lewa is flagged)\\n- East African Safari Classic (if rally season)\\n- Nanyuki Town Community\\n\\nIf a new group not on this list is relevant this week, add it with a note: NEW \\u2014 [group name] \\u2014 [why this week].\\n\\n---\\n\\nONE ACTION FOR TODAY\\nThe single most important thing Sandra should do in the next 2 hours.\\nOne sentence. Specific. Actionable. Not generic.\\nIf the action involves posting, write the post for Sandra. She should be able to copy, paste, and send in under a minute.\\n\\n---\\n\\nSCHOOL HOLIDAY AND PUBLIC HOLIDAY FLAGS\\nIf any school holiday or public holiday falls within the next 21 days, flag it with the date and one sentence on what it typically means for demand at a property like Idan Barn.\\nIf nothing in the next 21 days, write: 'No school breaks or public holidays in the next 21 days.'\\n\\n---\\n\\nKeep the entire report under 500 words. Be direct. Sandra is busy. Empty rooms cost money. If you found nothing useful this week, say so clearly \\u2014 do not pad the report.\\n\\n---\\n\\nAfter the report, on a new line write exactly:\\n---SHEETS_DATA---\\nThen a JSON object on one line with these exact keys:\\n{\"events\": \"comma-separated event names found or NONE\", \"w1\": \"HIGH or MEDIUM or LOW or UNKNOWN\", \"w2\": \"HIGH or MEDIUM or LOW or UNKNOWN\", \"w3\": \"HIGH or MEDIUM or LOW or UNKNOWN\", \"groups\": \"comma-separated group names to check this week\"}\\n---END_SHEETS---`;\n\nreturn [{ json: { prompt, failureNote, mondayDate: meta.mondayDate, failures } }];"
+      },
+      "id": "a1111111-0000-0000-0000-000000000006",
+      "name": "Build Claude Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "body": "={{ JSON.stringify({ model: 'claude-haiku-4-5-20251001', max_tokens: 3000, messages: [{ role: 'user', content: $json.prompt }] }) }}",
+        "options": {}
+      },
+      "id": "a1111111-0000-0000-0000-000000000007",
+      "name": "Call Claude API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        340
+      ],
+      "retryOnFail": true,
+      "maxTries": 2,
+      "waitBetweenTries": 5000,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_ANTHROPIC_CRED_ID",
+          "name": "Anthropic API Key"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const resp = $input.item.json;\nconst buildNode = $('Build Claude Prompt').item.json;\n\nconst content = resp.content?.[0]?.text || '';\n\nif (!content || content.length < 100) {\n  throw new Error('Claude returned empty or very short response \\u2014 check API key and quota');\n}\n\nconst sheetsMatch = content.match(/---SHEETS_DATA---\\s*([\\s\\S]*?)\\s*---END_SHEETS---/);\nlet sheetsData = { events: 'NONE', w1: 'UNKNOWN', w2: 'UNKNOWN', w3: 'UNKNOWN', groups: '' };\n\nif (sheetsMatch) {\n  try { sheetsData = JSON.parse(sheetsMatch[1].trim()); } catch (e) {}\n}\n\nconst emailBody = content.replace(/---SHEETS_DATA---[\\s\\S]*?---END_SHEETS---/, '').trim();\nconst fullBody = buildNode.failureNote + emailBody;\n\nfunction esc(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }\nfunction bold(t) { return esc(t).replace(/\\*\\*(.*?)\\*\\*/g,'<strong>$1</strong>'); }\n\nfunction badgeHtml(signal) {\n  const s = (signal || 'UNKNOWN').trim();\n  const map = {\n    HIGH:'background:#d4edda;color:#155724',\n    MEDIUM:'background:#fff3cd;color:#856404',\n    LOW:'background:#cce5ff;color:#004085',\n    UNKNOWN:'background:#e2e3e5;color:#495057'\n  };\n  const style = map[s] || map.UNKNOWN;\n  return '<span style=\"display:inline-block;padding:2px 10px;font-size:11px;font-weight:700;' + style + ';border-radius:2px;letter-spacing:.5px\">' + s + '</span>';\n}\n\nfunction buildCalendar(text) {\n  const blocks = text.split(/(?=WEEKEND \\d+:)/).filter(b => /WEEKEND \\d+:/.test(b));\n  let out = '<div style=\"background:#fff;border:1px solid #d4cfc4;padding:20px 22px;margin-bottom:14px\">'\n    + '<div style=\"font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#6b7160;margin-bottom:14px\">Demand Calendar</div>';\n  for (const block of blocks) {\n    const lines = block.split('\\n').map(l => l.trim()).filter(Boolean);\n    const titleLine = lines[0];\n    const wNum = (titleLine.match(/WEEKEND (\\d+)/) || [])[1] || '';\n    const dateRange = titleLine.replace(/WEEKEND \\d+:\\s*/, '');\n    let event = '', signal = '', context = '';\n    for (const line of lines.slice(1)) {\n      if (line.startsWith('Event or signal:')) event = line.slice('Event or signal:'.length).trim();\n      else if (line.startsWith('Demand signal:')) signal = line.slice('Demand signal:'.length).trim();\n      else if (line.startsWith('One line of context:')) context = line.slice('One line of context:'.length).trim();\n    }\n    out += '<div style=\"border:1px solid #e8e3d8;padding:14px 16px;margin-bottom:10px\">'\n      + '<div style=\"font-size:14px;font-weight:700;color:#4a5240;margin-bottom:10px\">Weekend ' + wNum + ' \\u00b7 ' + esc(dateRange) + '</div>'\n      + '<div style=\"margin-bottom:7px\"><div style=\"font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#6b7160;margin-bottom:1px\">Event or Signal</div>'\n      + '<div style=\"font-size:14px;line-height:1.5\">' + bold(event) + '</div></div>'\n      + '<div style=\"margin-bottom:7px\"><div style=\"font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#6b7160;margin-bottom:3px\">Demand Signal</div>'\n      + badgeHtml(signal) + '</div>'\n      + '<div><div style=\"font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#6b7160;margin-bottom:1px\">Context</div>'\n      + '<div style=\"font-size:14px;line-height:1.5\">' + bold(context) + '</div></div>'\n      + '</div>';\n  }\n  return out + '</div>';\n}\n\nfunction buildGroups(lines) {\n  const groups = [];\n  let cur = null;\n  for (const line of lines) {\n    if (line.startsWith('- ')) {\n      if (cur) groups.push(cur);\n      cur = { name: line.slice(2), lookFor: '', action: '' };\n    } else if (cur && line.startsWith('What to look for:')) cur.lookFor = line.slice('What to look for:'.length).trim();\n    else if (cur && line.startsWith('Action:')) cur.action = line.slice('Action:'.length).trim();\n  }\n  if (cur) groups.push(cur);\n  let out = '<div style=\"background:#fff;border:1px solid #d4cfc4;padding:20px 22px;margin-bottom:14px\">'\n    + '<div style=\"font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#6b7160;margin-bottom:14px\">Facebook Groups to Check</div>';\n  if (!groups.length) {\n    out += '<p style=\"font-size:14px;line-height:1.65;margin:0\">' + bold(lines.join(' ')) + '</p>';\n  } else {\n    for (const g of groups) {\n      out += '<div style=\"padding:11px 0;border-bottom:1px solid #e8e3d8\">'\n        + '<div style=\"font-size:14px;font-weight:700;color:#4a5240;margin-bottom:4px\">' + esc(g.name) + '</div>'\n        + (g.lookFor ? '<div style=\"font-size:13px;color:#555;margin-bottom:2px\"><strong>Look for:</strong> ' + esc(g.lookFor) + '</div>' : '')\n        + (g.action ? '<div style=\"font-size:13px;color:#555\"><strong>Action:</strong> ' + esc(g.action) + '</div>' : '')\n        + '</div>';\n    }\n  }\n  return out + '</div>';\n}\n\nfunction buildAction(lines) {\n  const text = lines.join('\\n');\n  const postMatch = text.match(/\\*\"([\\s\\S]*?)\"\\*/);\n  let intro = text, postCopy = '';\n  if (postMatch) { intro = text.slice(0, postMatch.index).trim(); postCopy = postMatch[1].trim(); }\n  return '<div style=\"background:#4a5240;padding:20px 22px;margin-bottom:14px\">'\n    + '<div style=\"font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:10px\">One Action for Today</div>'\n    + '<div style=\"font-size:14px;color:#fff;line-height:1.65\">' + bold(intro).replace(/\\n/g, '<br>')\n    + (postCopy\n      ? '<div style=\"background:rgba(255,255,255,.12);border-left:3px solid #b5913a;padding:12px 14px;margin-top:12px;font-size:13px;font-style:italic;color:rgba(255,255,255,.9);line-height:1.6\">\\u201c' + esc(postCopy) + '\\u201d</div>'\n      : '')\n    + '</div></div>';\n}\n\nfunction buildFlags(lines) {\n  let out = '<div style=\"background:#fff;border:1px solid #d4cfc4;padding:20px 22px;margin-bottom:14px\">'\n    + '<div style=\"font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#6b7160;margin-bottom:14px\">School & Public Holiday Flags</div>';\n  for (const line of lines) {\n    if (line) out += '<div style=\"font-size:14px;line-height:1.6;padding:6px 0;border-bottom:1px solid #e8e3d8\">' + bold(line) + '</div>';\n  }\n  return out + '</div>';\n}\n\nfunction buildSummary(lines) {\n  return '<div style=\"background:#fff;border:1px solid #d4cfc4;border-left:3px solid #4a5240;padding:20px 22px;margin-bottom:14px\">'\n    + '<div style=\"font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:#6b7160;margin-bottom:10px\">Summary</div>'\n    + '<p style=\"font-size:14px;line-height:1.7;margin:0\">' + bold(lines.join(' ')) + '</p></div>';\n}\n\nfunction buildGeneric(lines) {\n  let out = '<div style=\"background:#fff;border:1px solid #d4cfc4;padding:20px 22px;margin-bottom:14px\">';\n  for (const line of lines) {\n    out += '<p style=\"font-size:14px;line-height:1.65;margin:0 0 8px\">' + bold(line) + '</p>';\n  }\n  return out + '</div>';\n}\n\nfunction toHtml(text, mondayDate) {\n  const sections = text.split(/\\n---\\n/).map(s => s.trim()).filter(Boolean);\n  let body = '';\n  for (const sec of sections) {\n    const lines = sec.split('\\n').map(l => l.trim()).filter(Boolean);\n    if (!lines.length) continue;\n    const h = lines[0].replace(/\\*\\*/g, '').trim();\n    if (h === 'DEMAND CALENDAR') body += buildCalendar(sec);\n    else if (h === 'FACEBOOK GROUPS TO CHECK THIS WEEK') body += buildGroups(lines.slice(1));\n    else if (h === 'ONE ACTION FOR TODAY') body += buildAction(lines.slice(1));\n    else if (h === 'SCHOOL HOLIDAY AND PUBLIC HOLIDAY FLAGS') body += buildFlags(lines.slice(1));\n    else if (h.startsWith('SUMMARY')) body += buildSummary(lines.slice(1));\n    else body += buildGeneric(lines);\n  }\n  return '<!DOCTYPE html><html><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"></head>'\n    + '<body style=\"margin:0;padding:0;background:#f5f0e8;font-family:\\'Helvetica Neue\\',Arial,sans-serif;color:#2c2c2c\">'\n    + '<div style=\"max-width:620px;margin:0 auto;padding:20px\">'\n    + '<div style=\"background:#4a5240;padding:28px 24px;margin-bottom:14px\">'\n    + '<div style=\"color:#fff;font-size:21px;font-weight:600;margin-bottom:4px\">Demand Intelligence</div>'\n    + '<div style=\"color:rgba(255,255,255,.65);font-size:11px;letter-spacing:2px;text-transform:uppercase\">Week of ' + esc(mondayDate) + ' \\u00b7 Idan Barn Suites &amp; Caf\\u00e9</div>'\n    + '</div>' + body\n    + '<div style=\"text-align:center;font-size:11px;color:#9a9590;padding:10px\">Generated every Monday 07:00 EAT \\u00b7 Naromoru, Kenya</div>'\n    + '</div></body></html>';\n}\n\nconst emailHtml = toHtml(fullBody, buildNode.mondayDate);\n\nreturn [{\n  json: {\n    emailBody: fullBody,\n    emailHtml,\n    subject: `Nanyuki \\u2014 Week of ${buildNode.mondayDate}`,\n    sheetsData,\n    mondayDate: buildNode.mondayDate\n  }\n}];"
+      },
+      "id": "a1111111-0000-0000-0000-000000000008",
+      "name": "Extract & Parse",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1360,
+        340
+      ]
+    },
+    {
+      "parameters": {
+        "sendTo": "idanbookings@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.emailHtml }}",
+        "options": {},
+        "emailType": "html"
+      },
+      "id": "a1111111-0000-0000-0000-000000000009",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1580,
+        240
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "REPLACE_WITH_GMAIL_CRED_ID",
+          "name": "Gmail OAuth2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "REPLACE_WITH_YOUR_GOOGLE_SHEET_ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "Demand Intelligence Log",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Week of": "={{ $json.mondayDate }}",
+            "Events detected": "={{ $json.sheetsData.events }}",
+            "Demand signal W1": "={{ $json.sheetsData.w1 }}",
+            "Demand signal W2": "={{ $json.sheetsData.w2 }}",
+            "Demand signal W3": "={{ $json.sheetsData.w3 }}",
+            "Groups flagged this week": "={{ $json.sheetsData.groups }}",
+            "Action taken": ""
+          }
+        },
+        "options": {}
+      },
+      "id": "a1111111-0000-0000-0000-000000000010",
+      "name": "Log to Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1580,
+        440
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "REPLACE_WITH_SHEETS_CRED_ID",
+          "name": "Google Sheets OAuth2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Every Monday 07:00 EAT": {
+      "main": [
+        [
+          {
+            "node": "Prepare Dates & Queries",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Dates & Queries": {
+      "main": [
+        [
+          {
+            "node": "Search Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Loop": {
+      "main": [
+        [
+          {
+            "node": "Tavily Search",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Build Claude Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Tavily Search": {
+      "main": [
+        [
+          {
+            "node": "Package Search Result",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Package Search Result": {
+      "main": [
+        [
+          {
+            "node": "Search Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Build Claude Prompt": {
+      "main": [
+        [
+          {
+            "node": "Call Claude API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call Claude API": {
+      "main": [
+        [
+          {
+            "node": "Extract & Parse",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract & Parse": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Log to Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": [],
+  "triggerCount": 0,
+  "versionId": "demand-intelligence-v1"
+}
