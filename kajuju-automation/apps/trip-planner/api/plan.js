@@ -42,7 +42,7 @@ export default async function handler(request) {
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 900,
+      max_tokens: 1000,
       stream: true,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: userPrompt }],
