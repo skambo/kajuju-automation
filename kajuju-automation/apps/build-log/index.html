@@ -1,0 +1,1275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building in the Wild — A Hospitality + Tech Field Log</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ink: #1a1a18;
+      --paper: #f5f0e8;
+      --paper-dark: #ede8da;
+      --accent: #b85c2a;
+      --accent-light: #e8d5c4;
+      --muted: #7a7060;
+      --green: #3a6b4a;
+      --green-light: #d4e8db;
+      --border: #d4cfc2;
+      --mono: 'DM Mono', monospace;
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--sans);
+      font-weight: 300;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    .masthead {
+      border-bottom: 2px solid var(--ink);
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .masthead-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .masthead-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .masthead-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--green);
+    }
+
+    .status-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .masthead-hero {
+      padding: 4rem 2.5rem 3rem;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 3rem;
+      align-items: end;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+    }
+
+    h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1.05;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    .hero-sub {
+      margin-top: 1.5rem;
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.8;
+    }
+
+    .hero-meta {
+      text-align: right;
+    }
+
+    .hero-meta-item {
+      margin-bottom: 1.2rem;
+    }
+
+    .meta-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .meta-value {
+      font-family: var(--serif);
+      font-size: 1rem;
+    }
+
+    .meta-value.accent { color: var(--accent); }
+
+    .progress-bar-wrap {
+      margin-top: 1rem;
+    }
+
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .progress-track {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 30%;
+      transition: width 1s ease;
+    }
+
+    /* ── NAV STRIP ── */
+    .nav-strip {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 2px solid var(--ink);
+      overflow-x: auto;
+    }
+
+    .nav-strip a {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--muted);
+      padding: 0.7rem 1.5rem;
+      border-right: 1px solid var(--border);
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .nav-strip a:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2.5rem;
+    }
+
+    section {
+      padding: 4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-num {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    /* ── THE STORY ── */
+    .story-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .story-body p {
+      margin-bottom: 1.2rem;
+      font-size: 1rem;
+      line-height: 1.9;
+    }
+
+    .story-body p:first-child::first-letter {
+      font-family: var(--serif);
+      font-size: 3.5rem;
+      font-weight: 700;
+      float: left;
+      line-height: 0.8;
+      margin: 0.1em 0.1em 0 0;
+      color: var(--accent);
+    }
+
+    .callout {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2rem;
+      margin: 2rem 0;
+    }
+
+    .callout p {
+      font-family: var(--serif);
+      font-style: italic;
+      font-size: 1.15rem;
+      line-height: 1.7;
+    }
+
+    .callout cite {
+      display: block;
+      font-family: var(--mono);
+      font-style: normal;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--accent-light);
+      margin-top: 0.8rem;
+    }
+
+    .story-sidebar {
+      border-left: 2px solid var(--border);
+      padding-left: 2.5rem;
+    }
+
+    .sidebar-card {
+      margin-bottom: 2rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-card:last-child {
+      border-bottom: none;
+    }
+
+    .sidebar-card-label {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar-card-value {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+    }
+
+    .sidebar-card-note {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+    }
+
+    /* ── PROBLEMS SOLVED ── */
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+
+    .problem-card {
+      padding: 1.8rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .problem-card:nth-child(3n) { border-right: none; }
+    .problem-card:nth-last-child(-n+3) { border-bottom: none; }
+
+    .problem-num {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.8rem;
+    }
+
+    .problem-title {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .problem-desc {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .problem-status {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 2px;
+    }
+
+    .status-built { background: var(--green-light); color: var(--green); }
+    .status-live { background: var(--accent-light); color: var(--accent); }
+    .status-next { background: var(--paper-dark); color: var(--muted); border: 1px solid var(--border); }
+
+    /* ── WHAT I BUILT ── */
+    .built-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    .built-item {
+      display: flex;
+      gap: 1.2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .built-item:hover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .built-icon {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+    }
+
+    .built-title {
+      font-family: var(--sans);
+      font-weight: 500;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .built-desc {
+      font-size: 0.8rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── TECH STACK (for tech readers) ── */
+    .stack-toggle {
+      display: flex;
+      gap: 0;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+      width: fit-content;
+    }
+
+    .stack-toggle button {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.2rem;
+      border: none;
+      cursor: pointer;
+      background: transparent;
+      color: var(--muted);
+      transition: all 0.2s;
+    }
+
+    .stack-toggle button.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .stack-view { display: none; }
+    .stack-view.active { display: block; }
+
+    .tech-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .tech-table th {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: left;
+      padding: 0.6rem 1rem;
+      border-bottom: 2px solid var(--ink);
+    }
+
+    .tech-table td {
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .tech-table td:first-child {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.05em;
+      padding: 0.15rem 0.5rem;
+      background: var(--paper-dark);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      margin: 0.1rem;
+    }
+
+    /* ── LOG ── */
+    .log-entry {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .log-entry.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .log-date {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      padding-top: 0.2rem;
+      position: relative;
+    }
+
+    .log-date::after {
+      content: '';
+      position: absolute;
+      right: -1rem;
+      top: 0.5rem;
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .log-content h3 {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .log-content p {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .log-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.8rem;
+    }
+
+    .log-tag {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .log-tag.ops { border-color: var(--accent); color: var(--accent); }
+    .log-tag.tech { border-color: var(--green); color: var(--green); }
+    .log-tag.biz { border-color: var(--ink); color: var(--ink); }
+
+    /* ── WATCH THIS SPACE ── */
+    .watchlist {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .watch-item {
+      background: var(--paper);
+      padding: 1.8rem;
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .watch-horizon {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+      padding-top: 0.2rem;
+      min-width: 80px;
+    }
+
+    .watch-text {
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .watch-text strong {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 2.5rem;
+      border-top: 2px solid var(--ink);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .masthead-hero { grid-template-columns: 1fr; }
+      .hero-meta { text-align: left; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+      .story-grid { grid-template-columns: 1fr; }
+      .story-sidebar { border-left: none; border-top: 2px solid var(--border); padding-left: 0; padding-top: 2rem; }
+      .problems-grid { grid-template-columns: 1fr; }
+      .problem-card { border-right: none; }
+      .built-list { grid-template-columns: 1fr; }
+      .log-entry { grid-template-columns: 1fr; gap: 0.5rem; }
+      .log-date::after { display: none; }
+      .watchlist { grid-template-columns: 1fr; }
+      .container { padding: 0 1.2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-top">
+    <span class="masthead-label">Field Log · East Africa · Hospitality × Tech</span>
+    <span class="masthead-status">
+      <span class="status-dot"></span>
+      Active Build — Month 8
+    </span>
+  </div>
+  <div class="masthead-hero container" style="padding-left:2.5rem;padding-right:2.5rem;max-width:100%;">
+    <div>
+      <p class="hero-eyebrow">A Senior QA Engineer Runs a Lodge</p>
+      <h1>Building<br><em>in the Wild</em></h1>
+      <p class="hero-sub">
+        What happens when someone who spent years testing software at scale takes a career break — 
+        and builds the automation stack for a boutique lodge at the foot of Mt. Kenya from scratch.
+        This is the live field log.
+      </p>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <span class="meta-label">Location</span>
+        <span class="meta-value">Naromoru, Kenya<br><small style="font-family:var(--sans);font-size:0.75rem;color:var(--muted);">Mt. Kenya base, 1,900m</small></span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="meta-label">Property Age</span>
+        <span class="meta-value accent">8 months</span>
+      </div>
+      <div class="hero-meta-item">
+        <span class="meta-label">Build Progress</span>
+        <div class="progress-bar-wrap">
+          <div class="progress-label">
+            <span>Phase 1</span>
+            <span>~30%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <nav class="nav-strip">
+    <a href="#story">The Story</a>
+    <a href="#problems">Problems to Solve</a>
+    <a href="#built">What's Built</a>
+    <a href="#stack">The Stack</a>
+    <a href="#log">Build Log</a>
+    <a href="#watch">Watch This Space</a>
+    <a href="#follow" style="color:var(--accent);">Follow the Build</a>
+  </nav>
+</header>
+
+<!-- THE STORY -->
+<section id="story">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>The Story</h2>
+    </div>
+    <div class="story-grid">
+      <div class="story-body">
+        <p>
+          I've been hosting on Airbnb for years — two separate listings on the Kenyan coast, 
+          running quietly in parallel with a tech career. The kind of side-hosting that teaches 
+          you a lot about guests, nothing about scale. Then a bigger opportunity arrived that 
+          had been building for some time, and it took centre stage.
+        </p>
+        <p>
+          A boutique property near Mt. Kenya. Barn suites, a café, proper grounds. Not an 
+          apartment with a spare room. A real hospitality business that needed real systems — 
+          and a tech career's worth of instincts to build them.
+        </p>
+        <div class="callout">
+          <p>"The chaos was real. For an organised mind, watching a hospitality business run 
+          on PDFs, manual WhatsApp threads, and memory — with no single source of truth for 
+          anything — was genuinely painful. The only sensible response was to fix it."</p>
+          <cite>— The actual motivation, month one</cite>
+        </div>
+        <p>
+          Eight months in, the property is operational. The café runs. Guests come and go. 
+          Staff get paid. Bills get paid. That's the honest version — and behind it, an 
+          enormous amount of work that runs manually, invisibly, and at a scale that makes no 
+          sense without systems. A large team could paper over the gaps. Building the right 
+          infrastructure is the other answer.
+        </p>
+        <p>
+          But in parallel, something else has been built: a working automation framework. 
+          A Playwright + TypeScript test suite. A live availability engine wired to the channel 
+          manager. A mobile-first rate card replacing a PDF. An n8n workflow surfacing local 
+          demand signals. The beginning of a WhatsApp response system. All of it built on top of 
+          a business that is simultaneously learning how to exist.
+        </p>
+        <p style="color:var(--muted);">
+          None of this touches the things that genuinely can't be automated yet — great meals, 
+          team morale, procurement, general maintenance, the hundred small human decisions that 
+          make a stay memorable or forgettable. Those remain entirely human, and probably should. 
+          Getting the systems side in order is just the start — but it is a start.
+        </p>
+        <p>
+          This page is the log of that process. It is not a success story yet. 
+          It is a <em>watch this space</em> story — and the space is worth watching.
+        </p>
+      </div>
+      <div class="story-sidebar">
+        <div class="sidebar-card">
+          <div class="sidebar-card-label">The Property</div>
+          <div class="sidebar-card-value">Kaju</div>
+          <div class="sidebar-card-note">Boutique lodge, 5 rooms, café, Naromoru — at the foot of Mt. Kenya</div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-card-label">The Builder</div>
+          <div class="sidebar-card-value">Sandra</div>
+          <div class="sidebar-card-note">
+            Senior QA and software engineering background. Running operations end-to-end at 
+            <em>Kaju</em> — a boutique hospitality lodge in Naromoru, built with a little 
+            Nina energy. ☀️
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-card-label">Why document this?</div>
+          <div class="sidebar-card-note" style="font-size:0.9rem; color:var(--ink);">
+            Because the question of what AI agents can do for a small independent hospitality 
+            business — not a hotel group, not a chain — is genuinely unsolved. And this is a 
+            live test of one answer.
+          </div>
+        </div>
+        <div class="sidebar-card">
+          <div class="sidebar-card-label">Previous hosting</div>
+          <div class="sidebar-card-value" style="font-size:1rem;">Coast region, Kenya</div>
+          <div class="sidebar-card-note">Two separate listings, separately managed. The longer-running hosting experiment — where a lot of the instincts came from.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMS -->
+<section id="problems">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Six Problems Worth Solving</h2>
+    </div>
+    <p style="color:var(--muted);margin-bottom:2rem;max-width:560px;">
+      These didn't all surface on day one. Early challenges were about the build — 
+      staff, setup, just getting the doors open. These operational gaps became visible 
+      later, as the chaos of construction gave way to the quieter, more revealing work 
+      of trying to grow and optimise a running business.
+    </p>
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="problem-num">P-01</div>
+        <div class="problem-title">No single source of truth</div>
+        <div class="problem-desc">Bookings tracked separately across Airbnb, Booking.com, WordPress, and direct WhatsApp. Any lag creates overbooking risk.</div>
+        <span class="problem-status status-built">Solved — Smoobu</span>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">P-02</div>
+        <div class="problem-title">Rate card as a PDF</div>
+        <div class="problem-desc">Staff sending the same PDF file dozens of times a day. No tracking. No mobile experience. No call to action.</div>
+        <span class="problem-status status-live">Live — rates.idanbarnsuites.com</span>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">P-03</div>
+        <div class="problem-title">Three inquiry channels, zero consistency</div>
+        <div class="problem-desc">Guests arrive via WhatsApp, phone follow-up, and social media. Each handled differently, unpredictably.</div>
+        <span class="problem-status status-next">In Progress</span>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">P-04</div>
+        <div class="problem-title">Slow response time</div>
+        <div class="problem-desc">Manual process means guests wait minutes to hours for basic availability or rate information. First response wins bookings.</div>
+        <span class="problem-status status-next">Partial — WhatsApp bot in build</span>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">P-05</div>
+        <div class="problem-title">No post-stay feedback loop</div>
+        <div class="problem-desc">Review solicitation is manual and inconsistent. Google reviews drive bookings in this market. Every missed review is a missed future booking.</div>
+        <span class="problem-status status-next">Phase 1 planned</span>
+      </div>
+      <div class="problem-card">
+        <div class="problem-num">P-06</div>
+        <div class="problem-title">No demand visibility</div>
+        <div class="problem-desc">No way to know what's driving inquiry spikes — events, long weekends, Mt. Kenya season. No data = reactive pricing only.</div>
+        <span class="problem-status status-built">Running — n8n weekly digest</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT'S BUILT -->
+<section id="built">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>What's Been Built</h2>
+    </div>
+    <p style="color:var(--muted);margin-bottom:2rem;max-width:560px;">
+      Everything below is live and running. Not demos. Not prototypes.
+    </p>
+    <div class="built-list">
+      <div class="built-item">
+        <div class="built-icon">📄</div>
+        <div>
+          <div class="built-title">Mobile-First Rate Card</div>
+          <div class="built-desc">Replaced the PDF. Live at rates.idanbarnsuites.com — weekday/weekend/peak toggle, all rooms, direct booking CTA. Sent via WhatsApp as a link, not a file.</div>
+        </div>
+      </div>
+      <div class="built-item">
+        <div class="built-icon">🔄</div>
+        <div>
+          <div class="built-title">Real-Time Availability Engine</div>
+          <div class="built-desc">Smoobu API integration as the single source of truth. Vercel serverless function checks live availability before any booking form submission. Double-booking detection running every 4 hours via GitHub Actions.</div>
+        </div>
+      </div>
+      <div class="built-item">
+        <div class="built-icon">🏔️</div>
+        <div>
+          <div class="built-title">Mt. Kenya Positioning + Trip Planner</div>
+          <div class="built-desc">The property sits at the foot of Mt. Kenya — nobody was leading with that. A dedicated trip planner at <a href="https://rates.idanbarnsuites.com/plan" target="_blank" style="color:var(--accent);">rates.idanbarnsuites.com/plan</a> lets guests plan their full stay: hike, e-bike, safari. Operator outreach underway. Mt. Kenya climb package live.</div>
+        </div>
+      </div>
+      <div class="built-item">
+        <div class="built-icon">📊</div>
+        <div>
+          <div class="built-title">Weekly Demand Digest</div>
+          <div class="built-desc">n8n workflow pulling local event and travel signals into a weekly brief. Tells us what's driving demand in the Nanyuki area before guests arrive — not after.</div>
+        </div>
+      </div>
+      <div class="built-item">
+        <div class="built-icon">🧪</div>
+        <div>
+          <div class="built-title">Full QA Test Suite</div>
+          <div class="built-desc">Playwright + TypeScript strict mode. 10 synthetic monitoring tests across all live pages. Date-boundary and double-booking test cases. CI/CD via GitHub Actions with email alerting on failure.</div>
+        </div>
+      </div>
+      <div class="built-item">
+        <div class="built-icon">💬</div>
+        <div>
+          <div class="built-title">WhatsApp Auto-Response Bot — Live</div>
+          <div class="built-desc">Node.js + Express bot deployed permanently on Railway. Every incoming WhatsApp message gets an instant reply: rates link, booking link, welcome message. Running on Twilio sandbox — Meta WhatsApp Business API approval is the next step to open it to all guests.</div>
+        </div>
+      </div>
+      <div class="built-item">
+        <div class="built-icon">📋</div>
+        <div>
+          <div class="built-title">Kitchen & Operations SOPs</div>
+          <div class="built-desc">Full SOP library covering portioning, storage, sauce standardisation, burger patty prep, cookie batches, naan, beverage service. The ops side is not glamorous but it is the foundation the tech sits on.</div>
+        </div>
+      </div>
+      <div class="built-item">
+        <div class="built-icon">🔌</div>
+        <div>
+          <div class="built-title">Channel Manager Trial</div>
+          <div class="built-desc">Ezee channel manager trial in setup. Evaluating against Smoobu. The question is whether a more hospitality-native tool makes more sense at this stage than the dev-friendly API approach currently running.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE STACK -->
+<section id="stack">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>The Stack</h2>
+    </div>
+    <div class="stack-toggle">
+      <button class="active" onclick="switchView('ops')">For Operators</button>
+      <button onclick="switchView('tech')">For Engineers</button>
+    </div>
+
+    <div id="view-ops" class="stack-view active">
+      <p style="color:var(--muted);margin-bottom:1.5rem;max-width:560px;font-size:0.95rem;">
+        What this looks like from the business side — what each tool does in plain language.
+      </p>
+      <div class="built-list" style="grid-template-columns:1fr 1fr;">
+        <div class="built-item">
+          <div class="built-icon">📅</div>
+          <div>
+            <div class="built-title">Smoobu — Booking Brain</div>
+            <div class="built-desc">Keeps Airbnb, Booking.com, and direct bookings in sync. One system, one source of truth. Prevents double-bookings automatically.</div>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-icon">🌐</div>
+          <div>
+            <div class="built-title">Vercel — Guest-Facing Pages</div>
+            <div class="built-desc">Hosts the rate card, trip planner, and booking form. Fast, mobile-first, no app to download. Lives at rates.idanbarnsuites.com.</div>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-icon">⚙️</div>
+          <div>
+            <div class="built-title">n8n — Workflow Automation</div>
+            <div class="built-desc">Runs background workflows: weekly demand digest, alert routing, future WhatsApp triggers. The connective tissue between everything else.</div>
+          </div>
+        </div>
+        <div class="built-item">
+          <div class="built-icon">🤖</div>
+          <div>
+            <div class="built-title">OpenAI + Claude — AI Layer</div>
+            <div class="built-desc">OpenAI handles guest FAQ responses. Claude is the architectural partner for decisions, SOPs, and building things correctly the first time.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="view-tech" class="stack-view">
+      <p style="color:var(--muted);margin-bottom:0.5rem;max-width:580px;font-size:0.95rem;">
+        The engineering decisions and why they were made. A lot of moving parts — all wired together. 
+        The full repo is at 
+        <a href="https://github.com/skambo/kajuju-automation" target="_blank" style="color:var(--accent);font-family:var(--mono);font-size:0.85em;">github.com/skambo/kajuju-automation</a>.
+      </p>
+      <p style="color:var(--muted);margin-bottom:1.5rem;font-size:0.8rem;font-family:var(--mono);">22 tests · 91% passing · CI running every 4 hours</p>
+      <table class="tech-table">
+        <thead>
+          <tr>
+            <th>Component</th>
+            <th>Tool</th>
+            <th>Why / Notes</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Test Framework</td>
+            <td>Playwright + TypeScript strict</td>
+            <td>E2E, API, synthetic monitoring. Strict mode from day one — forces type handling at compile time, not runtime.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>Channel Manager</td>
+            <td>Smoobu REST API</td>
+            <td>iCal feeds update every 15–30 min — unacceptable for a live property. Smoobu holds the Airbnb/Booking.com API relationships and provides near-instant two-way sync.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>Serverless / Hosting</td>
+            <td>Vercel Functions</td>
+            <td>Proxy pattern keeps Smoobu API keys off the client. Guest-facing pages at rates.idanbarnsuites.com. No server to maintain.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>CI/CD</td>
+            <td>GitHub Actions</td>
+            <td>Cron every 4 hours. Double-booking detection with soft assertions — collects all conflicts across all 5 rooms before alerting. Summary email on failure.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>WhatsApp Messaging</td>
+            <td>Twilio</td>
+            <td>Sandbox connected and live. Bot replies to every incoming message instantly with rates link + booking link. Meta WhatsApp Business API approval required to open beyond opted-in test numbers. Hard constraint: same number cannot run both the App and API simultaneously.</td>
+            <td><span class="tag">Sandbox Live</span></td>
+          </tr>
+          <tr>
+            <td>Bot Hosting</td>
+            <td>Railway</td>
+            <td>Always-on Node.js + Express server. Auto-deploys on push to <code>skambo/kajuju-bot</code>. Chose Railway over Render/Heroku for simplicity of GitHub-connected deploys and persistent uptime at current scale.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>Workflow Automation</td>
+            <td>n8n</td>
+            <td>Weekly demand digest — pulls local event and travel signals into a structured brief. Connective tissue for future WhatsApp trigger flows and alert routing.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>Search / Intel</td>
+            <td>Tavily API</td>
+            <td>Powers the demand digest. Retrieves current, structured web data for local events, competitor rates, and travel trends in the Nanyuki area.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>AI / FAQ</td>
+            <td>OpenAI GPT-4o + Claude API</td>
+            <td>OpenAI for guest FAQ handling and demand digest synthesis. Claude API for architectural decisions, SOP generation, and operational reasoning. 20-query evaluation harness planned for the FAQ layer.</td>
+            <td><span class="tag">Partial</span></td>
+          </tr>
+          <tr>
+            <td>Form Backend</td>
+            <td>Formspree</td>
+            <td>Booking requests emailed to the team. Chosen over a custom backend — no server, free tier covers current volume, swappable in Phase 2.</td>
+            <td><span class="tag">Live</span></td>
+          </tr>
+          <tr>
+            <td>Date Logic</td>
+            <td>YYYY-MM-DD string comparison</td>
+            <td><code>new Date()</code> parses as midnight UTC. Kenya is EAT (UTC+3) — a checkout and checkin on the same calendar day appeared to overlap by 3 hours, causing 8 false positive alerts overnight. String comparison is timezone-agnostic. Fixed in session 7.</td>
+            <td><span class="tag">Fixed</span></td>
+          </tr>
+          <tr>
+            <td>WordPress Plugin</td>
+            <td>WP Hotel Booking</td>
+            <td>Lesson the hard way: plugin writes directly via <code>$wpdb->update()</code>, bypassing WordPress hook system entirely. Status values are <code>hb-prefixed</code>, not documented. Database-level solution required for sync. Currently manual.</td>
+            <td><span class="tag">Tech Debt</span></td>
+          </tr>
+          <tr>
+            <td>Invoicing</td>
+            <td>Wave</td>
+            <td>Human-operated intentionally. Invoice errors in hospitality create disputes. System generates a pre-filled Wave link for staff — they review and send. 90-second task vs. automation risk.</td>
+            <td><span class="tag">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- BUILD LOG -->
+<section id="log">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Build Log</h2>
+    </div>
+    <p style="color:var(--muted);margin-bottom:2.5rem;max-width:560px;">
+      The running record. Updated as things get built, broken, or decided.
+    </p>
+
+    <div class="log-entry">
+      <div class="log-date">Apr 2026</div>
+      <div class="log-content">
+        <h3>Receipts, demand intel, and the WhatsApp API stall</h3>
+        <p>Procurement logging formalized. n8n demand digest live. Trip planner at rates.idanbarnsuites.com/plan. Mt. Kenya operator outreach underway — 4 contacted, 1 confirmed response. WhatsApp bot decision deferred: message volume too low right now to justify the API migration risk. Channel manager (Ezee) trial details received. Menu costing done — several items flagged for margin improvement.</p>
+        <div class="log-tags">
+          <span class="log-tag ops">Ops</span>
+          <span class="log-tag tech">Tech</span>
+          <span class="log-tag biz">Menu</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Mar 18 2026</div>
+      <div class="log-content">
+        <h3>WhatsApp API investigation — architecture nearly went wrong</h3>
+        <p>Discovered the WhatsApp Business account was already fully set up — registered, verified, Business Manager configured. Nobody had documented it. More critically: migrating to the API would permanently kill the WhatsApp app on the brand number. Staff lose chat history, WhatsApp Web, and human access. Three alternative paths documented. Staged approach recommended.</p>
+        <div class="log-tags">
+          <span class="log-tag tech">Tech</span>
+          <span class="log-tag biz">Decision</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Mar 12 2026</div>
+      <div class="log-content">
+        <h3>False positive alerts fixed — timezone bug in the availability engine</h3>
+        <p>8 false positive double-booking emails overnight. Root cause: JavaScript's <code style="font-family:var(--mono);font-size:0.8em;background:var(--paper-dark);padding:0.1em 0.3em;">new Date()</code> parses date strings as midnight UTC. Kenya is UTC+3 — so midnight UTC is 3am local, and a checkout/checkin on the same calendar day appeared to overlap. Fixed with YYYY-MM-DD string comparison. No false positives since. Smoobu availability check wired into the booking form.</p>
+        <div class="log-tags">
+          <span class="log-tag tech">Tech</span>
+          <span class="log-tag tech">Bug Fix</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Mar 10 2026</div>
+      <div class="log-content">
+        <h3>Smoobu connected — single source of truth is live</h3>
+        <p>Airbnb and Booking.com now syncing through Smoobu. GitHub Actions running every 4 hours with double-booking detection. Key architectural decision: Coral Room held back from Airbnb as an overbooking buffer — only Jade Room listed on Airbnb. Smoobu is now the only place dates get blocked. Never block directly on Airbnb or Booking.com.</p>
+        <div class="log-tags">
+          <span class="log-tag tech">Tech</span>
+          <span class="log-tag ops">Ops</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Mar 2026</div>
+      <div class="log-content">
+        <h3>Foundation: rate card live, availability check live, CI running</h3>
+        <p>Repo set up in TypeScript strict mode from day one. Rate card page live on Vercel — weekday/weekend/peak toggle, 5 rooms. Workation landing page live. Booking form with real-time Smoobu availability check. Synthetic monitoring across all pages. GitHub Actions CI pipeline. The architecture is in place. Now build on top of it.</p>
+        <div class="log-tags">
+          <span class="log-tag tech">Tech</span>
+          <span class="log-tag biz">Launch</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="log-entry">
+      <div class="log-date">Aug 2025</div>
+      <div class="log-content">
+        <h3>Month zero — the lodge opens</h3>
+        <p>A boutique property near Mt. Kenya. Barn suites. A café. Proper grounds. Five rooms. A blank operations manual. A channel manager not yet set up. A PDF rate card. Bookings being tracked on WhatsApp. This is the starting point. All the tech work that follows starts from here.</p>
+        <div class="log-tags">
+          <span class="log-tag biz">Milestone</span>
+          <span class="log-tag ops">Ops</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- WATCH THIS SPACE -->
+<section id="watch">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Watch This Space</h2>
+    </div>
+    <p style="color:var(--muted);margin-bottom:2rem;max-width:560px;">
+      The things still in motion. Some take five minutes. Some take an hour. 
+      Some will take months — or a year — to properly figure out.
+    </p>
+    <div class="watchlist">
+      <div class="watch-item">
+        <span class="watch-horizon">Next 30d</span>
+        <div class="watch-text">
+          <strong>WhatsApp Bot — go or no-go</strong>
+          The API migration decision gets made when message volume justifies it. The bot code is ready. The architecture decision is the blocker.
+        </div>
+      </div>
+      <div class="watch-item">
+        <span class="watch-horizon">Next 30d</span>
+        <div class="watch-text">
+          <strong>Mt. Kenya operator pipeline</strong>
+          10–15 operators need to be contacted, not 4. One confirmed response is a start. This positioning only pays off with consistent pipeline.
+        </div>
+      </div>
+      <div class="watch-item">
+        <span class="watch-horizon">Next 90d</span>
+        <div class="watch-text">
+          <strong>Revenue visibility dashboard</strong>
+          Right now: no single view of revenue by source. Room bookings by channel, café revenue, package revenue — scattered. This gets built next.
+        </div>
+      </div>
+      <div class="watch-item">
+        <span class="watch-horizon">Next 90d</span>
+        <div class="watch-text">
+          <strong>Post-stay feedback loop</strong>
+          Automated sentiment routing after checkout. Positive → Google review link. Negative → personal follow-up. Every missed review is a missed future booking.
+        </div>
+      </div>
+      <div class="watch-item">
+        <span class="watch-horizon">6 months</span>
+        <div class="watch-text">
+          <strong>Does any of this translate to bookings?</strong>
+          The honest question. Automation brings order. Order should enable growth. The data to prove or disprove that doesn't exist yet. It will.
+        </div>
+      </div>
+      <div class="watch-item">
+        <span class="watch-horizon">2 years</span>
+        <div class="watch-text">
+          <strong>Can this be a consulting model?</strong>
+          Independent African hospitality properties have the same problems. Same channels, same manual overhead, same overbooking risk. If this stack works here, it works elsewhere. That question gets answered in 2027.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOLLOW / INTEREST FORM -->
+<section id="follow" style="background:var(--ink);color:var(--paper);border-bottom:none;">
+  <div class="container" style="padding-top:4rem;padding-bottom:4rem;">
+    <div style="max-width:560px;margin:0 auto;text-align:center;">
+      <p style="font-family:var(--mono);font-size:0.65rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--accent-light);margin-bottom:1rem;">Stay in the loop</p>
+      <h2 style="font-family:var(--serif);font-size:2rem;margin-bottom:1rem;color:var(--paper);">Follow the build</h2>
+      <p style="font-size:0.95rem;color:#b0a898;line-height:1.8;margin-bottom:2rem;">
+        This log updates as things get built, broken, or decided. Leave your email and I'll 
+        send a note when something significant shifts — a new system goes live, a lesson lands 
+        hard, or the two-year question starts getting answers.
+      </p>
+      <form action="https://formspree.io/f/placeholder" method="POST" id="follow-form" style="display:flex;gap:0;max-width:420px;margin:0 auto;">
+        <input 
+          type="email" 
+          name="email" 
+          placeholder="your@email.com" 
+          required
+          style="flex:1;padding:0.8rem 1rem;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-right:none;color:var(--paper);font-family:var(--sans);font-size:0.9rem;outline:none;"
+        />
+        <button 
+          type="submit"
+          style="padding:0.8rem 1.4rem;background:var(--accent);border:none;color:white;font-family:var(--mono);font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background 0.2s;"
+          onmouseover="this.style.background='#a04e24'" 
+          onmouseout="this.style.background='var(--accent)'"
+        >Follow →</button>
+      </form>
+      <p style="font-family:var(--mono);font-size:0.6rem;color:#6a6358;margin-top:1rem;letter-spacing:0.05em;">
+        No newsletter cadence. No marketing. Just signal when something real happens.
+      </p>
+      <div id="form-thanks" style="display:none;margin-top:1rem;font-family:var(--mono);font-size:0.75rem;color:var(--accent-light);letter-spacing:0.05em;">
+        ✓ Got it. You'll hear from me when something worth saying happens.
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Building in the Wild · Naromoru, Kenya · Updated April 2026</p>
+  <p>Stack: Vercel · Playwright · Smoobu · n8n · Twilio · Railway · Tavily · Claude · OpenAI · <a href="https://github.com/skambo/kajuju-automation" target="_blank">GitHub ↗</a></p>
+</footer>
+
+<script>
+  // Stack view toggle
+  function switchView(view) {
+    document.querySelectorAll('.stack-view').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.stack-toggle button').forEach(el => el.classList.remove('active'));
+    document.getElementById('view-' + view).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  // Scroll-triggered log entries
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.log-entry').forEach(el => observer.observe(el));
+
+  // Animate progress bar on load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelector('.progress-fill').style.width = '30%';
+    }, 500);
+  });
+
+  // Form submit handler
+  document.getElementById('follow-form').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+    try {
+      const res = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (res.ok) {
+        form.style.display = 'none';
+        document.getElementById('form-thanks').style.display = 'block';
+      }
+    } catch(err) {
+      // Fail silently — formspree placeholder anyway
+    }
+  });
+</script>
+
+</body>
+</html>
