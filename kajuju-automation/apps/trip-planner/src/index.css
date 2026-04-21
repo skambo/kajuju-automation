@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-cream text-charcoal;
+    font-family: 'Lato', sans-serif;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Playfair Display', serif;
+  }
+}
+
+@layer components {
+  .hero-bg {
+    background: linear-gradient(160deg, #091510 0%, #1C3A2A 45%, #243d2e 100%);
+    position: relative;
+  }
+
+  .hero-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+  }
+
+  .chip-base {
+    @apply px-4 py-2 rounded-full text-sm font-lato font-medium border transition-all duration-150 cursor-pointer;
+  }
+
+  .chip-idle {
+    @apply bg-white text-charcoal border-charcoal/20 hover:border-forest hover:text-forest;
+  }
+
+  .chip-active-green {
+    @apply bg-forest text-white border-forest;
+  }
+
+  .chip-active-sand {
+    @apply bg-sand text-white border-sand;
+  }
+
+  .day-heading {
+    font-family: 'Playfair Display', serif;
+    @apply text-2xl font-bold text-forest mt-8 mb-3;
+  }
+
+  .itinerary-prose {
+    @apply text-base leading-7 text-charcoal mb-4;
+  }
+
+  .booking-callout {
+    @apply bg-forest rounded-2xl p-8 text-center mt-10;
+  }
+
+  .streaming-cursor::after {
+    content: '▍';
+    @apply text-sand animate-pulse ml-0.5;
+  }
+}
