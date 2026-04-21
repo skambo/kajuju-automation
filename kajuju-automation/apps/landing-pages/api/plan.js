@@ -24,7 +24,7 @@ export default async function handler(req) {
     });
   }
 
-  const { days, who, interests, origin } = body;
+  const { days, who, interests, origin, occasion } = body;
 
   if (!days || !who || !interests || !interests.length) {
     return new Response(JSON.stringify({ error: 'Missing required fields: days, who, interests' }), {
@@ -33,7 +33,8 @@ export default async function handler(req) {
     });
   }
 
-  const userPrompt = `Plan a ${days}-day trip for ${who}. They love ${interests.join(', ')}. Travelling from ${origin || 'Nairobi'}. Make Idan Barn Suites the base for the whole trip.`;
+  const occasionLine = occasion ? ` Special occasion: ${occasion}.` : '';
+  const userPrompt = `Plan a ${days}-day trip for ${who}. They love ${interests.join(', ')}. Travelling from ${origin || 'Nairobi'}.${occasionLine} Make Idan Barn Suites the base for the whole trip.`;
 
   const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',

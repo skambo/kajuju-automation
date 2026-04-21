@@ -283,6 +283,15 @@
       </div>
 
       <div class="field-group">
+        <span class="field-label">Any special occasion? <span style="font-size:0.68rem;color:#aaa;letter-spacing:0;text-transform:none;">(optional)</span></span>
+        <div class="chip-row" id="occasion-chips">
+          <button type="button" class="chip" data-group="occasion" data-value="birthday">🎂 Birthday</button>
+          <button type="button" class="chip" data-group="occasion" data-value="romantic">💛 Romantic / Anniversary</button>
+          <button type="button" class="chip" data-group="occasion" data-value="proposal">💍 Proposal</button>
+        </div>
+      </div>
+
+      <div class="field-group">
         <span class="field-label">What do you love?</span>
         <div class="chip-row" id="interests-chips">
           <button type="button" class="chip" data-group="interests" data-value="Hiking">Hiking</button>
@@ -334,7 +343,7 @@
 </footer>
 
 <script>
-  const state = { days: '', who: '', interests: [] };
+  const state = { days: '', who: '', interests: [], occasion: '' };
 
   // Chip interaction
   document.querySelectorAll('.chip').forEach(chip => {
@@ -351,6 +360,11 @@
           state.interests.push(value);
           chip.classList.add('active-sand');
         }
+      } else if (group === 'occasion') {
+        const already = state.occasion === value;
+        document.querySelectorAll('.chip[data-group="occasion"]').forEach(c => c.classList.remove('active-sand'));
+        state.occasion = already ? '' : value;
+        if (!already) chip.classList.add('active-sand');
       } else {
         // single-select for days and who
         document.querySelectorAll(`.chip[data-group="${group}"]`).forEach(c => c.classList.remove('active-green'));
@@ -397,7 +411,7 @@
       const response = await fetch('/api/plan', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ days: state.days, who: state.who, interests: state.interests, origin }),
+        body: JSON.stringify({ days: state.days, who: state.who, interests: state.interests, origin, occasion: state.occasion }),
       });
 
       if (!response.ok) {
