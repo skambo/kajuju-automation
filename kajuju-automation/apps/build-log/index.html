@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Building in the Wild — A Hospitality + Tech Field Log</title>
+  <title>Building While Hosting — A Hospitality + Tech Field Log</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
@@ -638,7 +638,7 @@
   <div class="masthead-hero container" style="padding-left:2.5rem;padding-right:2.5rem;max-width:100%;">
     <div>
       <p class="hero-eyebrow">A Senior QA Engineer Runs a Lodge</p>
-      <h1>Building<br><em>in the Wild</em></h1>
+      <h1>Building<br><em>While Hosting</em></h1>
       <p class="hero-sub">
         What happens when someone who spent years testing software at scale takes a career break — 
         and builds the automation stack for a boutique lodge at the foot of Mt. Kenya from scratch.
@@ -700,29 +700,29 @@
           and a tech career's worth of instincts to build them.
         </p>
         <div class="callout">
-          <p>"The chaos was real. For an organised mind, watching a hospitality business run 
-          on PDFs, manual WhatsApp threads, and memory — with no single source of truth for 
-          anything — was genuinely painful. The only sensible response was to fix it."</p>
-          <cite>— The actual motivation, month one</cite>
+          <p>"The chaos was real. For an organised mind, watching a hospitality business run
+          on PDFs, manual WhatsApp threads, and memory — with no single source of truth for
+          anything — was genuinely painful."</p>
+          <cite>— The actual motivation.</cite>
         </div>
         <p>
-          Eight months in, the property is operational. The café runs. Guests come and go. 
-          Staff get paid. Bills get paid. That's the honest version — and behind it, an 
-          enormous amount of work that runs manually, invisibly, and at a scale that makes no 
-          sense without systems. A large team could paper over the gaps. Building the right 
-          infrastructure is the other answer.
+          Eight months in, the property is operational. The café runs. Guests come and go, and come back.
+          Staff get paid. Bills get paid. That's the honest version — and behind it, an
+          enormous amount of work that runs manually, invisibly, and at a scale that makes no
+          sense without a system. A large team could paper over the gaps. Building the right
+          infrastructure feels like the other answer.
         </p>
         <p>
-          But in parallel, something else has been built: a working automation framework. 
-          A Playwright + TypeScript test suite. A live availability engine wired to the channel 
-          manager. A mobile-first rate card replacing a PDF. An n8n workflow surfacing local 
-          demand signals. The beginning of a WhatsApp response system. All of it built on top of 
+          But in parallel, something else has been built: a working automation framework.
+          A Playwright + TypeScript test suite. A live availability engine wired to the channel
+          manager. A mobile-first rate card replacing a PDF. An n8n workflow surfacing local
+          demand signals (with more to come). The beginning of a WhatsApp response system using Open Api FAQs. All of it built on top of
           a business that is simultaneously learning how to exist.
         </p>
         <p style="color:var(--muted);">
-          None of this touches the things that genuinely can't be automated yet — great meals, 
-          team morale, procurement, general maintenance, the hundred small human decisions that 
-          make a stay memorable or forgettable. Those remain entirely human, and probably should. 
+          None of this touches the things that genuinely can't be automated yet — great meals,
+          team morale, procurement, general maintenance, the hundred small human decisions that
+          make a stay memorable or forgettable. Those remain entirely human, and probably should.
           Getting the systems side in order is just the start — but it is a start.
         </p>
         <p>
@@ -746,11 +746,11 @@
           </div>
         </div>
         <div class="sidebar-card">
-          <div class="sidebar-card-label">Why document this?</div>
+          <div class="sidebar-card-label">Why Document This?</div>
           <div class="sidebar-card-note" style="font-size:0.9rem; color:var(--ink);">
-            Because the question of what AI agents can do for a small independent hospitality 
-            business — not a hotel group, not a chain — is genuinely unsolved. And this is a 
-            live test of one answer.
+            Because while large hotel groups can afford expensive software, consultants, and custom systems, small independent hospitality businesses are often left piecing things together with tools that were never really built for them.
+            The question isn't whether this technology exists — it does. The real question is whether it can be made practical, affordable, and adaptable for a smaller operator without losing the human side of hospitality.
+            I'm documenting this as a live experiment: using AI, automation, and systems thinking to build something that works for our independent lodge. It's also a way to lean into the technical side of how I think — solving problems, simplifying operations, and building better systems while running a business.
           </div>
         </div>
         <div class="sidebar-card">
@@ -768,7 +768,7 @@
   <div class="container">
     <div class="section-header">
       <span class="section-num">02</span>
-      <h2>Six Problems Worth Solving</h2>
+      <h2>Problems Worth Solving</h2>
     </div>
     <p style="color:var(--muted);margin-bottom:2rem;max-width:560px;">
       These didn't all surface on day one. Early challenges were about the build — 
@@ -781,7 +781,7 @@
         <div class="problem-num">P-01</div>
         <div class="problem-title">No single source of truth</div>
         <div class="problem-desc">Bookings tracked separately across Airbnb, Booking.com, WordPress, and direct WhatsApp. Any lag creates overbooking risk.</div>
-        <span class="problem-status status-built">Solved — Smoobu</span>
+        <span class="problem-status status-next">In progress — Tools in trial</span>
       </div>
       <div class="problem-card">
         <div class="problem-num">P-02</div>
@@ -798,7 +798,7 @@
       <div class="problem-card">
         <div class="problem-num">P-04</div>
         <div class="problem-title">Slow response time</div>
-        <div class="problem-desc">Manual process means guests wait minutes to hours for basic availability or rate information. First response wins bookings.</div>
+        <div class="problem-desc">Manual process means guests wait minutes to hours for basic availability or rate information. Fast responses wins bookings.</div>
         <span class="problem-status status-next">Partial — WhatsApp bot in build</span>
       </div>
       <div class="problem-card">
@@ -825,7 +825,7 @@
       <h2>What's Been Built</h2>
     </div>
     <p style="color:var(--muted);margin-bottom:2rem;max-width:560px;">
-      Everything below is live and running. Not demos. Not prototypes.
+      Everything below is live and running.
     </p>
     <div class="built-list">
       <div class="built-item">
@@ -839,21 +839,21 @@
         <div class="built-icon">🔄</div>
         <div>
           <div class="built-title">Real-Time Availability Engine</div>
-          <div class="built-desc">Smoobu API integration as the single source of truth. Vercel serverless function checks live availability before any booking form submission. Double-booking detection running every 4 hours via GitHub Actions.</div>
+          <div class="built-desc">Exploring channel manager integrations as the single source of truth. Vercel serverless function checks live availability before any booking form submission. Double-booking detection running every 4 hours via GitHub Actions.</div>
         </div>
       </div>
       <div class="built-item">
         <div class="built-icon">🏔️</div>
         <div>
           <div class="built-title">Mt. Kenya Positioning + Trip Planner</div>
-          <div class="built-desc">The property sits at the foot of Mt. Kenya — nobody was leading with that. A dedicated trip planner at <a href="https://rates.idanbarnsuites.com/plan" target="_blank" style="color:var(--accent);">rates.idanbarnsuites.com/plan</a> lets guests plan their full stay: hike, e-bike, safari. Operator outreach underway. Mt. Kenya climb package live.</div>
+          <div class="built-desc">The property sits at the foot of Mt. Kenya. A dedicated trip planner at <a href="https://rates.idanbarnsuites.com/plan" target="_blank" style="color:var(--accent);">rates.idanbarnsuites.com/plan</a> lets guests plan their full stay depending on their hobbies — hike, e-bike, safari. Operator outreach underway. Mt. Kenya climb package live.</div>
         </div>
       </div>
       <div class="built-item">
         <div class="built-icon">📊</div>
         <div>
           <div class="built-title">Weekly Demand Digest</div>
-          <div class="built-desc">n8n workflow pulling local event and travel signals into a weekly brief. Tells us what's driving demand in the Nanyuki area before guests arrive — not after.</div>
+          <div class="built-desc">n8n workflow pulling local event and travel signals into a weekly brief. Tells us what's driving demand in the Nanyuki area before guests arrive.</div>
         </div>
       </div>
       <div class="built-item">
@@ -902,13 +902,13 @@
 
     <div id="view-ops" class="stack-view active">
       <p style="color:var(--muted);margin-bottom:1.5rem;max-width:560px;font-size:0.95rem;">
-        What this looks like from the business side — what each tool does in plain language.
+        What this looks like from the business side — what each tool does in simple terms.
       </p>
       <div class="built-list" style="grid-template-columns:1fr 1fr;">
         <div class="built-item">
           <div class="built-icon">📅</div>
           <div>
-            <div class="built-title">Smoobu — Booking Brain</div>
+            <div class="built-title">Channel Manager — Booking Brain</div>
             <div class="built-desc">Keeps Airbnb, Booking.com, and direct bookings in sync. One system, one source of truth. Prevents double-bookings automatically.</div>
           </div>
         </div>
@@ -1052,7 +1052,7 @@
       <div class="log-date">Apr 2026</div>
       <div class="log-content">
         <h3>Receipts, demand intel, and the WhatsApp API stall</h3>
-        <p>Procurement logging formalized. n8n demand digest live. Trip planner at rates.idanbarnsuites.com/plan. Mt. Kenya operator outreach underway — 4 contacted, 1 confirmed response. WhatsApp bot decision deferred: message volume too low right now to justify the API migration risk. Channel manager (Ezee) trial details received. Menu costing done — several items flagged for margin improvement.</p>
+        <p>Procurement logging formalized. n8n demand digest live. Trip planner at rates.idanbarnsuites.com/plan. Mt. Kenya operator outreach underway. WhatsApp bot decision deferred: message volume too low right now to justify the API migration risk. Channel manager (Ezee) trial details received. Menu costing done — several items flagged for margin improvement.</p>
         <div class="log-tags">
           <span class="log-tag ops">Ops</span>
           <span class="log-tag tech">Tech</span>
@@ -1064,8 +1064,8 @@
     <div class="log-entry">
       <div class="log-date">Mar 18 2026</div>
       <div class="log-content">
-        <h3>WhatsApp API investigation — architecture nearly went wrong</h3>
-        <p>Discovered the WhatsApp Business account was already fully set up — registered, verified, Business Manager configured. Nobody had documented it. More critically: migrating to the API would permanently kill the WhatsApp app on the brand number. Staff lose chat history, WhatsApp Web, and human access. Three alternative paths documented. Staged approach recommended.</p>
+        <h3>WhatsApp API investigation — architecture needs rethinking</h3>
+        <p>Migrating to the WhatsApp API would permanently kill the WhatsApp app on the brand number. Staff lose chat history, WhatsApp Web, and human access. Three alternative paths documented. Staged approach recommended.</p>
         <div class="log-tags">
           <span class="log-tag tech">Tech</span>
           <span class="log-tag biz">Decision</span>
@@ -1146,22 +1146,22 @@
       <div class="watch-item">
         <span class="watch-horizon">Next 30d</span>
         <div class="watch-text">
-          <strong>Mt. Kenya operator pipeline</strong>
-          10–15 operators need to be contacted, not 4. One confirmed response is a start. This positioning only pays off with consistent pipeline.
+          <strong>Mt. Kenya operator pipeline in progress</strong>
+          This positioning only pays off with consistent pipeline.
         </div>
       </div>
       <div class="watch-item">
         <span class="watch-horizon">Next 90d</span>
         <div class="watch-text">
           <strong>Revenue visibility dashboard</strong>
-          Right now: no single view of revenue by source. Room bookings by channel, café revenue, package revenue — scattered. This gets built next.
+          Right now: no single view of revenue by source. Room bookings by channel, café revenue, package revenue — scattered.
         </div>
       </div>
       <div class="watch-item">
         <span class="watch-horizon">Next 90d</span>
         <div class="watch-text">
           <strong>Post-stay feedback loop</strong>
-          Automated sentiment routing after checkout. Positive → Google review link. Negative → personal follow-up. Every missed review is a missed future booking.
+          Automated sentiment routing after checkout. Positive → Google review link. Negative → personal follow-up.
         </div>
       </div>
       <div class="watch-item">
@@ -1175,7 +1175,7 @@
         <span class="watch-horizon">2 years</span>
         <div class="watch-text">
           <strong>Can this be a consulting model?</strong>
-          Independent African hospitality properties have the same problems. Same channels, same manual overhead, same overbooking risk. If this stack works here, it works elsewhere. That question gets answered in 2027.
+          Independent African hospitality properties most likely have the same problems. Same channels, same manual overhead, same overbooking risk. If this stack works here, it works elsewhere. That question gets answered in 2027.
         </div>
       </div>
     </div>
