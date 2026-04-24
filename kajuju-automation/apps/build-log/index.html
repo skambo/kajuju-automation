@@ -636,9 +636,45 @@
       h2 { font-size: 1.45rem; }
       .section-header { margin-bottom: 1.5rem; }
 
-      /* Story */
-      .story-grid { grid-template-columns: 1fr; }
-      .story-sidebar { border-left: none; border-top: 2px solid var(--border); padding-left: 0; padding-top: 2rem; }
+      /* Story — sidebar (quick facts) first, narrative below */
+      .story-grid { display: flex; flex-direction: column; }
+      .story-body { order: 2; border-top: 1px solid var(--border); padding-top: 2rem; margin-top: 1.5rem; }
+      .story-sidebar { order: 1; border-left: none; border-top: none; padding-left: 0; padding-top: 0; }
+
+      /* Sidebar cards — boxed info panels, warm background */
+      .sidebar-card {
+        background: var(--accent-light);
+        border: 1px solid var(--border);
+        padding: 1rem 1.2rem;
+        margin-bottom: 0.8rem;
+      }
+      .sidebar-card:last-child { border-bottom: 1px solid var(--border); margin-bottom: 0; }
+      .sidebar-card-label { font-size: 0.62rem; }
+      .sidebar-card-note { font-size: 0.82rem; line-height: 1.75; }
+
+      /* Callout — tighter on mobile */
+      .callout { padding: 1.4rem; margin: 1.5rem 0; }
+      .callout p { font-size: 1.05rem; }
+
+      /* Story body — drop cap off, short line separator between paragraphs */
+      .story-body > p:first-child::first-letter {
+        float: none;
+        font-size: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+        margin: 0;
+        color: inherit;
+        font-family: inherit;
+      }
+      .story-body > p { font-size: 0.93rem; margin-bottom: 0; }
+      .story-body > p + p::before {
+        content: '';
+        display: block;
+        height: 1px;
+        background: var(--border);
+        margin: 1.4rem 0;
+        width: 32px;
+      }
 
       /* Problems grid — single column with corrected borders */
       .problems-grid { grid-template-columns: 1fr; }
