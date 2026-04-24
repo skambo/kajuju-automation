@@ -610,17 +610,111 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
-      .masthead-hero { grid-template-columns: 1fr; }
+      /* Container */
+      .container { padding: 0 1.2rem; }
+
+      /* Masthead top bar */
+      .masthead-top { padding: 0.7rem 1.2rem; flex-wrap: wrap; gap: 0.3rem; }
+      .masthead-label { font-size: 0.55rem; letter-spacing: 0.08em; }
+
+      /* Hero — collapse to single column, reduce padding */
+      .masthead-hero {
+        grid-template-columns: 1fr;
+        padding: 2rem 1.2rem 1.5rem !important;
+      }
+      h1 { font-size: clamp(1.9rem, 8vw, 2.8rem); }
+      .hero-sub { font-size: 0.95rem; max-width: 100%; }
       .hero-meta { text-align: left; border-top: 1px solid var(--border); padding-top: 1.5rem; }
+
+      /* Nav strip — scrollable pill row, no visible scrollbar */
+      .nav-strip { -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .nav-strip::-webkit-scrollbar { display: none; }
+      .nav-strip a { padding: 0.65rem 1rem; font-size: 0.6rem; letter-spacing: 0.08em; }
+
+      /* Section spacing */
+      section { padding: 2.5rem 0; }
+      h2 { font-size: 1.45rem; }
+      .section-header { margin-bottom: 1.5rem; }
+
+      /* Story */
       .story-grid { grid-template-columns: 1fr; }
       .story-sidebar { border-left: none; border-top: 2px solid var(--border); padding-left: 0; padding-top: 2rem; }
+
+      /* Problems grid — single column with corrected borders */
       .problems-grid { grid-template-columns: 1fr; }
-      .problem-card { border-right: none; }
-      .built-list { grid-template-columns: 1fr; }
-      .log-entry { grid-template-columns: 1fr; gap: 0.5rem; }
+      .problem-card { border-right: none; border-bottom: 1px solid var(--border); }
+      .problem-card:nth-last-child(-n+3) { border-bottom: 1px solid var(--border); }
+      .problem-card:last-child { border-bottom: none; }
+
+      /* What's built — single column (overrides inline style on ops view) */
+      .built-list { grid-template-columns: 1fr !important; }
+
+      /* Tech table → stacked cards */
+      .tech-table { display: block; }
+      .tech-table thead { display: none; }
+      .tech-table tbody { display: block; }
+      .tech-table tbody tr {
+        display: block;
+        border: 1px solid var(--border);
+        margin-bottom: 0.8rem;
+        padding: 1rem 1.2rem;
+      }
+      .tech-table tbody tr:last-child { margin-bottom: 0; }
+      .tech-table td {
+        display: block;
+        padding: 0.15rem 0;
+        border: none;
+        white-space: normal;
+        font-size: 0.82rem;
+      }
+      .tech-table td:first-child {
+        font-size: 0.85rem;
+        white-space: normal;
+        padding-bottom: 0.6rem;
+        padding-top: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .tech-table td:nth-child(2)::before,
+      .tech-table td:nth-child(3)::before,
+      .tech-table td:nth-child(4)::before {
+        display: block;
+        font-family: var(--mono);
+        font-size: 0.55rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-top: 0.6rem;
+        margin-bottom: 0.15rem;
+      }
+      .tech-table td:nth-child(2)::before { content: "Tool"; }
+      .tech-table td:nth-child(3)::before { content: "Why / Notes"; }
+      .tech-table td:nth-child(4)::before { content: "Status"; }
+
+      /* Build log — feed card feel with left accent bar */
+      .log-entry {
+        display: block;
+        padding: 1.5rem 0 1.5rem 1rem;
+        border-left: 2px solid var(--accent);
+        margin-left: 0;
+        gap: 0;
+      }
+      .log-date { font-size: 0.6rem; color: var(--accent); margin-bottom: 0.3rem; }
       .log-date::after { display: none; }
+      .log-content h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+      .log-content p { font-size: 0.85rem; line-height: 1.75; }
+
+      /* Watch this space */
       .watchlist { grid-template-columns: 1fr; }
-      .container { padding: 0 1.2rem; }
+      .watch-item { padding: 1.2rem; }
+      .watch-horizon { min-width: 65px; font-size: 0.55rem; }
+
+      /* Follow form — stack input and button vertically */
+      #follow-form { flex-direction: column !important; max-width: 100% !important; }
+      #follow-form input { border-right: 1px solid rgba(255,255,255,0.15) !important; border-bottom: none !important; }
+      #follow-form button { width: 100%; margin-top: 0.5rem; }
+
+      /* Footer — stack vertically */
+      footer { flex-direction: column; align-items: flex-start; gap: 0.8rem; padding: 2rem 1.2rem; }
     }
   </style>
 </head>
@@ -902,7 +996,7 @@
       <p style="color:var(--muted);margin-bottom:1.5rem;max-width:560px;font-size:0.95rem;">
         What this looks like from the business side — what each tool does in simple terms.
       </p>
-      <div class="built-list" style="grid-template-columns:1fr 1fr;">
+      <div class="built-list">
         <div class="built-item">
           <div class="built-icon">📅</div>
           <div>
