@@ -101,6 +101,28 @@
 
     @media (max-width: 540px) {
       .ebike-rates { grid-template-columns: 1fr; }
+      .packages { grid-template-columns: 1fr; }
+    }
+
+    /* Hamburger nav */
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: #fff;
+      font-size: 1.2rem;
+      padding: 0.35rem 0.65rem;
+      cursor: pointer;
+      border-radius: 3px;
+      line-height: 1;
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0.75rem 1.2rem; align-items: center; }
+      .nav-toggle { display: block; }
+      .nav-links { display: none; flex-direction: column; width: 100%; gap: 0; padding: 0.5rem 0; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.12); font-size: 0.82rem; }
+      .nav-links a:last-child { border-bottom: none; }
     }
   </style>
 </head>
@@ -108,6 +130,7 @@
 
 <nav>
   <a href="/" class="nav-brand">Idan Barn Suites & Café <span>Mt. Kenya Base Camp · Naromoru</span></a>
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
   <div class="nav-links">
     <a href="/">Rates</a>
     <a href="/workation">Workation</a>
@@ -266,5 +289,12 @@
   <a href="mailto:idanbookings@gmail.com">idanbookings@gmail.com</a>
 </footer>
 
+<script>
+  document.querySelector('.nav-toggle').addEventListener('click', function() {
+    var links = document.querySelector('.nav-links');
+    links.classList.toggle('open');
+    this.setAttribute('aria-expanded', links.classList.contains('open') ? 'true' : 'false');
+  });
+</script>
 </body>
 </html>

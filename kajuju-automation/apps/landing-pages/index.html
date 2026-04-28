@@ -106,21 +106,44 @@
 
     .rate-section { display: none; }
     .rate-section.active { display: block; }
+
+    /* Responsive nav */
+    .nav-links { display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: center; }
+    .nav-links a { color: rgba(255,255,255,0.85); text-decoration: none; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; }
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: 1.5px solid rgba(255,255,255,0.4);
+      color: #fff;
+      font-size: 1.2rem;
+      padding: 0.35rem 0.65rem;
+      cursor: pointer;
+      border-radius: 3px;
+      line-height: 1;
+    }
+    @media (max-width: 768px) {
+      .nav-toggle { display: block; }
+      .nav-links { display: none; flex-direction: column; width: 100%; gap: 0; padding: 0.5rem 0; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.12); font-size: 0.82rem; }
+      .nav-links a:last-child { border-bottom: none; }
+    }
   </style>
 </head>
 <body>
 
 <nav style="background:#4a5240;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.75rem;">
   <a href="/" style="color:#fff;font-family:'Playfair Display',serif;font-size:1.1rem;text-decoration:none;">Idan Barn Suites &amp; Café <span style="display:block;font-size:0.7rem;font-family:'Lato',sans-serif;font-weight:300;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.7);">Mt. Kenya Base Camp · Naromoru</span></a>
-  <div style="display:flex;gap:1.5rem;flex-wrap:wrap;">
-    <a href="/" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Rates</a>
-    <a href="/workation" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Workation</a>
-    <a href="/gatherings" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Gatherings</a>
-    <a href="/explore" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Explore</a>
-    <a href="/climb" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Climb Mt Kenya</a>
-    <a href="/menu" style="color:rgba(255,255,255,0.85);text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;">Menu</a>
-    <a href="/plan" style="color:#D4A96A;text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;">Plan</a>
-    <a href="/book" style="color:#fff;text-decoration:none;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-weight:700;">Book Now</a>
+  <button class="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+  <div class="nav-links">
+    <a href="/">Rates</a>
+    <a href="/workation">Workation</a>
+    <a href="/gatherings">Gatherings</a>
+    <a href="/explore">Explore</a>
+    <a href="/climb">Climb Mt Kenya</a>
+    <a href="/menu">Menu</a>
+    <a href="/plan" style="color:#D4A96A;font-weight:700;">Plan</a>
+    <a href="/book" style="color:#fff;font-weight:700;">Book Now</a>
   </div>
 </nav>
 <div style="background:#F5F5F0;padding:14px 20px;text-align:center;border-bottom:2px solid #E0E0D8;">
@@ -9451,7 +9474,7 @@ soQp1SSkYIQDj+9UI//Z" alt="Kajuju Barn Suites exterior view" />
 </section>
 
 <section class="cta-section">
-  <p>Ready to book or have a question?<br/>Chat with us directly — we respond within 60 seconds.</p>
+  <p>Ready to book or have a question?<br/>Call or Chat with us directly - 0762 00 44 17</p>
   <a
     class="whatsapp-btn"
     href="https://wa.me/254762004417?text=Hi%20Kaju!%20I%27ve%20seen%20your%20rates%20and%20I%27d%20like%20to%20enquire%20about%20availability."
@@ -9476,6 +9499,12 @@ soQp1SSkYIQDj+9UI//Z" alt="Kajuju Barn Suites exterior view" />
 </footer>
 
 <script>
+  document.querySelector('.nav-toggle').addEventListener('click', function() {
+    var links = document.querySelector('.nav-links');
+    links.classList.toggle('open');
+    this.setAttribute('aria-expanded', links.classList.contains('open') ? 'true' : 'false');
+  });
+
   function showRates(period) {
     document.querySelectorAll('.rate-section').forEach(el => el.classList.remove('active'));
     document.querySelectorAll('.rate-toggle button').forEach(el => el.classList.remove('active'));
