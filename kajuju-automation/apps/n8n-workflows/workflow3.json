@@ -54,63 +54,6 @@
     },
     {
       "parameters": {
-        "method": "GET",
-        "url": "https://remocate.app/sitemap.xml",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "text",
-              "outputPropertyName": "data"
-            }
-          }
-        }
-      },
-      "id": "node-05",
-      "name": "HTTP Request - Remocate Sitemap",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [440, 480]
-    },
-    {
-      "parameters": {
-        "method": "GET",
-        "url": "https://testdevjobs.com/sitemap.xml",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "text",
-              "outputPropertyName": "data"
-            }
-          }
-        }
-      },
-      "id": "node-06",
-      "name": "HTTP Request - TestDevJobs Sitemap",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [440, 620]
-    },
-    {
-      "parameters": {
-        "method": "GET",
-        "url": "https://nodesk.co/sitemap.xml",
-        "options": {
-          "response": {
-            "response": {
-              "responseFormat": "text",
-              "outputPropertyName": "data"
-            }
-          }
-        }
-      },
-      "id": "node-07",
-      "name": "HTTP Request - Nodesk Sitemap",
-      "type": "n8n-nodes-base.httpRequest",
-      "typeVersion": 4.2,
-      "position": [440, 760]
-    },
-    {
-      "parameters": {
         "language": "javaScript",
         "jsCode": "const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;\nreturn $input.all()\n  .filter(item => {\n    const pub = item.json.pubDate;\n    if (!pub) return true;\n    return new Date(pub).getTime() >= cutoff;\n  })\n  .map(item => {\n    const raw = (item.json.title || '').trim();\n    const colonIdx = raw.indexOf(':');\n    let company = '', title = '';\n    if (colonIdx > -1) {\n      company = raw.substring(0, colonIdx).trim();\n      title = raw.substring(colonIdx + 1).trim();\n    } else {\n      title = raw;\n    }\n    return { json: { title, company, url: item.json.link || '', source: 'WeWorkRemotely' } };\n  });"
       },
@@ -141,39 +84,6 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [680, 340]
-    },
-    {
-      "parameters": {
-        "language": "javaScript",
-        "jsCode": "const xmlText = $input.first().json.data || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet'];\nconst cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;\nconst locMatches = [...xmlText.matchAll(/<loc>(.*?)<\\/loc>/g)];\nconst jobs = locMatches\n  .map(m => m[1].trim())\n  .filter(url => {\n    const slug = url.toLowerCase();\n    return qaTerms.some(t => slug.includes(t));\n  })\n  .filter(url => {\n    const m = url.match(/\\/(20\\d{2})[\\/\\-](0[1-9]|1[0-2])/) || url.match(/\\/(20\\d{2})\\//);\n    if (!m) return true;\n    const year = parseInt(m[1], 10);\n    const month = m[2] ? parseInt(m[2], 10) - 1 : 0;\n    return new Date(year, month, 1).getTime() >= cutoff;\n  })\n  .map(url => ({\n    json: {\n      title: url.split('/').pop().replace(/-/g, ' '),\n      company: '',\n      url,\n      source: 'Remocate'\n    }\n  }));\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
-      },
-      "id": "node-11",
-      "name": "Parse Sitemap - Remocate",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [680, 480]
-    },
-    {
-      "parameters": {
-        "language": "javaScript",
-        "jsCode": "const xmlText = $input.first().json.data || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet'];\nconst cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;\nconst locMatches = [...xmlText.matchAll(/<loc>(.*?)<\\/loc>/g)];\nconst jobs = locMatches\n  .map(m => m[1].trim())\n  .filter(url => {\n    const slug = url.toLowerCase();\n    return qaTerms.some(t => slug.includes(t));\n  })\n  .filter(url => {\n    const m = url.match(/\\/(20\\d{2})[\\/\\-](0[1-9]|1[0-2])/) || url.match(/\\/(20\\d{2})\\//);\n    if (!m) return true;\n    const year = parseInt(m[1], 10);\n    const month = m[2] ? parseInt(m[2], 10) - 1 : 0;\n    return new Date(year, month, 1).getTime() >= cutoff;\n  })\n  .map(url => ({\n    json: {\n      title: url.split('/').pop().replace(/-/g, ' '),\n      company: '',\n      url,\n      source: 'TestDevJobs'\n    }\n  }));\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
-      },
-      "id": "node-12",
-      "name": "Parse Sitemap - TestDevJobs",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [680, 620]
-    },
-    {
-      "parameters": {
-        "language": "javaScript",
-        "jsCode": "const xmlText = $input.first().json.data || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet'];\nconst cutoff = Date.now() - 30 * 24 * 60 * 60 * 1000;\nconst locMatches = [...xmlText.matchAll(/<loc>(.*?)<\\/loc>/g)];\nconst jobs = locMatches\n  .map(m => m[1].trim())\n  .filter(url => {\n    const slug = url.toLowerCase();\n    return qaTerms.some(t => slug.includes(t));\n  })\n  .filter(url => {\n    const m = url.match(/\\/(20\\d{2})[\\/\\-](0[1-9]|1[0-2])/) || url.match(/\\/(20\\d{2})\\//);\n    if (!m) return true;\n    const year = parseInt(m[1], 10);\n    const month = m[2] ? parseInt(m[2], 10) - 1 : 0;\n    return new Date(year, month, 1).getTime() >= cutoff;\n  })\n  .map(url => ({\n    json: {\n      title: url.split('/').pop().replace(/-/g, ' '),\n      company: '',\n      url,\n      source: 'Nodesk'\n    }\n  }));\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
-      },
-      "id": "node-13",
-      "name": "Parse Sitemap - Nodesk",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [680, 760]
     },
     {
       "parameters": {
@@ -333,31 +243,138 @@
     },
     {
       "parameters": {
-        "language": "javaScript",
-        "jsCode": "return [{ json: { body: $input.first().json.message } }];"
+        "method": "POST",
+        "url": "https://api.firecrawl.dev/v1/scrape",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\"url\": \"https://remocate.app/jobs\", \"formats\": [\"markdown\"]}",
+        "options": {}
       },
-      "id": "node-21",
-      "name": "Format Message",
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [2780, 300]
+      "id": "node-27",
+      "name": "Firecrawl - Remocate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 480],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Firecrawl API"
+        }
+      }
     },
     {
       "parameters": {
-        "operation": "sendSms",
-        "from": "whatsapp:+14155238886",
-        "to": "whatsapp:+254757690925",
-        "message": "={{ $json.body }}"
+        "language": "javaScript",
+        "jsCode": "const response = $input.first().json;\nconst markdown = (response && response.data && response.data.markdown) || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet', 'tester', 'automation'];\nconst jobs = [];\nconst seen = new Set();\n\nconst addJob = (title, url) => {\n  const clean = title.replace(/^[#\\-*>\\s]+/, '').trim();\n  if (!clean || !url || seen.has(url)) return;\n  seen.add(url);\n  jobs.push({ json: { title: clean, company: '', url, source: 'Remocate' } });\n};\n\n// Pass 1: markdown links where the link text itself contains a QA term\nconst linkRe = /\\[([^\\]]+)\\]\\((https?:\\/\\/[^\\)\\s]+)\\)/g;\nlet m;\nwhile ((m = linkRe.exec(markdown)) !== null) {\n  if (qaTerms.some(t => m[1].toLowerCase().includes(t))) addJob(m[1], m[2]);\n}\n\n// Pass 2: paragraph blocks that mention a QA term — grab any URL in the same block\nfor (const block of markdown.split(/\\n\\n+/)) {\n  if (!qaTerms.some(t => block.toLowerCase().includes(t))) continue;\n  const lm = /\\[([^\\]]*)\\]\\((https?:\\/\\/[^\\)\\s]+)\\)/.exec(block);\n  const um = /https?:\\/\\/\\S+/.exec(block);\n  const rawUrl = lm ? lm[2] : (um ? um[0] : '');\n  if (!rawUrl) continue;\n  const url = rawUrl.replace(/[)\\]>.,;]+$/, '');\n  const titleLine = block.split('\\n').find(l => qaTerms.some(t => l.toLowerCase().includes(t))) || '';\n  const title = titleLine.replace(/\\[[^\\]]*\\]\\([^\\)]*\\)/g, '').replace(/^[#\\-*>\\s]+/, '').trim();\n  if (title) addJob(title, url);\n}\n\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
       },
-      "id": "node-22",
-      "name": "Send WhatsApp",
-      "type": "n8n-nodes-base.twilio",
-      "typeVersion": 1,
-      "position": [3020, 300],
+      "id": "node-28",
+      "name": "Parse Firecrawl - Remocate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 480]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.firecrawl.dev/v1/scrape",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\"url\": \"https://testdevjobs.com/jobs\", \"formats\": [\"markdown\"]}",
+        "options": {}
+      },
+      "id": "node-29",
+      "name": "Firecrawl - TestDevJobs",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 620],
       "credentials": {
-        "twilioApi": {
+        "httpHeaderAuth": {
           "id": "",
-          "name": "Twilio account"
+          "name": "Firecrawl API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const response = $input.first().json;\nconst markdown = (response && response.data && response.data.markdown) || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet', 'tester', 'automation'];\nconst jobs = [];\nconst seen = new Set();\n\nconst addJob = (title, url) => {\n  const clean = title.replace(/^[#\\-*>\\s]+/, '').trim();\n  if (!clean || !url || seen.has(url)) return;\n  seen.add(url);\n  jobs.push({ json: { title: clean, company: '', url, source: 'TestDevJobs' } });\n};\n\n// Pass 1: markdown links where the link text itself contains a QA term\nconst linkRe = /\\[([^\\]]+)\\]\\((https?:\\/\\/[^\\)\\s]+)\\)/g;\nlet m;\nwhile ((m = linkRe.exec(markdown)) !== null) {\n  if (qaTerms.some(t => m[1].toLowerCase().includes(t))) addJob(m[1], m[2]);\n}\n\n// Pass 2: paragraph blocks that mention a QA term — grab any URL in the same block\nfor (const block of markdown.split(/\\n\\n+/)) {\n  if (!qaTerms.some(t => block.toLowerCase().includes(t))) continue;\n  const lm = /\\[([^\\]]*)\\]\\((https?:\\/\\/[^\\)\\s]+)\\)/.exec(block);\n  const um = /https?:\\/\\/\\S+/.exec(block);\n  const rawUrl = lm ? lm[2] : (um ? um[0] : '');\n  if (!rawUrl) continue;\n  const url = rawUrl.replace(/[)\\]>.,;]+$/, '');\n  const titleLine = block.split('\\n').find(l => qaTerms.some(t => l.toLowerCase().includes(t))) || '';\n  const title = titleLine.replace(/\\[[^\\]]*\\]\\([^\\)]*\\)/g, '').replace(/^[#\\-*>\\s]+/, '').trim();\n  if (title) addJob(title, url);\n}\n\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
+      },
+      "id": "node-30",
+      "name": "Parse Firecrawl - TestDevJobs",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 620]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.firecrawl.dev/v1/scrape",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "{\"url\": \"https://nodesk.co/remote-jobs\", \"formats\": [\"markdown\"]}",
+        "options": {}
+      },
+      "id": "node-31",
+      "name": "Firecrawl - Nodesk",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 760],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "",
+          "name": "Firecrawl API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const response = $input.first().json;\nconst markdown = (response && response.data && response.data.markdown) || '';\nconst qaTerms = ['qa', 'quality', 'test', 'sdet', 'tester', 'automation'];\nconst jobs = [];\nconst seen = new Set();\n\nconst addJob = (title, url) => {\n  const clean = title.replace(/^[#\\-*>\\s]+/, '').trim();\n  if (!clean || !url || seen.has(url)) return;\n  seen.add(url);\n  jobs.push({ json: { title: clean, company: '', url, source: 'Nodesk' } });\n};\n\n// Pass 1: markdown links where the link text itself contains a QA term\nconst linkRe = /\\[([^\\]]+)\\]\\((https?:\\/\\/[^\\)\\s]+)\\)/g;\nlet m;\nwhile ((m = linkRe.exec(markdown)) !== null) {\n  if (qaTerms.some(t => m[1].toLowerCase().includes(t))) addJob(m[1], m[2]);\n}\n\n// Pass 2: paragraph blocks that mention a QA term — grab any URL in the same block\nfor (const block of markdown.split(/\\n\\n+/)) {\n  if (!qaTerms.some(t => block.toLowerCase().includes(t))) continue;\n  const lm = /\\[([^\\]]*)\\]\\((https?:\\/\\/[^\\)\\s]+)\\)/.exec(block);\n  const um = /https?:\\/\\/\\S+/.exec(block);\n  const rawUrl = lm ? lm[2] : (um ? um[0] : '');\n  if (!rawUrl) continue;\n  const url = rawUrl.replace(/[)\\]>.,;]+$/, '');\n  const titleLine = block.split('\\n').find(l => qaTerms.some(t => l.toLowerCase().includes(t))) || '';\n  const title = titleLine.replace(/\\[[^\\]]*\\]\\([^\\)]*\\)/g, '').replace(/^[#\\-*>\\s]+/, '').trim();\n  if (title) addJob(title, url);\n}\n\nreturn jobs.length > 0 ? jobs : [{ json: { _empty: true } }];"
+      },
+      "id": "node-32",
+      "name": "Parse Firecrawl - Nodesk",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 760]
+    },
+    {
+      "parameters": {
+        "language": "javaScript",
+        "jsCode": "const items = $input.all();\nconst count = items.length;\nconst date = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });\nconst esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');\nconst jobBlocks = items.map(item => {\n  const j = item.json;\n  const title = esc(j.title || 'Untitled');\n  const company = j.company ? ' — ' + esc(j.company) : '';\n  const source = ' — [' + esc(j.source || 'Unknown') + ']';\n  const url = j.url ? '<br><a href=' + JSON.stringify(j.url) + '>' + esc(j.url) + '</a>' : '';\n  return '<strong>' + title + '</strong>' + company + source + url;\n}).join('<hr>');\nconst subject = 'QA Jobs Today — ' + date + ' (' + count + ' roles)';\nconst body = '<h3>📋 QA Jobs Today (' + count + ')</h3>' + jobBlocks;\nreturn [{ json: { subject, body } }];"
+      },
+      "id": "node-33",
+      "name": "Format Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [2060, 300]
+    },
+    {
+      "parameters": {
+        "operation": "sendEmail",
+        "to": "swairimu2002@gmail.com",
+        "subject": "={{ $json.subject }}",
+        "message": "={{ $json.body }}",
+        "htmlBody": true,
+        "options": {}
+      },
+      "id": "node-34",
+      "name": "Send Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [2300, 300],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail Sandra"
         }
       }
     }
@@ -369,9 +386,9 @@
           {"node": "RSS Feed - WeWorkRemotely", "type": "main", "index": 0},
           {"node": "RSS Feed - Himalayas", "type": "main", "index": 0},
           {"node": "HTTP Request - Remotive", "type": "main", "index": 0},
-          {"node": "HTTP Request - Remocate Sitemap", "type": "main", "index": 0},
-          {"node": "HTTP Request - TestDevJobs Sitemap", "type": "main", "index": 0},
-          {"node": "HTTP Request - Nodesk Sitemap", "type": "main", "index": 0}
+          {"node": "Firecrawl - Remocate", "type": "main", "index": 0},
+          {"node": "Firecrawl - TestDevJobs", "type": "main", "index": 0},
+          {"node": "Firecrawl - Nodesk", "type": "main", "index": 0}
         ]
       ]
     },
@@ -384,14 +401,14 @@
     "HTTP Request - Remotive": {
       "main": [[{"node": "Normalize - Remotive", "type": "main", "index": 0}]]
     },
-    "HTTP Request - Remocate Sitemap": {
-      "main": [[{"node": "Parse Sitemap - Remocate", "type": "main", "index": 0}]]
+    "Firecrawl - Remocate": {
+      "main": [[{"node": "Parse Firecrawl - Remocate", "type": "main", "index": 0}]]
     },
-    "HTTP Request - TestDevJobs Sitemap": {
-      "main": [[{"node": "Parse Sitemap - TestDevJobs", "type": "main", "index": 0}]]
+    "Firecrawl - TestDevJobs": {
+      "main": [[{"node": "Parse Firecrawl - TestDevJobs", "type": "main", "index": 0}]]
     },
-    "HTTP Request - Nodesk Sitemap": {
-      "main": [[{"node": "Parse Sitemap - Nodesk", "type": "main", "index": 0}]]
+    "Firecrawl - Nodesk": {
+      "main": [[{"node": "Parse Firecrawl - Nodesk", "type": "main", "index": 0}]]
     },
     "Normalize - WeWorkRemotely": {
       "main": [[{"node": "Merge RSS Sources", "type": "main", "index": 0}]]
@@ -402,14 +419,14 @@
     "Normalize - Remotive": {
       "main": [[{"node": "Merge API and Remocate", "type": "main", "index": 0}]]
     },
-    "Parse Sitemap - Remocate": {
-      "main": [[{"node": "Merge API and Remocate", "type": "main", "index": 1}]]
-    },
-    "Parse Sitemap - TestDevJobs": {
+    "Parse Firecrawl - Remocate": {
       "main": [[{"node": "Merge Sitemap Sources", "type": "main", "index": 0}]]
     },
-    "Parse Sitemap - Nodesk": {
+    "Parse Firecrawl - TestDevJobs": {
       "main": [[{"node": "Merge Sitemap Sources", "type": "main", "index": 1}]]
+    },
+    "Parse Firecrawl - Nodesk": {
+      "main": [[{"node": "Merge Sitemap Sources", "type": "main", "index": 2}]]
     },
     "Merge RSS Sources": {
       "main": [[{"node": "Merge Group 1", "type": "main", "index": 0}]]
@@ -434,26 +451,17 @@
     },
     "Has Jobs?": {
       "main": [
-        [{"node": "Batch Jobs for Claude", "type": "main", "index": 0}],
+        [{"node": "Format Message", "type": "main", "index": 0}],
         []
       ]
     },
-    "Batch Jobs for Claude": {
-      "main": [[{"node": "Claude Score", "type": "main", "index": 0}]]
-    },
-    "Claude Score": {
-      "main": [[{"node": "Parse Claude Response", "type": "main", "index": 0}]]
-    },
-    "Parse Claude Response": {
-      "main": [[{"node": "Format Message", "type": "main", "index": 0}]]
-    },
     "Format Message": {
-      "main": [[{"node": "Send WhatsApp", "type": "main", "index": 0}]]
+      "main": [[{"node": "Send Email", "type": "main", "index": 0}]]
     }
   },
   "active": false,
   "settings": {
     "executionOrder": "v1"
   },
-  "id": "qa-job-alert-digest-v2"
+  "id": "qa-job-alert-digest-v3"
 }
