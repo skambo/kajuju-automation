@@ -75,12 +75,11 @@ test.describe('Kajuju Rate Card Page — Synthetic Monitor', () => {
     expect(loadTime).toBeLessThan(5000);
   });
 
-  // TODO: investigate why Playwright can't find nav links despite them being visible in browser
-  test.skip('navigation links present on all pages', async ({ page }) => {
+  test('navigation links present on all pages', async ({ page }) => {
     for (const path of ['/', '/workation', '/book']) {
       await page.goto(`${BASE_URL}${path}`);
       await page.waitForLoadState('domcontentloaded');
-      await expect(page.locator('a[href="/book"]').first()).toBeVisible({ timeout: 10000 });
+      await expect(page.locator('a[href="https://idanbarnsuites.com/hotel-booking"]').first()).toBeVisible({ timeout: 10000 });
     }
   });
 
