@@ -20,7 +20,11 @@ Kajuju — a boutique property near Mt. Kenya — receives booking inquiries acr
 | 5 | No automated guest feedback loop | Post-stay follow-up and review solicitation is manual and inconsistent |
 | 6 | Manual invoice creation | Ad hoc with no templated guest data pre-population |
 
+## About
 
+Built by Sandra, a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business itself as the test subject.
+
+The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, serverless architecture, and WhatsApp automation.
 
 ## The Solution
 
@@ -238,8 +242,3 @@ node index.js
 
 Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner — working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging — including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic. This reflects how I work: AI handles the repetitive thinking, I own the decisions and the quality bar.
 
-## About
-
-Built by Sandra — a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business itself as the test subject.
-
-The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, serverless architecture, and WhatsApp automation.
