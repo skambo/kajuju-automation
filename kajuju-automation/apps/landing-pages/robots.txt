@@ -1,3 +1,51 @@
 User-agent: *
 Allow: /
+
+# Search engine crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# AI crawlers — allowed to index and cite; training opt-out signalled via Content-Signal header
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Content usage signals (informational — see also Content-Signal HTTP header)
+# search=yes, ai-input=yes, ai-train=no
+
 Sitemap: https://rates.idanbarnsuites.com/sitemap.xml

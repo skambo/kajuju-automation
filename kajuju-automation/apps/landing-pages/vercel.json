@@ -6,7 +6,8 @@
       "source": "/(.*)",
       "headers": [
         { "key": "X-Robots-Tag", "value": "index, follow" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" }
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Content-Signal", "value": "search=yes, ai-input=yes, ai-train=no" }
       ]
     },
     {
