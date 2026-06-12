@@ -35,6 +35,28 @@
       overflow-x: hidden;
     }
 
+    /* ── RECRUITER BANNER ── */
+    .recruiter-banner {
+      background: var(--paper-dark);
+      border-bottom: 1px solid var(--border);
+      padding: 0.55rem 2.5rem;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.06em;
+      color: var(--ink);
+      line-height: 1.6;
+    }
+
+    .recruiter-banner strong { color: var(--accent); font-weight: 500; }
+
+    .recruiter-banner a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-light);
+    }
+
+    .recruiter-banner a:hover { border-bottom-color: var(--accent); }
+
     /* ── HEADER ── */
     .masthead {
       border-bottom: 2px solid var(--ink);
@@ -610,6 +632,9 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
+      /* Recruiter banner */
+      .recruiter-banner { padding: 0.55rem 1.2rem; font-size: 0.6rem; }
+
       /* Container */
       .container { padding: 0 1.2rem; }
 
@@ -755,6 +780,13 @@
   </style>
 </head>
 <body>
+
+<!-- RECRUITER BANNER -->
+<div class="recruiter-banner">
+  <strong>Currently:</strong>&nbsp; Senior QA Engineer (10+ years, fintech &amp; SaaS) — open to remote roles.
+  This page documents a parallel technical project demonstrating live Playwright, CI/CD, and systems-design work.
+  &nbsp;·&nbsp; <a href="https://docs.google.com/document/d/1lepRFqlHu_g6oDP8z5darfXWPgsJyTxb_-a3rYvLXJY/edit?usp=sharing" target="_blank">View CV →</a> &nbsp;|&nbsp; <a href="https://www.linkedin.com/in/sandrawk/" target="_blank">LinkedIn →</a>
+</div>
 
 <!-- MASTHEAD -->
 <header class="masthead">
@@ -1075,7 +1107,7 @@
         The full repo is at 
         <a href="https://github.com/skambo/kajuju-automation" target="_blank" style="color:var(--accent);font-family:var(--mono);font-size:0.85em;">github.com/skambo/kajuju-automation</a>.
       </p>
-      <p style="color:var(--muted);margin-bottom:1.5rem;font-size:0.8rem;font-family:var(--mono);">22 tests · 91% passing · CI running every 4 hours</p>
+      <p style="color:var(--muted);margin-bottom:1.5rem;font-size:0.8rem;font-family:var(--mono);">22 tests · 91% pass rate (remaining failures are known environment-dependent flakes, triaged weekly) · CI running every 4 hours</p>
       <table class="tech-table">
         <thead>
           <tr>
