@@ -92,7 +92,7 @@ Every incoming WhatsApp message is automatically replied to with the welcome mes
 
 **What the bot sends on any incoming message:**
 ```
-Hi! 👋 Welcome to Kajuju — boutique lodge at the foot of Mt. Kenya.
+Hi! 👋 Welcome to Idan Barn Suites & Café — boutique lodge at the foot of Mt. Kenya.
 
 🏡 View our rooms & rates: 
 📅 Book your stay: 
@@ -103,6 +103,7 @@ Questions about availability, meals, or special requests? Just reply here and we
 **Current status: Twilio Sandbox** — works for opted-in test numbers. Moving to production WhatsApp Business API (Meta approval) is on hold — decision pending.
 
 **Bot repo:** `https://github.com/skambo/kajuju-bot`
+**Railway project:** `https://railway.com/project/705ac21c-7bc0-46da-bdb9-f4d03a2f0530`
 
 
 ### Phase 2 (WIP — Remaining)
@@ -213,12 +214,13 @@ node index.js
 
 ## Current Test Status
 
-| Suite | Status | Notes |
-|-------|--------|-------|
-| health-check.spec.ts | Passing, with one skip | Nav link needs data-testid — TODO |
-| booking-form.spec.ts | Passing, with one skip | 2-night minimum — might need unit test approach |
-| smoobu.spec.ts | ⚠️ Deprecated | Not run in CI |
-| availability.spec.ts | ⚠️ Deprecated | Not run in CI |
+| Suite | Tests | Passing | Skipped | Notes |
+|-------|-------|---------|---------|-------|
+| health-check.spec.ts | 10 | 9 | 1 | Nav link needs data-testid — TODO |
+| booking-form.spec.ts | 8 | 7 | 1 | 2-night minimum — might need unit test approach |
+| smoobu.spec.ts | 1 | — | — | ⚠️ Deprecated — not run in CI |
+| availability.spec.ts | 3 | — | — | ⚠️ Deprecated — not run in CI |
+| **Total (active)** | **18** | **16** | **2** | |
 
 
 ## Tech Debt
