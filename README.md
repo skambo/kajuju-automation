@@ -92,7 +92,6 @@ All incoming WhatsApp messages are handled automatically with a three-tier respo
 - Wired to Twilio WhatsApp Sandbox (production Meta API approval pending)
 
 **Bot repo:** `https://github.com/skambo/kajuju-bot`
-**Railway project:** `https://railway.com/project/705ac21c-7bc0-46da-bdb9-f4d03a2f0530`
 
 
 ### Phase 2 — Remaining
@@ -215,12 +214,11 @@ node index.js
 
 ## Current Test Status
 
-| Suite | Tests | Passing | Notes |
-|-------|-------|---------|-------|
-| health-check.spec.ts | 10 | 9 | Nav link needs data-testid — TODO |
-| booking-form.spec.ts | 8 | 7 | 2-night minimum — might need unit test approach |
-| availability.spec.ts | 3 | — | Pending channel manager rewrite |
-| **Total** | **21** | **16+** | Availability suite paused pending new channel manager |
+| Suite | Status | Notes |
+|-------|--------|-------|
+| health-check.spec.ts | Passing, with one skip | Nav link needs data-testid — TODO |
+| booking-form.spec.ts | Passing, with one skip | 2-night minimum — might need unit test approach |
+| availability.spec.ts | ⚠️ Paused | Pending channel manager rewrite |
 
 
 ## Tech Debt
