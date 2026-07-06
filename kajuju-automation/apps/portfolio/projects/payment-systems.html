@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Testing Payment Systems — Sandra K</title>
+  <meta name="description" content="A decade testing mobile wallets, PSP integrations, and lending platforms across Africa and Europe at Cellulant, JUMO, and Pleo." />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">Sandra K</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../about.html">About</a></li>
+      <li><a href="../projects.html" aria-current="page">Projects</a></li>
+      <li><a href="../field-notes.html">Field Notes</a></li>
+      <li><a href="../resume.html">Resume</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <section class="article-header">
+    <span class="pill">Case Study 01</span>
+    <h1>Payment Systems at Scale</h1>
+    <p class="article-sub">A decade spent inside the financial systems that include mobile wallets, PSP integrations, lending platforms, and corporate card transactions, across markets in Africa and Europe.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Companies</span>
+        <span class="meta-value">Cellulant, JUMO, Pleo, Sketch</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Domain</span>
+        <span class="meta-value">Mobile money, lending, savings, corporate cards</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Tools</span>
+        <span class="meta-value">Postman, SQL, Playwright, Cypress, Grafana</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose article-body">
+      <h2>The Problem Space</h2>
+      <p>
+        Financial systems don't fail loudly, they fail in a decimal point, a race condition between two services, a reconciliation job that silently drops a record where the cost of a missed edge case isn't a bad user review, it's money moving to the wrong place.
+      </p>
+
+      <h2>What I Tested</h2>
+      <ul>
+        <li>Multi-market, multi-currency payment flows and reconciliation logic at Cellulant, including PSP integrations and the Bank of Agriculture digital banking platform in Nigeria.</li>
+        <li>Loan, savings, and insurance calculation logic, eligibility rules, and payout flows at JUMO, where data integrity had direct financial consequences for users across Africa and Europe.</li>
+        <li>Card transaction logic and multi-user expense categorization at Pleo, an EU fintech unicorn.</li>
+      </ul>
+
+      <h2>How I Tested It</h2>
+      <p>
+        Deep API testing with Postman across distributed backend services. SQL queries written to trace transactions and verify database state directly, not just trust the UI. Grafana and observability tooling to catch production anomalies before they compounded.
+      </p>
+
+      <h2>What It Taught Me</h2>
+      <p>
+        Financial systems are a good training ground for testing anything with multiple moving parts, because the tolerance for silent failure is zero. That standard is what I now apply to every system I test — including the one I built for Kajuju, my own lodge.
+      </p>
+
+      <p><a href="kajuju.html">Read the Kajuju case study →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Sandra K</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/sandrawk/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/skambo" target="_blank" rel="noopener">GitHub</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
