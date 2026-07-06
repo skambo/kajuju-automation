@@ -1,7 +1,7 @@
 /* Sandra K — personal engineering site. Calm, text-forward, minimal. */
 
 :root {
-  --bg: #ffffff;
+  --bg: var(--accent-soft);
   --bg-alt: #f7f7f8;
   --ink: #14161a;
   --muted: #5b6270;
