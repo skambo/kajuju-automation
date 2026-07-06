@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lessons From Testing Hospitality Software — Sandra K</title>
+  <meta name="description" content="A QA engineer's perspective on coordination failures in hospitality tech." />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">Sandra K</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../projects.html">Projects</a></li>
+      <li><a href="../field-notes.html" aria-current="page">Testing Blog</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <article>
+    <section class="article-header">
+      <h1>Lessons From Testing Hospitality Software</h1>
+      <p class="article-sub">A QA engineer's perspective on coordination failures</p>
+      <p class="small">By Sandra K — QA &amp; Automation Engineer</p>
+    </section>
+
+    <section>
+      <div class="prose article-body">
+
+        <p>
+          Here's what I learned after building software to operate a hotel.
+        </p>
+
+        <p>
+          For over a decade, I worked as a QA engineer testing payment systems, lending platforms, healthcare applications, and SaaS products across Africa and Europe. My job was to find the defect before a customer did using automation, exploratory testing, API validation, and systems thinking.
+        </p>
+
+        <p>
+          After building Kajuju, a boutique lodge in Kenya, I expected the learning curve to be hospitality, service standards, guest experience, generally things outside a software engineering background, however, I found myself relearning systems engineering.
+        </p>
+
+        <h2>Coordination Failures</h2>
+
+        <p>
+          Every day exposed workflows where different systems had to agree with each other, reservations, payments, housekeeping, guest communication, and availability across booking channels. Individually, each piece usually worked. A booking form submitted correctly. A channel manager synced. A WhatsApp message got a reply. The friction showed up in the handoff or rather the gap between one system updating and another system finding out about it, especially where updates were done manually.
+        </p>
+
+        <h2>The Excel Sheets</h2>
+
+        <p>
+          Alongside every workflow, we kept a manual Excel sheet—not because anyone was resistant to the tooling, but because the channel manager, didn't give full visibility into everything staff needed to see in one place. So a spreadsheet persisted quietly in the background as the thing we actually trusted.
+        </p>
+
+        <p>
+          Excel sheets existed as our shadow system because our hospitality system didn't represent how the work actually happened, which I realized was a sign that the system's workflows did not represent the various ways small lodges and restaurants like ours actually operate, and the system had little flexibility to change to suit our workflows.
+        </p>
+
+        <h2>Why Hospitality Software Behaves Like a Distributed System</h2>
+
+        <p>
+          A booking engine sounds like a simple CRUD problem: create a reservation, block some dates, and take a payment. In theory, this is true, but multiple edge cases exist within this flow and have to be reconciled and updated constantly. The assumptions made are what cause the hiccups in using hospitality tech systems.
+        </p>
+
+        <h2>A Small Bug That Revealed a Bigger Problem</h2>
+
+        <p>
+          The clearest example was a timezone drift bug in the double booking detector I built. The original check compared checkout and check-in dates using JavaScript's <code>new Date()</code>, which parses a bare date string as midnight UTC. The property runs several hours ahead of UTC, so a checkout and a check-in on the same calendar day looked, to the code, like they overlapped by a few hours. The fix was to stop comparing <code>Date</code> objects and start comparing plain <code>YYYY-MM-DD</code> strings instead—timezone-agnostic by construction. The false-positive alerts that only surfaced in cross-timezone CI runs disappeared entirely.
+        </p>
+
+        <p>
+          It's a small bug technically, but proof for the larger claim that the failure wasn't in the booking logic, the payment logic, or the messaging logic, it was in an assumption about how two systems would agree on what "the same day" means.
+        </p>
+
+        <h2>Trust and Monitoring</h2>
+
+        <p>
+          The other lesson was about what makes monitoring worth trusting. Early on, false-positive alerts made the monitoring noisy enough that it was tempting to start ignoring it, which defeats the entire point of having it. Once the timezone bug was fixed and the noise stopped, an alert firing meant something real and got treated that way. Monitoring only earns trust by being predictable, consistent, and accurate over a long stretch of time. 
+        </p>
+
+        <p>
+          I've written up more of these failure modes—the kind of thing I'd tell any hospitality engineering team to actively test for—in a companion piece: <a href="ten-system-failures.html">10 System Failures I Found Running a Hotel That Hospitality Engineering Teams Should Test For</a>.
+        </p>
+
+        <h2>Closing</h2>
+
+        <p>
+          I didn't leave software to run a hotel, I'm still a QA and automation engineer, What changed is the range of systems I've watched fail, first in payment platforms,then design and SaaS, and now in a small hospitality business I operate myself. Both taught me the same thing: testing is really about testing coordination between systems.
+        </p>
+
+      </div>
+    </section>
+  </article>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Sandra K</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/sandrawk/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/skambo" target="_blank" rel="noopener">GitHub</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

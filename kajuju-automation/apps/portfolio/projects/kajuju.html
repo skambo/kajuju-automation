@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kajuju — Sandra K</title>
+  <meta name="description" content="Designing, building, and operating Kajuju, a boutique lodge in Kenya, with a production Playwright + TypeScript automation framework running its booking, availability, and guest-communication systems." />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">Sandra K</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../projects.html" aria-current="page">Projects</a></li>
+      <li><a href="../field-notes.html">Testing Blog</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <section class="article-header">
+    <span class="pill">Case Study 02 — Featured</span>
+    <h1>Kajuju</h1>
+    <p class="article-sub">Designing, building, and operating a boutique lodge in Kenya, and then building the automation framework that runs it.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-label">Role</span>
+        <span class="meta-value">Owner-operator &amp; automation engineer</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Stack</span>
+        <span class="meta-value">Playwright, TypeScript, Node.js, Express, Twilio</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Infra</span>
+        <span class="meta-value">Vercel, Railway, GitHub Actions</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="prose article-body">
+
+      <h2>Overview</h2>
+      <p>
+        In 2025, after building Kajuju with family, a boutique lodge in Kenya, alongside the physical property, I built a production test automation framework using Playwright and TypeScript, to run its booking, availability, and guest-communication systems. I treat the lodge the way I'd treat any system I was responsible for testing in a previous role: with synthetic monitoring, CI, and a healthy suspicion of anything that hasn't been verified.
+      </p>
+
+      <h2>The Problem</h2>
+      <p>
+        A live hospitality business has to keep several systems in tandem, including a channel manager tracking availability across booking platforms and our website, a booking form guests use directly, and a WhatsApp line where some enquiries arrive in addition to phone call enquiries. 
+      </p>
+      <p>
+        For us, the risk is double bookings, or losing out on potential bookings because of slow or missed response or frustrated staff unable to use the software efficiently while doing their work.
+      </p>
+
+      <h2>The Solution</h2>
+      <p>
+        I built a small set of connected systems, a booking flow with live availability checks, a suite of automated tests running in CI to catch regressions and double-bookings before guests do, and a WhatsApp bot that responds to enquiries and checks availability on a regular automated schedule. Each piece is tested on its own, and as part of the larger system. 
+      </p>
+
+      <h2>Architecture</h2>
+      <p>
+        Guest-facing pages and the booking flow are deployed as static and serverless functions on Vercel. A channel manager holds the availability data, the booking form checks against it in real time before allowing a submission. A separate Node.js and Express service, deployed on Railway, runs the WhatsApp bot via the Twilio API, independent of the main site's deploy cycle. GitHub Actions ties the two together with scheduled test runs against the live, deployed environment.
+      </p>
+
+      <h2>Automation</h2>
+      <p>
+        The Playwright suite covers the booking flow end to end, form validation, availability checks, and channel manager API responses, plus synthetic monitoring that runs continuously against the live site. A core focus is double-booking detection across multiple room types: the suite checks for date overlaps room by room, on a schedule, and raises an alert the moment two reservations claim the same night.
+      </p>
+      <p>
+        The WhatsApp bot runs on its own automated schedule too, checking availability and auto-responding to guest enquiries with current rates and booking information, so a guest messaging at 2am gets an answer.
+      </p>
+
+      <h2>Engineering Decisions</h2>
+      <p>
+        The most instructive bug in the whole project was a timezone drift issue in the double-booking detector. The original overlap check used JavaScript's <code>new Date()</code> to compare a checkout date against a checkin date. <code>new Date()</code> parses a bare date string as midnight UTC, but the property operates several hours ahead of UTC, so a checkout and a checkin on the same calendar day appeared to overlap by several hours. The result was a run of false-positive double-booking alerts that only surfaced in cross-timezone CI runs, not in local testing.
+      </p>
+      <p>
+        The fix was to stop comparing <code>Date</code> objects and start comparing calendar dates as plain <code>YYYY-MM-DD</code> strings — timezone-agnostic by construction.
+      </p>
+
+      <p class="code-label">Before — timezone-sensitive Date comparison</p>
+      <pre><code>// new Date() parses a bare string as midnight UTC.
+// A checkout/checkin on the same calendar day can
+// appear to overlap once the property's UTC offset
+// is applied.
+function datesOverlap(checkOut, checkIn) {
+  return new Date(checkOut) >= new Date(checkIn);
+}</code></pre>
+
+      <p class="code-label">After — timezone-agnostic string comparison</p>
+      <pre><code>// Compare calendar dates as YYYY-MM-DD strings.
+// No Date object, no UTC offset, no false positives.
+function datesOverlap(checkOut, checkIn) {
+  const toDateString = (d) => new Date(d).toISOString().slice(0, 10);
+  return toDateString(checkOut) >= toDateString(checkIn);
+}</code></pre>
+
+      <p>
+        It's a small fix, but it's a reminder that a lot of production bugs are mismatch between what a data type represents and what you assume it represents. That's as true of a payout calculation as it is of a checkout date.
+      </p>
+
+      <h2>Lessons Learned</h2>
+      <p>
+        Synthetic monitoring across several live deployments caught issues because the failures depended on real-world timing. Soft-assertion patterns (collecting every conflict across every room type before raising a single alert) turned out to matter more here than in most software projects I've tested, because the cost of missing one instance is a guest turned away or double-booked.
+      </p>
+      <p>
+        I also learned how much operational trust depends on monitoring being predictable and continuous. A test suite that runs quietly in the background, on a regular automated schedule, and only makes noise when something is wrong, is worth more than one that runs once and is trusted forever.
+      </p>
+
+      <h2>Business Impact</h2>
+      <p>
+        The booking flow now runs with continuous, automated verification instead of manual checking. Guest enquiries get an immediate, accurate response regardless of time of day.
+      </p>
+      <p>
+        More than any single feature, building Kajuju's systems confirmed that hospitality software is fundamentally a coordination problem between inventory, staff, payments, and guest communication. Most failures live in the gaps between systems, not inside any one of them.
+      </p>
+
+      <p><a href="../field-notes/running-a-hotel.html">Read the Testing Blog essay on this →</a></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Sandra K</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/sandrawk/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/skambo" target="_blank" rel="noopener">GitHub</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
