@@ -7,3 +7,12 @@ test-results/
 CONTEXT.md
 FAQ.md
 apps/landing-pages/dist/
+
+# Playwright MCP debug artifacts from the agentic testing layer — page
+# snapshots and console logs from live-site runs, not meant to be committed.
+agentic/.playwright-mcp/
+agentic/snap*.yml
+
+# Full raw API transcript written on every agentic run (diagnostics) —
+# contains real site content/URLs, uploaded as a CI artifact instead.
+agentic/transcript.json

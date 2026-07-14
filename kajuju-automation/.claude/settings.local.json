@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(vercel --version)"
+      "Bash(vercel --version)",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)"
     ]
   }
 }
