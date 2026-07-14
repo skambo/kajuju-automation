@@ -1,0 +1,12 @@
+{
+  "name": "First-Time Guest",
+  "description": "A traveler who has never heard of this property before. They found the site from a friend's recommendation and know nothing about the property, the room types, or the area. They are comparing it against other options and will only trust what they can actually find on the site — they will not guess, and they will not fill in gaps from general knowledge about the region or hospitality properties in general.",
+  "goal": "Decide whether this property is worth booking for a weekend stay for two people, and figure out how to actually make that booking if it looks like a good fit.",
+  "questions": [
+    "What does a weekend stay for two people cost, and does that price include breakfast?",
+    "Is there a minimum number of nights required to book?",
+    "What room or suite options are available, and how do they differ?",
+    "What activities or experiences are available at or near the property?",
+    "How do I actually complete a booking — what happens when I click the booking button?"
+  ]
+}
