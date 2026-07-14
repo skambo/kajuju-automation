@@ -1,0 +1,58 @@
+name: Agentic Discovery Test
+
+# This does NOT run on push/pull_request. Each run is a handful of Claude
+# Sonnet 5 turns plus a real headless browser session against the live site —
+# real API cost per run, not free CI minutes. It's a periodic discovery
+# report ("can a real guest actually use this site"), not a merge gate, so it
+# is intentionally kept off the push/PR path. Manual-only for now — no
+# schedule trigger until this has been run and reviewed a few times.
+on:
+  workflow_dispatch:
+
+jobs:
+  agentic-discovery:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: kajuju-automation/agentic
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser for MCP
+        run: npx playwright install --with-deps chromium
+
+      - name: Run agentic discovery test against the live site
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          TARGET_SITE_URL: ${{ secrets.TARGET_SITE_URL }}
+          GMAIL_USERNAME: ${{ secrets.GMAIL_USERNAME }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
+          ALERT_EMAIL: ${{ secrets.ALERT_EMAIL }}
+        run: npm run test -- --send-email
+
+      - name: Send failure alert (script broke, not just a bad persona outcome)
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.GMAIL_USERNAME }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          subject: '🚨 Agentic discovery test run failed'
+          to: ${{ secrets.ALERT_EMAIL }}
+          from: Kajuju Agentic Tester
+          body: |
+            The agentic discovery test run itself failed (hit the tool-use turn cap,
+            got a malformed final report from the model, or crashed) — this is
+            different from the persona reporting a bad experience on the site,
+            which is emailed separately by the run itself.
+
+            Check the run log and step summary:
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
