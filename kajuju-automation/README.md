@@ -9,7 +9,7 @@ A hospitality-grade QA automation framework built with Playwright + TypeScript, 
 
 ## The Problem
 
-Kajuju — a boutique property near Mt. Kenya — receives booking inquiries across WhatsApp, phone, and social media. Availability is manually tracked across Airbnb, Booking.com, a WordPress booking site, and direct bookings, with no single source of truth. Rate information is shared as PDFs. The result: overbooking risk, slow guest response times, and high manual overhead for a small team.
+Kajuju, a boutique property near Mt. Kenya, receives booking inquiries across WhatsApp, phone, and social media. Availability is manually tracked across Airbnb, Booking.com, a WordPress booking site, and direct bookings, with no single source of truth. Rate information is shared as PDFs. The result: overbooking risk, slow guest response times, and high manual overhead for a small team.
 
 | # | Pain Point | Impact |
 |---|-----------|--------|
@@ -28,7 +28,7 @@ The goal is twofold: solve real problems encountered while running a new busines
 
 ## The Solution
 
-This project defines and builds the Kajuju Automation Framework — a QA-engineered system that automates the inquiry-to-confirmation workflow while keeping human judgment in the loop for invoicing, payment verification, and channel management.
+This project defines and builds the Kajuju Automation Framework, a QA-engineered system that automates the inquiry-to-confirmation workflow while keeping human judgment in the loop for invoicing, payment verification, and channel management.
 
 ### Business Goals
 - Respond to all inquiries within 60 seconds
@@ -111,6 +111,30 @@ Questions about availability, meals, or special requests? Just reply here and we
 - OpenAI GPT — intelligent FAQ handling (availability, meals, special requests, local info)
 - Wave invoice automation ⏸️ _Paused — needs channel manager integration first_
 - WhatsApp Business API (Meta approval) ⏸️ _Paused — decision pending_
+
+
+### Phase 3 — Agentic Testing Layer
+
+The Playwright suites above answer "does the button work." They don't answer "could a
+real guest actually use this site to figure out if they want to stay here." Phase 3 adds
+a second, deliberately different kind of test: a Claude Sonnet 5 agent that role-plays a
+persona (currently a first-time guest) and browses the live site through Playwright
+MCP, the same accessibility-tree tools a human browsing agent would use, to answer the persona's real questions (price, minimum nights, what
+a booking actually involves) using only what it finds on the page.
+
+This is based on the approach Slack Engineering documented in "Agentic Testing: Where
+Agents Fit in the E2E Testing Stack" (June 2026), agentic tests as a complement to
+deterministic E2E, not a replacement for it.
+
+**Current status:** built and smoke-tested locally, runs on a weekly
+schedule and on-demand via `workflow_dispatch`, and reports whether the persona could
+complete their goal, what confused them, and what's missing, plus real token-usage and
+cost figures for every run, since this isn't free the way a Playwright
+assertion is.
+
+See [`agentic/TESTING.md`](agentic/TESTING.md) for how to run it, including a safe local
+dry-run mode that doesn't touch the live site. A full writeup covering the
+Playwright MCP bridging and design decisions is coming in `agentic/README.md`.
 
 
 ## Tech Stack
@@ -240,5 +264,5 @@ node index.js
 
 ## Development Methodology
 
-Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner — working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging — including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic. This reflects how I work: AI handles the repetitive thinking, I own the decisions and the quality bar.
+Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner, working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging, including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double booking detection logic. This reflects how I work, AI handles the repetitive thinking, I own the decisions and the quality bar.
 

@@ -71,6 +71,7 @@
     .book-direct-bar{background:#1e3d1a;padding:.9rem 1.25rem;text-align:center}
     .btn-book-direct{display:inline-block;background:#2d5a27;color:#fff;text-decoration:none;padding:.7rem 2rem;border-radius:50px;font-size:.9rem;font-weight:bold;letter-spacing:.5px;transition:background .2s;border:2px solid rgba(255,255,255,.3)}
     .btn-book-direct:hover{background:#3b6d11}
+    .redirect-notice{font-size:.72rem;color:rgba(255,255,255,.65);margin-top:.6rem;font-family:sans-serif}
 
     /* ── HERO ── */
     .hero{width:100%;max-height:220px;overflow:hidden;position:relative;background:#2d5a27}
@@ -119,6 +120,9 @@
     .room-card{background:#fff;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1rem;border:0.5px solid #d0ddc8}
     .room-card.featured{border:1.5px solid #2d5a27}
     .room-card h3{font-size:1rem;color:#1a1a1a;margin-bottom:.4rem}
+    .room-card h3 .room-alias{font-size:.72rem;font-weight:normal;color:#888;font-family:sans-serif;letter-spacing:.2px}
+    .gallery-link{display:inline-block;font-size:.8rem;color:#2d5a27;text-decoration:none;font-family:sans-serif;margin-bottom:.6rem}
+    .gallery-link:hover{text-decoration:underline}
     .room-desc{font-size:.87rem;color:#555;line-height:1.7;margin-bottom:.75rem}
     .room-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
     .rate-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.5rem}
@@ -273,7 +277,7 @@
       <a href="#tab-activities" onclick="switchTab('activities');return false;">Activities</a>
       <a href="#tab-menu" onclick="switchTab('menu');return false;">Menu</a>
       <a href="/plan" class="nav-plan">Plan</a>
-      <a href="https://idanbarnsuites.com/hotel-booking" class="nav-book">Book Now</a>
+      <a href="https://idanbarnsuites.com/hotel-booking" class="nav-book" title="You're now leaving this page for our sister booking site to complete your reservation.">Book Now</a>
     </div>
   </div>
 </nav>
@@ -282,9 +286,11 @@
 <div class="book-direct-bar">
   <a href="https://idanbarnsuites.com/hotel-booking"
      class="btn-book-direct"
+     title="You're now leaving this page for our sister booking site to complete your reservation."
      onclick="gtag('event','book_direct_click',{event_category:'conversion'})">
     Book Direct
   </a>
+  <div class="redirect-notice">You'll leave this page for our sister booking site to complete your reservation.</div>
 </div>
 
 <div class="hero">
@@ -345,7 +351,8 @@
     <div class="rate-section active" id="offpeak-wd">
 
       <div class="room-card">
-        <h3>Twin Garden Room</h3>
+        <h3>Twin Garden Room <span class="room-alias">(Pebble Room on booking calendar)</span></h3>
+        <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
         <p class="room-desc">A well-appointed twin room with garden views and direct access to the outdoor grounds. Comfortable for solo travellers and couples, with a calm, natural setting. En-suite bathroom, quality linens, and that quiet you came for. Also ideal for hikers looking for a no-frills, cosy room as a base for their ascents and early departures.</p>
         <div class="room-chips">
           <span class="chip">En-suite bathroom</span>
@@ -363,7 +370,8 @@
       </div>
 
       <div class="room-card featured">
-        <h3>Deluxe Room with Balcony</h3>
+        <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
+        <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
         <p class="room-desc">Our most popular room. A spacious deluxe room with a private balcony overlooking the property, one of the best seats in the house for Mt Kenya views on a clear morning. Ideal for couples and solo travellers who want a bit more space and that balcony moment with their morning coffee.</p>
         <div class="room-chips">
           <span class="chip">Private balcony</span>
@@ -386,7 +394,8 @@
     <div class="rate-section" id="offpeak-we">
 
       <div class="room-card">
-        <h3>Twin Garden Room</h3>
+        <h3>Twin Garden Room <span class="room-alias">(Pebble Room on booking calendar)</span></h3>
+        <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
         <div class="rate-grid">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 10,000 <span class="usd">~$77</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
@@ -396,7 +405,8 @@
       </div>
 
       <div class="room-card featured">
-        <h3>Deluxe Room with Balcony</h3>
+        <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
+        <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
         <div class="rate-grid">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 13,000 <span class="usd">~$100</span></div></div>
@@ -411,7 +421,8 @@
     <div class="rate-section" id="peak">
 
       <div class="room-card">
-        <h3>Twin Garden Room</h3>
+        <h3>Twin Garden Room <span class="room-alias">(Pebble Room on booking calendar)</span></h3>
+        <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
         <div class="rate-grid">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 13,000 <span class="usd">~$100</span></div></div>
@@ -421,7 +432,8 @@
       </div>
 
       <div class="room-card featured">
-        <h3>Deluxe Room with Balcony</h3>
+        <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
+        <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
         <div class="rate-grid">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 13,000 <span class="usd">~$100</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 14,500 <span class="usd">~$112</span></div></div>
@@ -437,6 +449,7 @@
 
     <div class="room-card">
       <h3>Penthouse Loft</h3>
+      <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
       <p class="room-desc">A private, elevated loft unit with its own self-catering kitchen, living space, and bedroom. Features a cosy fireplace — perfect for cool Mt Kenya evenings. Up to 3 adults. Ideal for those who want their own space, privacy, and the freedom to come and go. Starlink WiFi, solar power, and free parking included. Guests may also order à la carte from the café. Full breakfast available at Ksh 1,200 per adult.</p>
       <div class="room-chips">
         <span class="chip">Fireplace</span>
@@ -458,6 +471,7 @@
 
     <div class="room-card">
       <h3>Cottage — 3 bedrooms</h3>
+      <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
       <p class="room-desc">Our self-contained 3-bedroom cottage sleeps up to 6 guests — ideal for families, groups, and longer stays. Features a fireplace in the living area, a fully equipped self-catering kitchen, and a private outdoor space. Starlink WiFi and free parking included. Guests may also order à la carte from the café. Full breakfast available at Ksh 1,200 per adult.</p>
       <div class="room-chips">
         <span class="chip">Fireplace</span>
@@ -506,7 +520,7 @@
       <div class="policy-item"><strong>Children</strong><span>Under 6 free. Ages 6–12 at 50% of adult rate.</span></div>
       <div class="policy-item"><strong>Deposit</strong><span>50% required to confirm. Balance due on arrival.</span></div>
       <div class="policy-item"><strong>Cancellation</strong><span>Full refund 72hrs+. No refund within 48hrs of arrival.</span></div>
-      <div class="policy-item"><strong>Min stay</strong><span>2 nights on peak and long weekends. 3 nights for festive buyout.</span></div>
+      <div class="policy-item"><strong>Min stay</strong><span>No minimum on a standard Friday–Saturday weekend. 2 nights required over Easter, Christmas, and long public holiday weekends; 3 nights for a festive full-property buyout.</span></div>
       <div class="policy-item"><strong>Additional guests</strong><span>Ksh 4,000 per adult per night in Penthouse (up to 3).</span></div>
       <div class="policy-item"><strong>Exchange rate</strong><span>USD prices shown at a mid-market rate of KES 130. Subject to change with market rates.</span></div>
     </div>
@@ -877,10 +891,12 @@
     <!-- Booking page at idanbarnsuites.com has Paystack payment integration — ensure this link always points to /hotel-booking -->
     <a href="https://idanbarnsuites.com/hotel-booking"
        class="btn-book-direct"
-       style="display:inline-block;margin-bottom:1.25rem;"
+       style="display:inline-block;"
+       title="You're now leaving this page for our sister booking site to complete your reservation."
        onclick="gtag('event','book_direct_click',{event_category:'conversion'})">
       Book Direct
     </a>
+    <div class="redirect-notice" style="margin-bottom:1.25rem;">You'll leave this page for our sister booking site to complete your reservation.</div>
 
     <div class="cta-divider"></div>
 
@@ -907,7 +923,7 @@
     &copy; 2026 Idan Barn Suites &amp; Caf&eacute;<br/>
     Idan Barn Suites &amp; Caf&eacute;, Naromoru Gatuanyaga, Nyeri County, Kenya<br/>
     <a href="https://idanbarnsuites.com">Home</a> &nbsp;&middot;&nbsp;
-    <a href="https://idanbarnsuites.com/hotel-booking">Book Now</a> &nbsp;&middot;&nbsp;
+    <a href="https://idanbarnsuites.com/hotel-booking" title="You're now leaving this page for our sister booking site to complete your reservation.">Book Now</a> &nbsp;&middot;&nbsp;
     <a href="https://www.tripadvisor.com/Hotel_Review-g311292-d34000728-Reviews-Idan_Barn_Suites_And_Cafe-Naro_Moru_Rift_Valley_Province.html"
        target="_blank" rel="noopener">Read our TripAdvisor reviews &#9733;&#9733;&#9733;&#9733;&#9733;</a><br/>
     <a href="tel:+254762004417">+254 762 004 417</a> &nbsp;&middot;&nbsp;

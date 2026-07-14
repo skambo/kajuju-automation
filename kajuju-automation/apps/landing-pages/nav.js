@@ -44,7 +44,7 @@
     '<a href="/?tab=activities"' + cls('activities') + '>Activities</a>' +
     '<a href="/?tab=menu"' + cls('menu') + '>Menu</a>' +
     '<a href="/plan"' + cls('plan', 'nav-plan') + '>Plan</a>' +
-    '<a href="https://idanbarnsuites.com/hotel-booking" class="nav-book">Book Now</a>' +
+    '<a href="https://idanbarnsuites.com/hotel-booking" class="nav-book" title="You\'re now leaving this page for our sister booking site to complete your reservation.">Book Now</a>' +
     '</div></div></nav>';
 
   document.currentScript.insertAdjacentHTML('beforebegin', nav);

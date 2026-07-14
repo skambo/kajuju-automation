@@ -71,7 +71,10 @@
       border-left: 4px solid #E94560;
     }
     .package-card h3 { font-size: 1rem; color: #1A1A2E; margin-bottom: 4px; }
+    .package-card h3 .room-alias { font-size: 0.72rem; font-weight: normal; color: #888; }
     .package-card .subtitle { font-size: 0.78rem; color: #888; margin-bottom: 12px; }
+    .package-card .gallery-link { display: inline-block; font-size: 0.78rem; color: #E94560; text-decoration: none; margin-bottom: 12px; }
+    .package-card .gallery-link:hover { text-decoration: underline; }
 
     .rate-row {
       display: flex; justify-content: space-between;
@@ -149,9 +152,10 @@
 
 <script src="/nav.js"></script>
 <div style="background:#F5F5F0;padding:14px 20px;text-align:center;border-bottom:2px solid #E0E0D8;">
-  <a href="https://www.idanbarnsuites.com/rooms/" target="_blank" style="display:inline-block;background:#4a5240;color:#FFFFFF;text-decoration:none;padding:12px 28px;border-radius:50px;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-family:Georgia,serif;">
+  <a href="https://www.idanbarnsuites.com/rooms/" target="_blank" title="You're now leaving this page for our sister booking site to complete your reservation." style="display:inline-block;background:#4a5240;color:#FFFFFF;text-decoration:none;padding:12px 28px;border-radius:50px;font-size:0.85rem;letter-spacing:1px;text-transform:uppercase;font-family:Georgia,serif;">
     🏨 Book &amp; Pay Now — idanbarnsuites.com
   </a>
+  <div style="font-size:0.72rem;color:#888;margin-top:6px;">You'll leave this page for our sister booking site to complete your reservation.</div>
 </div>
 
 <div class="hero">
@@ -211,8 +215,9 @@
 
   <!-- DELUXE ROOM -->
   <div class="package-card">
-    <h3>Deluxe Room with Balcony</h3>
+    <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
     <div class="subtitle">Your outdoor office — work from the balcony with a view</div>
+    <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
     <div class="rate-row"><span class="label">Single — Half Board</span><span class="amount">KES 12,500 / night</span></div>
     <div class="rate-row"><span class="label">Double — Half Board</span><span class="amount">KES 15,000 / night</span></div>
     <ul class="includes-list">
@@ -227,8 +232,9 @@
 
   <!-- TWIN GARDEN ROOM -->
   <div class="package-card">
-    <h3>Twin Garden Room</h3>
+    <h3>Twin Garden Room <span class="room-alias">(Pebble Room on booking calendar)</span></h3>
     <div class="subtitle">Garden views, great value, same Idan experience</div>
+    <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
     <div class="rate-row"><span class="label">Single — Half Board</span><span class="amount">KES 11,000 / night</span></div>
     <div class="rate-row"><span class="label">Double — Half Board</span><span class="amount">KES 14,000 / night</span></div>
     <ul class="includes-list">
@@ -245,6 +251,7 @@
   <div class="package-card">
     <h3>Penthouse Loft</h3>
     <div class="subtitle">Your own floor — private, spacious, self-catering</div>
+    <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
     <div class="rate-row"><span class="label">Single</span><span class="amount">KES 12,500 / night</span></div>
     <div class="rate-row"><span class="label">Double</span><span class="amount">KES 13,500 / night</span></div>
     <ul class="includes-list">
@@ -264,6 +271,7 @@
   <div class="package-card">
     <h3>Cottage — Team Workation</h3>
     <div class="subtitle">Bring the whole team — up to 6 people, exclusive use</div>
+    <a class="gallery-link" href="GALLERY_LINK_PLACEHOLDER" target="_blank" rel="noopener">See more photos &rarr;</a>
     <div class="rate-row"><span class="label">Entire cottage / night</span><span class="amount">KES 12,000 / night</span></div>
     <ul class="includes-list">
       <li>3-bedroom cottage — exclusive to your team</li>

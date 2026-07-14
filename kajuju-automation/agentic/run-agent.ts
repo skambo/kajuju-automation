@@ -1,5 +1,6 @@
 import 'dotenv/config';
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import Anthropic from '@anthropic-ai/sdk';
@@ -32,6 +33,7 @@ Goal: ${persona.goal}
 - You have browser tools (Playwright MCP). Use them to navigate and read the page the way a real visitor would. You were not given selectors, a sitemap, or any hint about the page structure — discover it yourself, the same way a first-time visitor would.
 - Answer every question below using ONLY information you actually find on the site. If you cannot find an answer after a genuine attempt, say so in the answer and set "found" to false — do not guess, and do not fill gaps from outside knowledge about the property, the region, or hospitality in general.
 - Note anything confusing, slow, broken, or unclear as you go — these observations matter as much as the answers.
+- Booking links on this site may show a brief notice or tooltip warning that you're about to leave for an external booking site before or as the page navigates there. That notice is expected, working-as-intended behavior — do not treat it as a bug or dead end; follow it through to see where it leads.
 - You have a hard limit of ${maxTurns} tool-use turns for this entire session. Pace yourself: if you are past turn ${Math.max(
     1,
     maxTurns - 5,
@@ -57,6 +59,18 @@ When you are done investigating (or forced to stop by the turn limit), your fina
 - Do not call any more tools once you produce this final message.
 
 Start by navigating to ${targetUrl}.`;
+}
+
+// Tool calls whose result tells us what page/state the browser is actually
+// on — used for both the console preview log and loop detection below.
+const PAGE_STATE_TOOLS = new Set(['browser_snapshot', 'browser_navigate']);
+const STUCK_TURN_THRESHOLD = 3;
+
+function extractResultText(items: any[] | undefined): string {
+  return (items ?? [])
+    .filter((item) => item.type === 'text')
+    .map((item) => item.text ?? '')
+    .join('\n');
 }
 
 type ToolResultContent = Exclude<Anthropic.Messages.ToolResultBlockParam['content'], string | undefined>;
@@ -178,7 +192,15 @@ async function main(): Promise<void> {
     let totalOutputTokens = 0;
     let toolTurns = 0;
     let finalReport: AgenticReport | null = null;
+    let abortDiagnostic: string | null = null;
     const pagesVisited = new Set<string>();
+
+    // Loop detection: if the page snapshot/navigate result comes back
+    // identical several turns in a row, the agent is stuck (bot challenge,
+    // blocking modal, dead link) rather than making progress — abort instead
+    // of burning the full turn budget on a state that will never change.
+    let lastPageFingerprint: string | null = null;
+    let stuckTurns = 0;
 
     while (true) {
       const response = await anthropic.messages.create({
@@ -217,6 +239,7 @@ async function main(): Promise<void> {
       console.log(`[agentic] turn ${toolTurns}/${MAX_TOOL_TURNS}: ${toolUseBlocks.map((b) => b.name).join(', ')}`);
 
       const toolResults: Anthropic.Messages.ToolResultBlockParam[] = [];
+      let loopAborted = false;
       for (const block of toolUseBlocks) {
         const input = block.input as Record<string, unknown>;
         if (block.name === 'browser_navigate' && typeof input?.url === 'string') {
@@ -230,6 +253,24 @@ async function main(): Promise<void> {
             content: mcpContentToClaudeBlocks(result.content as any[]),
             is_error: Boolean((result as any).isError),
           });
+
+          if (PAGE_STATE_TOOLS.has(block.name)) {
+            const resultText = extractResultText(result.content as any[]);
+            console.log(
+              `[agentic] turn ${toolTurns} ${block.name} preview: ${resultText.slice(0, 300).replace(/\s+/g, ' ')}`,
+            );
+
+            const fingerprint = createHash('sha256').update(resultText).digest('hex');
+            if (fingerprint === lastPageFingerprint) {
+              stuckTurns += 1;
+            } else {
+              lastPageFingerprint = fingerprint;
+              stuckTurns = 1;
+            }
+            if (stuckTurns >= STUCK_TURN_THRESHOLD) {
+              loopAborted = true;
+            }
+          }
         } catch (err) {
           toolResults.push({
             type: 'tool_result',
@@ -241,6 +282,14 @@ async function main(): Promise<void> {
       }
 
       messages.push({ role: 'user', content: toolResults });
+
+      if (loopAborted) {
+        abortDiagnostic =
+          'Aborted: page appears stuck at the same state for 3+ turns, likely a bot-challenge or modal blocking interaction. See transcript artifact.';
+        console.error(`\n[agentic] ${abortDiagnostic}`);
+        exitCode = 1;
+        break;
+      }
     }
 
     const usage = { totalInputTokens, totalOutputTokens };
@@ -252,13 +301,14 @@ async function main(): Promise<void> {
     console.log(`  estimated cost: $${(inputCost + outputCost).toFixed(4)} (Sonnet 5 @ $2/$10 per MTok)`);
 
     if (!finalReport) {
-      // Hard cap or malformed JSON — still emit a minimal failure report so
-      // the workflow summary/email has something concrete to show.
+      // Hard cap, loop-detection abort, or malformed JSON — still emit a
+      // minimal failure report so the workflow summary/email has something
+      // concrete to show.
       finalReport = {
         outcome: 'failure',
         pagesVisited: Array.from(pagesVisited),
         questionsAnswered: persona.questions.map((q) => ({ q, answer: '', found: false })),
-        missingInfo: ['The agent did not produce a valid final report — see the run console output.'],
+        missingInfo: [abortDiagnostic ?? 'The agent did not produce a valid final report — see the run console output.'],
         confusions: [],
         recommendations: [],
       };
@@ -268,6 +318,17 @@ async function main(): Promise<void> {
     const markdown = renderMarkdown(finalReport, persona.name, usage);
     writeSummary(markdown);
     await maybeSendEmail(markdown, finalReport, { send: sendEmail });
+
+    // Full raw transcript (every message sent to/from the API, including all
+    // tool_use/tool_result blocks) — written on every run, not just failures,
+    // so CI vs. local behavior can be diffed. Uploaded as a build artifact by
+    // the workflow.
+    const transcriptPath = path.join(__dirname, 'transcript.json');
+    writeFileSync(
+      transcriptPath,
+      JSON.stringify({ persona: persona.name, targetUrl, systemPrompt, messages, usage, finalReport }, null, 2),
+    );
+    console.log(`[agentic] full transcript written to ${transcriptPath}`);
   } finally {
     await mcpClient.close().catch(() => {});
   }
