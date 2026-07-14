@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agentic Testing: Giving an AI a Goal Instead of a Script — Sandra K</title>
+  <meta name="description" content="What happened when I gave an AI agent a goal instead of a script to explore my hotel's booking site, and what it found that scripted automation couldn't." />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">Sandra K</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../projects.html">Projects</a></li>
+      <li><a href="../field-notes.html" aria-current="page">Testing Blog</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <article>
+    <section class="article-header">
+      <h1>Agentic Testing: Giving an AI a Goal Instead of a Script</h1>
+      <p class="article-sub">What happened when I gave an AI agent a goal instead of a script to explore my hotel's booking site</p>
+      <p class="small">By Sandra K — QA &amp; Automation Engineer</p>
+    </section>
+
+    <section>
+      <div class="prose article-body">
+
+        <p>
+          I run a boutique property near Mt Kenya, and I'm also a QA engineer with 10+ years of automation experience. Over the past year I've been using real operational problems from the property to stay sharp with modern QA tooling, Playwright, TypeScript, CI/CD, and now AI agents.
+        </p>
+
+        <p>
+          This experiment started with a simple question: can an AI explore my hotel's website the way a real guest would, and find problems my automated tests can't?
+        </p>
+
+        <h2>Why I built this</h2>
+
+        <p>
+          My Playwright test suite already verifies the booking journey:
+        </p>
+        <ul>
+          <li>Does the booking button work?</li>
+          <li>Does navigation behave correctly?</li>
+          <li>Do forms validate?</li>
+        </ul>
+        <p>
+          Those are important tests, but they don't answer the question a hotel owner actually cares about: can a first-time visitor understand the website well enough to make a booking? That's not a deterministic testing problem.
+        </p>
+        <p>
+          Instead of writing another scripted journey, I gave an AI agent a goal: "Visit this site as a first-time guest and decide whether you'd book." The agent explored the website on its own, reading content, comparing pages, following links, and reporting what it found confusing or inconsistent.
+        </p>
+
+        <h2>The technical approach</h2>
+        <p>
+          A few design decisions made this experiment practical.
+        </p>
+
+        <h3>Playwright MCP instead of scripted automation</h3>
+        <p>
+          I already use Playwright for my automation framework, so it became the browser layer for the agent. Rather than generating Playwright code, the agent interacts through Playwright MCP, giving it a clean interface to navigate, inspect, and interact with pages. A typical run completes in around 11 browser interactions, making it both fast and inexpensive.
+        </p>
+
+        <h3>Claude Sonnet instead of a larger model</h3>
+        <p>
+          This task isn't solving complex reasoning problems, it's exploring a small marketing website. One lesson I've learned with AI engineering is to use the cheapest model that reliably solves the problem.
+        </p>
+
+        <h3>Manual execution</h3>
+        <p>
+          This isn't something I'd run on every commit. My Playwright suite remains the fast safety net during development. The agentic test runs manually after significant content or UX changes, when I want an independent review of the user experience.
+        </p>
+
+        <h2>What the agent found</h2>
+        <p>
+          One short run uncovered several issues that my Playwright suite would never detect.
+        </p>
+        <ul>
+          <li>Room names on the marketing website didn't match those in the booking engine.</li>
+          <li>A minimum stay policy was technically present but written ambiguously.</li>
+          <li>Clicking Book Now unexpectedly redirected guests to an external booking site without warning.</li>
+          <li>Room pricing appeared inconsistent between different parts of the booking journey.</li>
+        </ul>
+        <p>
+          These were user experience problems that could easily reduce booking confidence.
+        </p>
+
+        <h2>The biggest lesson</h2>
+        <p>
+          The most interesting part wasn't what the agent found, it was what happened when it misunderstood my instructions. At one point I asked it to investigate the booking flow. I meant: "Observe what happens." The agent interpreted that as: "Complete an actual booking."
+        </p>
+        <p>
+          It opened the booking engine, selected dates, adjusted guest numbers, and kept exploring until it exhausted its turn limit. The result: a 20 interaction limit reached, a cost of $1.25, and no useful report.
+        </p>
+        <p>
+          That failure taught me two important lessons about building AI agents. First, scope matters. I rewrote the prompt to explicitly tell the agent to observe the booking flow rather than complete a reservation. Second, I stopped relying on instructions given only at the beginning of the conversation. Instead, just before the interaction limit is reached, the framework injects another instruction telling the agent to stop exploring and produce its report.
+        </p>
+        <p>
+          That small change dramatically improved reliability. The same test now completes in 11 interactions that cost $0.50.
+        </p>
+
+        <h2>What it costs</h2>
+        <p>
+          The experiment turned out to be more affordable than expected.
+        </p>
+        <ul>
+          <li><strong>Successful run:</strong> ~$0.50</li>
+          <li><strong>Poorly scoped run:</strong> ~$1.25</li>
+          <li><strong>Several manual runs each month:</strong> under $5</li>
+        </ul>
+
+        <h2>What I'd build next</h2>
+        <p>
+          This prototype currently evaluates the site as a first-time guest. I'd like to expand it with additional personas, including:
+        </p>
+        <ul>
+          <li>Budget traveller</li>
+          <li>Family traveller</li>
+          <li>Digital nomad</li>
+          <li>Mount Kenya climber</li>
+          <li>Price consistency validator</li>
+        </ul>
+        <p>
+          Each persona asks different questions and should uncover different usability issues without requiring additional Playwright scripts.
+        </p>
+
+        <h2>Final thoughts</h2>
+        <p>
+          Traditional automation verifies whether software behaves correctly. Agentic testing explores whether the experience makes sense to a user. Both of which complement each other.
+        </p>
+        <p>
+          In summary, building good agentic tests is about defining clear goals, controlling scope, managing cost, and designing guardrails so the agent knows when to stop exploring and start reporting.
+        </p>
+
+      </div>
+    </section>
+  </article>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Sandra K</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/sandrawk/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/skambo" target="_blank" rel="noopener">GitHub</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
