@@ -1,0 +1,24 @@
+{
+  "name": "kajuju-agentic-testing",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Agentic discovery testing — a persona-driven agent that browses the live site via Playwright MCP and reports whether a real guest could actually accomplish their goal.",
+  "scripts": {
+    "test": "tsx run-agent.ts",
+    "test:dry-run": "tsx run-agent.ts --dry-run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.111.0",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "@playwright/mcp": "^0.0.78",
+    "dotenv": "^17.3.1",
+    "nodemailer": "^9.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/nodemailer": "^6.4.0",
+    "tsx": "^4.23.1",
+    "typescript": "^5.6.2"
+  }
+}
