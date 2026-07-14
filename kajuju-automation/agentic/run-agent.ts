@@ -12,7 +12,17 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const MODEL = 'claude-sonnet-5';
 const MAX_TOKENS = 8000;
-const MAX_TOOL_TURNS = 20;
+// Lowered from 20 based on a real CI transcript: a well-scoped session
+// answers all persona questions in ~8-10 turns. 15 leaves headroom without
+// bankrolling an open-ended task (e.g. completing an actual reservation)
+// that was never part of the job.
+const MAX_TOOL_TURNS = 15;
+// How many tool-use turns before the hard cap to inject an explicit,
+// proximate stop-now warning as a real message (see the turn-budget
+// enforcement block below) — a rule stated once in the system prompt at the
+// start of a long session isn't reliably followed; an immediate instruction
+// close to the cap is.
+const TURN_WARNING_REMAINING = 3;
 
 interface Persona {
   name: string;
@@ -34,6 +44,7 @@ Goal: ${persona.goal}
 - Answer every question below using ONLY information you actually find on the site. If you cannot find an answer after a genuine attempt, say so in the answer and set "found" to false — do not guess, and do not fill gaps from outside knowledge about the property, the region, or hospitality in general.
 - Note anything confusing, slow, broken, or unclear as you go — these observations matter as much as the answers.
 - Booking links on this site may show a brief notice or tooltip warning that you're about to leave for an external booking site before or as the page navigates there. That notice is expected, working-as-intended behavior — do not treat it as a bug or dead end; follow it through to see where it leads.
+- For any question about how to complete a booking, you only need to click through to the external booking site and observe what's there — room list, pricing, date/guest selectors. Describe what you see. Do NOT attempt to select specific dates, fill in guest counts, click through a calendar, or otherwise complete an actual reservation. Once you can describe what the booking flow looks like and confirm it's functional, that's sufficient to answer the question.
 - You have a hard limit of ${maxTurns} tool-use turns for this entire session. Pace yourself: if you are past turn ${Math.max(
     1,
     maxTurns - 5,
@@ -202,6 +213,12 @@ async function main(): Promise<void> {
     let lastPageFingerprint: string | null = null;
     let stuckTurns = 0;
 
+    // Turn-budget enforcement: code-driven, not just a system-prompt
+    // suggestion. Once only TURN_WARNING_REMAINING turns are left, an
+    // explicit user-role message is injected into the conversation so the
+    // model gets an immediate, proximate instruction to wrap up.
+    let turnWarningInjected = false;
+
     while (true) {
       const response = await anthropic.messages.create({
         model: MODEL,
@@ -230,6 +247,11 @@ async function main(): Promise<void> {
       if (toolTurns > MAX_TOOL_TURNS) {
         console.error(
           `\n[agentic] FAILED: hit the hard cap of ${MAX_TOOL_TURNS} tool-use turns without a final report.`,
+        );
+        console.error(
+          turnWarningInjected
+            ? '[agentic] Note: the turn-budget warning WAS injected earlier and the model still did not stop — the warning itself was ignored, not merely untriggered. Treat this as a stronger signal of a prompt-adherence bug.'
+            : '[agentic] Note: the turn-budget warning was never triggered before the cap — check TURN_WARNING_REMAINING / MAX_TOOL_TURNS.',
         );
         console.error('[agentic] Treat this as a bug to investigate, not something to raise the cap for — see agentic/TESTING.md.');
         exitCode = 1;
@@ -281,7 +303,16 @@ async function main(): Promise<void> {
         }
       }
 
-      messages.push({ role: 'user', content: toolResults });
+      const turnsRemaining = MAX_TOOL_TURNS - toolTurns;
+      const content: Anthropic.Messages.ContentBlockParam[] = [...toolResults];
+      if (!turnWarningInjected && turnsRemaining <= TURN_WARNING_REMAINING) {
+        turnWarningInjected = true;
+        const warningText = `You have ${turnsRemaining} tool-use turns left. Stop exploring now and produce your final JSON report using what you've already found, marking unanswered questions as found: false rather than continuing to search.`;
+        content.push({ type: 'text', text: warningText });
+        console.log(`[agentic] turn ${toolTurns}: injected turn-budget warning — "${warningText}"`);
+      }
+
+      messages.push({ role: 'user', content });
 
       if (loopAborted) {
         abortDiagnostic =
