@@ -32,7 +32,7 @@ jobs:
           server_port: 465
           username: ${{ secrets.GMAIL_USERNAME }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject: '🚨 URGENT - Idan Barn Suites Site Down!'
+          subject: '🚨 URGENT - Kajuju Site Down!'
           to: ${{ secrets.ALERT_EMAIL }}
           from: Kajuju Monitor
           body: |
