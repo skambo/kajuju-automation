@@ -1,8 +1,11 @@
 # Kajuju Automation Framework
 
-A hospitality-grade QA automation framework built with Playwright + TypeScript, solving operational problems for a hospitality business.
+Production inspired automation testing built from real operational workflows.
 
-[![Channel Manager Integration Tests](https://github.com/skambo/kajuju-automation/actions/workflows/channel-manager-tests.yml/badge.svg)](https://github.com/skambo/kajuju-automation/actions/workflows/channel-manager-tests.yml)
+Kajuju is a Playwright + TypeScript framework created to explore how modern QA evolves beyond UI automation into API validation, AI-assisted testing and production-quality workflows.
+
+Many scenarios are inspired by problems encountered while operating a real hospitality business.
+
 
 🔗 **Live site:** Shared privately
 
@@ -30,7 +33,15 @@ The goal is twofold: solve real problems encountered while running a new busines
 
 ## The Solution
 
-This project defines and builds the Kajuju Automation Framework, a QA-engineered system that automates the inquiry-to-confirmation workflow while keeping human judgment in the loop for invoicing, payment verification, and channel management.
+Traditional test automation proves software works. Modern QA needs to prove software keeps working when real customers behave unpredictably. Kajuju explores that shift. The project demonstrates:
+
+- Playwright automation
+- Resilient page object models
+- API validation
+- Production inspired edge cases
+- CI integration
+- Maintainable TypeScript architecture
+- AI-assisted test development
 
 ### Business Goals
 - Respond to all inquiries within 60 seconds
@@ -145,7 +156,7 @@ the channel manager as an API dependency instead of trusting it blindly.
 The suite runs against the Channex staging sandbox, instead of a live paid
 connection.
 
-- It's a real API with real auth, real validation, real latency, and a real async
+- It's an API with auth, real validation, real latency, and a real async
   task queue behind writes.
 - It's free, so the suite runs unattended on a daily schedule without tying test
   reliability to a paid subscription staying active.
@@ -292,4 +303,13 @@ node index.js
 ## Development Methodology
 
 Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner, working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging, including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double booking detection logic. This reflects how I work, AI handles the repetitive thinking, I own the decisions and the quality bar.
+
+## What I'd build next
+
+- AI agent evaluation suite
+- MCP testing
+- Contract testing
+- Synthetic monitoring
+- Self-healing test experiments
+- LLM-assisted regression detection
 
