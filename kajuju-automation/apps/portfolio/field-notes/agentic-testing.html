@@ -3,8 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Agentic Testing: Giving an AI a Goal Instead of a Script — Sandra K</title>
-  <meta name="description" content="What happened when I gave an AI agent a goal instead of a script to explore my hotel's booking site, and what it found that scripted automation couldn't." />
+  <title>Evaluating AI Agents with Realistic User Scenarios — Sandra K</title>
+  <meta name="description" content="What happened when I gave an AI agent a goal instead of a script to explore a live booking flow, and what it found that scripted automation couldn't." />
+  <link rel="canonical" href="https://sandra-qe-portfolio.vercel.app/field-notes/agentic-testing.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Evaluating AI Agents with Realistic User Scenarios — Sandra K" />
+  <meta property="og:description" content="What happened when I gave an AI agent a goal instead of a script to explore a live booking flow, and what it found that scripted automation couldn't." />
+  <meta property="og:url" content="https://sandra-qe-portfolio.vercel.app/field-notes/agentic-testing.html" />
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
@@ -16,7 +22,7 @@
     <ul class="nav-links">
       <li><a href="../index.html">Home</a></li>
       <li><a href="../projects.html">Projects</a></li>
-      <li><a href="../field-notes.html" aria-current="page">Testing Blog</a></li>
+      <li><a href="../field-notes.html" aria-current="page">Engineering Insights</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
   </div>
@@ -25,8 +31,8 @@
 <main id="main">
   <article>
     <section class="article-header">
-      <h1>Agentic Testing: Giving an AI a Goal Instead of a Script</h1>
-      <p class="article-sub">What happened when I gave an AI agent a goal instead of a script to explore my hotel's booking site</p>
+      <h1>Evaluating AI Agents with Realistic User Scenarios</h1>
+      <p class="article-sub">What happened when I gave an AI agent a goal instead of a script to explore a live booking flow</p>
       <p class="small">By Sandra K — QA &amp; Automation Engineer</p>
     </section>
 
@@ -34,11 +40,11 @@
       <div class="prose article-body">
 
         <p>
-          I run a boutique property near Mt Kenya, and I'm also a QA engineer with 10+ years of automation experience. Over the past year I've been using real operational problems from the property to stay sharp with modern QA tooling, Playwright, TypeScript, CI/CD, and now AI agents.
+          I'm a QA engineer with 10+ years of automation experience, and I've been using real operational systems I have hands-on access to as test subjects to stay sharp with modern QA tooling: Playwright, TypeScript, CI/CD, and now AI agents.
         </p>
 
         <p>
-          This experiment started with a simple question: can an AI explore my hotel's website the way a real guest would, and find problems my automated tests can't?
+          This experiment started with a simple question: can an AI explore a booking website the way a real user would, and find problems my automated tests can't?
         </p>
 
         <h2>Why I built this</h2>
@@ -52,7 +58,7 @@
           <li>Do forms validate?</li>
         </ul>
         <p>
-          Those are important tests, but they don't answer the question a hotel owner actually cares about: can a first-time visitor understand the website well enough to make a booking? That's not a deterministic testing problem.
+          Those are important tests, but they don't answer the question that actually matters to the business: can a first-time visitor understand the website well enough to make a booking? That's not a deterministic testing problem.
         </p>
         <p>
           Instead of writing another scripted journey, I gave an AI agent a goal: "Visit this site as a first-time guest and decide whether you'd book." The agent explored the website on its own, reading content, comparing pages, following links, and reporting what it found confusing or inconsistent.
