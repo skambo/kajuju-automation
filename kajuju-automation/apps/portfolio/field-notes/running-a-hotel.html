@@ -6,8 +6,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lessons From Testing Hospitality Software — Sandra K</title>
-  <meta name="description" content="A QA engineer's perspective on coordination failures in hospitality tech." />
+  <title>Lessons from Production That Changed My Test Strategy — Sandra K</title>
+  <meta name="description" content="A QA engineer's perspective on the coordination failures between systems that scripted tests miss, and how a production timezone bug reshaped a test strategy." />
+  <link rel="canonical" href="https://sandra-qe-portfolio.vercel.app/field-notes/running-a-hotel.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Lessons from Production That Changed My Test Strategy — Sandra K" />
+  <meta property="og:description" content="A QA engineer's perspective on the coordination failures between systems that scripted tests miss." />
+  <meta property="og:url" content="https://sandra-qe-portfolio.vercel.app/field-notes/running-a-hotel.html" />
+  <meta name="twitter:card" content="summary" />
   <link rel="stylesheet" href="../css/style.css" />
 </head>
 <body>
@@ -19,7 +25,7 @@
     <ul class="nav-links">
       <li><a href="../index.html">Home</a></li>
       <li><a href="../projects.html">Projects</a></li>
-      <li><a href="../field-notes.html" aria-current="page">Testing Blog</a></li>
+      <li><a href="../field-notes.html" aria-current="page">Engineering Insights</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
   </div>
@@ -28,21 +34,21 @@
 <main id="main">
   <article>
     <section class="article-header">
-      <h1>Lessons From Testing Hospitality Software</h1>
-      <p class="article-sub">A QA engineer's perspective on coordination failures</p>
+      <h1>Lessons from Production That Changed My Test Strategy</h1>
+      <p class="article-sub">A QA engineer's perspective on the coordination failures between systems that scripted tests miss</p>
       <p class="small">By Sandra K — QA &amp; Automation Engineer</p>
     </section>
 
     <section>
       <div class="prose article-body">
         <p>
-          Here's what I learned after building software to operate a hotel.
+          Here's a test strategy lesson that a decade of fintech and SaaS testing didn't fully teach me, but a live operational system did.
         </p>
         <p>
           For over a decade, I worked as a QA engineer testing payment systems, lending platforms, healthcare applications, and SaaS products across Africa and Europe. My job was to find the defect before a customer did using automation, exploratory testing, API validation, and systems thinking.
         </p>
         <p>
-          After building Kajuju, a boutique lodge in Kenya, I expected the learning curve to be hospitality, service standards, guest experience, the things a software engineering background doesn't obviously prepare you for. Instead, I found myself relearning systems engineering.
+          I got hands-on operational exposure to a different kind of system when I helped build the software behind Kajuju, a boutique lodge in Kenya. I expected the learning curve to be operational, service standards, guest experience, the things a software engineering background doesn't obviously prepare you for. Instead, I found myself relearning systems engineering, and it changed how I think about test strategy.
         </p>
 
         <h2>Coordination Failures</h2>
@@ -77,7 +83,7 @@
         </p>
         <h2>Closing Thought</h2>
         <p>
-          I continue evolving in the range of systems I've tested, from payment platforms, to SaaS and design software, and now a small hospitality business I operate myself, all have taught me similar lessons, testing is testing coordination between systems.
+          Across the range of systems I've tested, payment platforms, SaaS and design software, and this operational system, the lesson keeps repeating: testing is testing coordination between systems. The tools change; that discipline doesn't.
         </p>
       </div>
     </section>

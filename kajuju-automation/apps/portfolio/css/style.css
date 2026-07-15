@@ -439,6 +439,96 @@ pre {
   padding: 0.35rem 0.8rem;
 }
 
+/* ── HERO SKILLS + AVAILABILITY ── */
+.hero .interest-list {
+  margin: 1.5rem 0 0;
+}
+
+.availability-line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.25rem 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+.availability-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── APPROACH LIST ── */
+.approach-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.5rem;
+  list-style: none;
+  margin: 1.75rem 0 0;
+  padding: 0;
+}
+
+@media (max-width: 640px) {
+  .approach-list { grid-template-columns: 1fr; }
+}
+
+.approach-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.98rem;
+}
+
+.approach-list li::before {
+  content: "→";
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ── SKILLS GROUPS ── */
+.skills-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.75rem;
+}
+
+@media (max-width: 640px) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+.skill-group h3 {
+  font-size: 0.95rem;
+  margin: 0 0 0.85rem;
+}
+
+.skill-group .interest-list .tag {
+  font-size: 0.8rem;
+  padding: 0.3rem 0.7rem;
+}
+
+/* ── RESUME SUMMARY ── */
+.resume-summary-list {
+  columns: 2;
+  column-gap: 2rem;
+  margin: 1.5rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (max-width: 640px) {
+  .resume-summary-list { columns: 1; }
+}
+
+.resume-summary-list li {
+  break-inside: avoid;
+  padding: 0.4rem 0;
+  font-size: 0.98rem;
+}
+
 /* ── FOOTER ── */
 footer {
   border-top: 1px solid var(--border);
