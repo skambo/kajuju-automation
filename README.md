@@ -132,11 +132,9 @@ deterministic E2E, not a replacement for it.
 **Current status:** built and smoke-tested locally, runs on a weekly
 schedule and on-demand via `workflow_dispatch`, and reports whether the persona could
 complete their goal, what confused them, and what's missing, plus real token-usage and
-cost figures for every run, since this isn't free the way a Playwright
-assertion is.
+cost figures for every run.
 
-See [`agentic/TESTING.md`](agentic/TESTING.md) for how to run it, a full writeup covering the
-Playwright MCP bridging and design decisions is coming in `agentic/README.md`.
+Coming Soon -> [`agentic/TESTING.md`](agentic/TESTING.md) for how to run it.
 
 
 ## Channel Manager Testing
