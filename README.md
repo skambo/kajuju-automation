@@ -1,6 +1,8 @@
 # Kajuju Automation Framework
 
-A hospitality-grade automation framework built with Playwright + TypeScript, solving operational problems for a boutique hospitality business.
+A hospitality-grade QA automation framework built with Playwright + TypeScript, solving operational problems for a hospitality business.
+
+[![Channel Manager Integration Tests](https://github.com/skambo/kajuju-automation/actions/workflows/channel-manager-tests.yml/badge.svg)](https://github.com/skambo/kajuju-automation/actions/workflows/channel-manager-tests.yml)
 
 🔗 **Live site:** Shared privately
 
@@ -9,21 +11,26 @@ A hospitality-grade automation framework built with Playwright + TypeScript, sol
 
 ## The Problem
 
-Kaju — a boutique property near Mt. Kenya — receives booking inquiries across WhatsApp, phone, and social media. Availability is manually tracked across Airbnb, Booking.com, a WordPress booking site, and direct bookings, with no single source of truth. Rate information is shared as PDFs. The result: overbooking risk, slow guest response times, and high manual overhead for a small team.
+Kajuju, a boutique property near Mt. Kenya, receives booking inquiries across WhatsApp, phone, and social media. Availability is manually tracked across Airbnb, Booking.com, a WordPress booking site, and direct bookings, with no single source of truth. Rate information is shared as PDFs. The result: overbooking risk, slow guest response times, and high manual overhead for a small team.
 
 | # | Pain Point | Impact |
 |---|-----------|--------|
 | 1 | No single source of truth | Bookings tracked separately across 4 channels — any lag causes overbooking |
 | 2 | Manual rate card distribution | Staff send the same PDF and photos multiple times daily — no tracking, poor mobile UX |
 | 3 | Three inbound inquiry channels | WhatsApp, phone, and social media each require different manual handling |
-| 4 | Slow inquiry-to-response time | Guests wait minutes to hours for basic availability or rate information |
+| 4 | Slow inquiry-to-response time | Guests wait for basic availability or rate information |
 | 5 | No automated guest feedback loop | Post-stay follow-up and review solicitation is manual and inconsistent |
 | 6 | Manual invoice creation | Ad hoc with no templated guest data pre-population |
 
+## About
+
+Built by Sandra, a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business itself as the test subject.
+
+The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, serverless architecture,WhatsApp automation and AI trends in QA. 
 
 ## The Solution
 
-This project defines and builds the Kajuju Automation Framework — a QA-engineered system that automates the inquiry-to-confirmation workflow while keeping human judgment in the loop for invoicing, payment verification, and channel management.
+This project defines and builds the Kajuju Automation Framework, a QA-engineered system that automates the inquiry-to-confirmation workflow while keeping human judgment in the loop for invoicing, payment verification, and channel management.
 
 ### Business Goals
 - Respond to all inquiries within 60 seconds
@@ -50,24 +57,26 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 - Rate card page with weekday / weekend / peak tab toggle
 - Workation packages page
 - Booking form with phone/email validation, 2-night minimum enforcement, and real-time availability check
-- Activities and gatherings pages
 
-**Channel manager availability integration** ⚠️ Deprecated
-- Vercel serverless function proxied availability checks to Smoobu channel manager API
-- Smoobu has been decommissioned — new channel manager trial pending
-- Availability check currently fails open (form submits, team reviews manually)
+**Channel manager integration tests**
+- A contract/integration suite (`tests/api/availability.spec.ts`) runs against the [Channex](https://channex.io) staging sandbox, a free developer sandbox.
+- It creates real ARI (availability, rate, inventory) writes against a sandbox property, reads them back through the API, and asserts the same double-booking-prevention logic used in `api/check-availability.js` still holds against real API responses, not mocked ones
+- Runs daily on a schedule via GitHub Actions (badge above), plus on-demand via `workflow_dispatch`
+- See [Channel Manager Testing](#channel-manager-testing) below for why we're using a sandbox
+- The live booking form's availability proxy (`api/check-availability.js`) currently points at at a previously trialled channel manager, which has been replaced; that swap is tracked separately from the test suite above and doesn't block it
 
 **Formspree form backend**
 - Booking requests are submitted to Formspree, which emails the team immediately
-- Chosen deliberately over a custom email backend — no server to maintain, free tier covers current volume
+- Chosen deliberately over a custom email backend as there's no server to maintain, free tier covers current volume
 
 **GitHub Actions CI pipeline**
-- Site uptime monitor runs on schedule via cron
-- Sends alert email on failure with a link to the actions log
-- Manual trigger available via workflow_dispatch
+- Site uptime monitor runs every 4 hours via cron
+- Checks all production pages load correctly and CTAs are present
+- Sends alert email on failure with link to the failing page
+- Manual trigger available via `workflow_dispatch`
 
 **Playwright test suites**
-- Synthetic monitors for all production pages (load time, CTA presence, nav links)
+- Synthetic monitors for all 3 production pages (load time, CTA presence, nav links)
 - E2E booking form validation (phone formats, email regex, date constraints, dropdown coverage)
 
 
@@ -75,31 +84,86 @@ This project defines and builds the Kajuju Automation Framework — a QA-enginee
 
 **Kajuju WhatsApp Bot** is deployed and running at `https://kajuju-production.up.railway.app`
 
-All incoming WhatsApp messages are handled automatically with a three-tier response system:
-
-1. **Greeting detection** — "hi", "hello", "habari" etc. trigger a welcome message with rates and booking links
-2. **Scripted FAQ matching** — 19 keyword-matched categories return instant, accurate responses (checkout time, directions, menu, wifi, cancellation policy, activities, workation, groups, availability, and more)
-3. **GPT-4o fallback** — any question not matched by the FAQ layer is handled by OpenAI with a property-specific system prompt
-
-**Smart availability handling** — if a guest mentions a specific date, GPT-4o acknowledges it and asks for guest count; generic availability queries return the booking link directly.
+Every incoming WhatsApp message is automatically replied to with the welcome message, rates link, and booking link, with no manual intervention.
 
 **Architecture:**
 - Node.js + Express bot server (`apps/bot-server/index.js`)
-- FAQ response library (`apps/bot-server/faqs.js`) — 19 scripted categories, easily editable
-- OpenAI GPT-4o for unmatched questions (max 300 tokens, graceful fallback on error)
+- Listens on `POST /webhook`
 - Deployed permanently on Railway (auto-restarts, always on)
-- Auto-deploys on every push to `master` branch of `skambo/kajuju-bot`
-- Wired to Twilio WhatsApp Sandbox (production Meta API approval pending)
+- Auto-deploys on every push to `master` branch of `skambo/kajuju-bot` on GitHub
+- Wired to Twilio WhatsApp Sandbox
+
+**What the bot sends on any incoming message** (structure shown, property name redacted for this portfolio):
+```
+Hi! 👋 Welcome to Kajuju, a boutique lodge at the foot of Mt. Kenya.
+
+🏡 View our rooms & rates: 
+📅 Book your stay: 
+
+Questions about availability, meals, or special requests? Just reply here and we'll get back to you shortly!
+```
+
+**Current status: Twilio Sandbox** — works for opted-in test numbers. Moving to production WhatsApp Business API (Meta approval) is on hold, decision pending.
 
 **Bot repo:** `https://github.com/skambo/kajuju-bot`
 **Railway project:** `https://railway.com/project/705ac21c-7bc0-46da-bdb9-f4d03a2f0530`
 
 
-### Phase 2 — Remaining
-- Move from Twilio Sandbox to WhatsApp Business API (Meta approval + phone number strategy TBD)
-- Proactive outbound messages to known channel users via approved message templates
-- New channel manager integration (trial pending) — rewrite availability check once confirmed
-- Wave invoice automation with guest data pre-population
+### Phase 2 (WIP — Remaining)
+- Proactive outbound messages to known channel users via approved WhatsApp message templates
+- OpenAI GPT: Intelligent FAQ handling (availability, meals, special requests, local info)
+- Wave invoice automation ⏸️ _Paused — needs channel manager integration first_
+- WhatsApp Business API (Meta approval) ⏸️ _Paused — decision pending_
+
+
+### Phase 3 — Agentic Testing Layer
+
+The Playwright suites above answer "does the button work." They don't answer "could a
+real guest actually use this site to figure out if they want to stay here." Phase 3 adds
+a second, deliberately different kind of test: a Claude Sonnet 5 agent that role-plays a
+persona (currently a first-time guest) and browses the live site through Playwright
+MCP, the same accessibility-tree tools a human browsing agent would use, to answer the persona's real questions (price, minimum nights, what
+a booking actually involves) using only what it finds on the page.
+
+This is based on the approach Slack Engineering documented in "Agentic Testing: Where
+Agents Fit in the E2E Testing Stack" (June 2026), agentic tests as a complement to
+deterministic E2E, not a replacement for it.
+
+**Current status:** built and smoke-tested locally, runs on a weekly
+schedule and on-demand via `workflow_dispatch`, and reports whether the persona could
+complete their goal, what confused them, and what's missing, plus real token-usage and
+cost figures for every run, since this isn't free the way a Playwright
+assertion is.
+
+See [`agentic/TESTING.md`](agentic/TESTING.md) for how to run it, a full writeup covering the
+Playwright MCP bridging and design decisions is coming in `agentic/README.md`.
+
+
+## Channel Manager Testing
+
+This project's core differentiator is a suite that catches double bookings by treating
+the channel manager as an API dependency instead of trusting it blindly.
+
+The suite runs against the Channex staging sandbox, instead of a live paid
+connection.
+
+- It's a real API with real auth, real validation, real latency, and a real async
+  task queue behind writes.
+- It's free, so the suite runs unattended on a daily schedule without tying test
+  reliability to a paid subscription staying active.
+- It isolates test data from any production channel manager account, so a bad test run
+ doesn't touch real guest bookings.
+
+**What the suite proves:**
+1. The Channex sandbox property, room type, and rate plan resolve correctly by name (contract check)
+2. Rate and availability writes are accepted by the ARI endpoints (`POST /restrictions`, `POST /availability`)
+3. Those writes are correctly readable back through the API once the async task queue processes them (read-your-write, with polling, Channex applies ARI updates asynchronously)
+4. A simulated sell-out (availability driven to 0 for a date range) is correctly flagged as unavailable by the same conflict detection logic that runs in `api/check-availability.js`
+5. A back-to-back booking (one guest's checkout day is the next guest's check-in day) is correctly flagged. 
+
+Once the live channel manager is confirmed, `api/check-availability.js`
+will be rewritten against it, the Channex suite here is the reusable pattern for
+testing that integration in a sandbox first.
 
 
 ## Tech Stack
@@ -108,16 +172,16 @@ All incoming WhatsApp messages are handled automatically with a three-tier respo
 |-------|-----------|---------|
 | Test framework | Playwright + TypeScript (strict mode) | E2E, API, and synthetic monitoring tests |
 | Runtime | Node.js 20 | Test execution and serverless functions |
-| CI/CD | GitHub Actions | Cron site uptime monitoring, alerting |
+| CI/CD | GitHub Actions | Cron uptime monitoring, alerting |
 | Serverless | Vercel | Hosting + availability check proxy function |
-| Channel manager | ⚠️ Smoobu deprecated — new channel manager TBD | Single source of truth for availability |
-| Form backend | Formspree | Booking request emails — no custom server needed |
+| Channel manager (test target) | Channex staging sandbox | Free sandbox API for the ARI contract/integration suite |
+| Channel manager (production, pending) | In-trial | Will replace previous manager as the live booking form's availability source of truth |
+| Form backend | Formspree | Booking request emails, no custom server needed |
 | Frontend | HTML / CSS / JS | Static pages, no build step required |
-| WhatsApp bot | Node.js + Express + Twilio | FAQ handling + GPT-4o fallback for WhatsApp inquiries |
-| AI | OpenAI GPT-4o | Handles unscripted guest questions |
+| WhatsApp bot | Node.js + Express + Twilio | Auto-response to all WhatsApp inquiries |
 | Bot hosting | Railway | Permanent deployment, auto-redeploy on push |
 | Secrets (local) | dotenv | Local .env for API keys |
-
+| Phase 2 (next) | OpenAI GPT-4o | AI FAQ handling |
 
 ## Project Structure
 
@@ -125,21 +189,18 @@ All incoming WhatsApp messages are handled automatically with a three-tier respo
 kajuju-automation/                          ← git root
 ├── .github/
 │   └── workflows/
-│       └── availability-monitor.yml        ← Cron CI pipeline (site uptime)
+│       ├── availability-monitor.yml        ← Cron CI pipeline (site uptime monitor)
+│       └── channel-manager-tests.yml       ← Cron CI pipeline (Channex sandbox integration suite)
 ├── api/                                    ← Vercel serverless functions
-│   ├── check-availability.js               ← Channel manager availability proxy (Smoobu deprecated)
-│   └── package.json                        ← CommonJS override
-└── kajuju-automation/                      ← all application and test code
+│   └── check-availability.js              ← Availability proxy (awaiting channel manager rewrite)
+└── kajuju-automation/                      ← All application and test code
     ├── apps/
     │   ├── bot-server/
-    │   │   ├── index.js                    ← WhatsApp bot (deployed on Railway via kajuju-bot)
-    │   │   ├── faqs.js                     ← 19 scripted FAQ categories + GPT-4o fallback logic
+    │   │   ├── index.js                    ← WhatsApp bot (deployed on Railway)
     │   │   └── package.json
     │   └── landing-pages/
     │       ├── index.html                  ← Rate card  →  /
     │       ├── workation/index.html        ← Workation  →  /workation
-    │       ├── explore/index.html          ← Activities →  /explore
-    │       ├── gatherings/index.html       ← Groups     →  /gatherings
     │       └── book/index.html             ← Booking form  →  /book
     └── tests/
         ├── monitoring/
@@ -147,7 +208,7 @@ kajuju-automation/                          ← git root
         ├── e2e/
         │   └── booking-form.spec.ts        ← Form E2E
         └── api/
-            └── availability.spec.ts        ← Availability detection
+            └── availability.spec.ts        ← Channex sandbox contract/integration suite
 ```
 
 
@@ -167,36 +228,28 @@ kajuju-automation/                          ← git root
 
 **Railway over Heroku/Render for bot hosting** — GitHub-connected deploys, always-on free tier suitable for current volume, simple environment variable management.
 
-**Twilio Sandbox first** — Allows full end-to-end testing without Meta WhatsApp Business API approval. Production number strategy is under review.
-
-**FAQ-first, GPT-4o second** — Scripted responses are instant, free, and accurate. GPT-4o only fires for genuinely novel questions — cost stays minimal (~$5/month at expected inquiry volume).
-
-**Smart availability routing** — Date-pattern detection in the FAQ layer distinguishes specific date queries (routed to GPT-4o for a natural, personalised response) from generic availability questions (routed to the booking form link).
+**Twilio Sandbox first** — Allows full end-to-end testing without Meta WhatsApp Business API approval. Sandbox requires recipients to opt in via a join code.
 
 
-## Secrets & Where They Live
+## Secrets
 
 | Secret | Where | Purpose |
 |--------|-------|---------|
-| OPENAI_API_KEY | Local .env + Railway Env Vars | OpenAI GPT-4o for unscripted FAQ fallback |
+| CHANNEX_API_KEY | Local .env / GitHub Secrets | Channex sandbox — channel manager integration test suite |
 | GMAIL_USERNAME | GitHub Secrets | Alert email sender |
 | GMAIL_APP_PASSWORD | GitHub Secrets | Gmail app password (16 chars, no spaces) |
 | ALERT_EMAIL | GitHub Secrets | Recipient for uptime alerts |
 
 
+
+
 ## Local Setup
 
 ```bash
-git clone https://github.com/skambo/kajuju-automation.git
+git clone
 cd kajuju-automation/kajuju-automation
 npm install
 npx playwright install chromium
-```
-
-Create `.env` in `kajuju-automation/kajuju-automation/`:
-
-```
-OPENAI_API_KEY=your_key_here
 ```
 
 ```bash
@@ -215,35 +268,30 @@ node index.js
 
 ## Current Test Status
 
-| Suite | Tests | Passing | Notes |
-|-------|-------|---------|-------|
-| health-check.spec.ts | 10 | 9 | Nav link needs data-testid — TODO |
-| booking-form.spec.ts | 8 | 7 | 2-night minimum — might need unit test approach |
-| availability.spec.ts | 3 | — | Pending channel manager rewrite |
-| **Total** | **21** | **16+** | Availability suite paused pending new channel manager |
+| Suite | Tests | Passing | Skipped | Notes |
+|-------|-------|---------|---------|-------|
+| health-check.spec.ts | 10 | 9 | 1 | Nav link needs data-testid — TODO |
+| booking-form.spec.ts | 8 | 7 | 1 | 2-night minimum, might need unit test approach |
+| availability.spec.ts | 5 | 5 | 0 | Channex sandbox contract/integration suite — runs daily in CI |
+| **Total (active)** | **23** | **21** | **2** | |
 
 
 ## Tech Debt
 
 | ID | Issue | Priority |
 |----|-------|----------|
-| TD-001 | Channel manager rewrite — Smoobu decommissioned, new integration pending trial confirmation | High |
-| TD-002 | Alert email doesn't specify which page or check failed | Medium |
-| TD-003 | Page titles show incorrect brand name on public pages | Medium |
+| TD-001 | `api/check-availability.js` (live booking form proxy) still needs rewrite once channel manager is onboarded — `tests/api/` (now runs against the Channex sandbox) | Medium |
+| TD-002 | Alert email doesn't specify which page failed | Medium |
+| TD-003 | Page `<title>` tags on the live landing pages are inconsistent, guest-facing production content, out of scope for this pass | Medium |
 | TD-004 | Images not fitting correctly on desktop | Low |
 | TD-005 | Nav link Playwright test flaky — skipped with TODO | Low |
-| TD-006 | Workation page slow load — image needs to be compressed (5.4MB) | Low |
-| TD-007 | 2-night minimum checkout for workation package test skipped — might need unit test approach | Low |
-| TD-008 | WhatsApp production number strategy TBD — Twilio Sandbox to Meta API migration requires phone number decision | High |
-| TD-009 | Proactive outbound message templates not yet built — blocked on Meta API approval | Medium |
+| TD-006 | ~~Workation page slow load — hero image needs compression (5.4MB)~~ Fixed — compressed to WebP | Done |
+| TD-007 | 2-night minimum checkout test skipped, needs unit test approach | Low |
+| TD-008 | Bot replies identically to all messages, no keyword detection or smart routing yet | Medium |
+| TD-009 | Twilio Sandbox requires manual opt-in from each guest. Meta approval decision pending | High |
 
 
 ## Development Methodology
 
-Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner, working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging, including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double-booking detection logic. This reflects how I work: AI handles the repetitive thinking, I own the decisions and the quality bar.
+Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner, working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging, including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double booking detection logic. This reflects how I work, AI handles the repetitive thinking, I own the decisions and the quality bar.
 
-## About
-
-Built by Sandra, a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business itself as the test subject.
-
-The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, serverless architecture, and AI-assisted WhatsApp automation.
