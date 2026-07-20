@@ -268,12 +268,11 @@ node index.js
 
 ## Current Test Status
 
-| Suite | Tests | Passing | Skipped | Notes |
-|-------|-------|---------|---------|-------|
-| health-check.spec.ts | 10 | 9 | 1 | Nav link needs data-testid — TODO |
-| booking-form.spec.ts | 8 | 7 | 1 | 2-night minimum, might need unit test approach |
-| availability.spec.ts | 5 | 5 | 0 | Channex sandbox contract/integration suite — runs daily in CI |
-| **Total (active)** | **23** | **21** | **2** | |
+| Suite | Status | Notes |
+|-------|--------|-------|
+| health-check.spec.ts | Passing, with one skip | Nav link needs data-testid — TODO |
+| booking-form.spec.ts | Passing, with one skip | 2-night minimum, might need unit test approach |
+| availability.spec.ts | Passing | Channex sandbox contract/integration suite — runs daily in CI |
 
 
 ## Tech Debt
