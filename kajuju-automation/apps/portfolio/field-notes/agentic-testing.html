@@ -44,13 +44,13 @@
         </p>
 
         <p>
-          This experiment started with a simple question: can an AI explore a booking website the way a real user would, and find problems my automated tests can't?
+          This experiment started with this question, can an AI explore a booking website the way a real user would, and find problems my automated tests can't?
         </p>
 
         <h2>Why I built this</h2>
 
         <p>
-          My Playwright test suite already verifies the booking journey:
+          My Playwright test suite already verifies the booking journey
         </p>
         <ul>
           <li>Does the booking button work?</li>
@@ -58,10 +58,10 @@
           <li>Do forms validate?</li>
         </ul>
         <p>
-          Those are important tests, but they don't answer the question that actually matters to the business: can a first-time visitor understand the website well enough to make a booking? That's not a deterministic testing problem.
+          Those are important tests, but they don't answer the question that matters to the business, can a first-time visitor understand the website well enough to make a booking?
         </p>
         <p>
-          Instead of writing another scripted journey, I gave an AI agent a goal: "Visit this site as a first-time guest and decide whether you'd book." The agent explored the website on its own, reading content, comparing pages, following links, and reporting what it found confusing or inconsistent.
+          Instead of writing a scripted journey, I gave an AI agent a goal to "Visit this site as a first-time guest and decide whether you'd book." The agent explored the website on its own, reading content, comparing pages, following links, and reporting what it found confusing or inconsistent.
         </p>
 
         <h2>The technical approach</h2>
@@ -81,7 +81,7 @@
 
         <h3>Manual execution</h3>
         <p>
-          This isn't something I'd run on every commit. My Playwright suite remains the fast safety net during development. The agentic test runs manually after significant content or UX changes, when I want an independent review of the user experience.
+          This isn't something I'd run on every commit, the Playwright suite remains the fast safety net during development. The agentic test runs manually after significant content or UX changes, when I want an independent review of the user experience.
         </p>
 
         <h2>What the agent found</h2>
@@ -90,7 +90,7 @@
         </p>
         <ul>
           <li>Room names on the marketing website didn't match those in the booking engine.</li>
-          <li>A minimum stay policy was technically present but written ambiguously.</li>
+          <li>A minimum stay policy was present but written ambiguously.</li>
           <li>Clicking Book Now unexpectedly redirected guests to an external booking site without warning.</li>
           <li>Room pricing appeared inconsistent between different parts of the booking journey.</li>
         </ul>
@@ -100,16 +100,16 @@
 
         <h2>The biggest lesson</h2>
         <p>
-          The most interesting part wasn't what the agent found, it was what happened when it misunderstood my instructions. At one point I asked it to investigate the booking flow. I meant: "Observe what happens." The agent interpreted that as: "Complete an actual booking."
+          The most interesting part wasn't what the agent found, it was what happened when it misunderstood my instructions. At one point I asked it to investigate the booking flow. I meant, "Observe what happens," the agent interpreted that as, "Complete an actual booking."
         </p>
         <p>
-          It opened the booking engine, selected dates, adjusted guest numbers, and kept exploring until it exhausted its turn limit. The result: a 20 interaction limit reached, a cost of $1.25, and no useful report.
+          It opened the booking engine, selected dates, adjusted guest numbers, and kept exploring until it exhausted its limit, with no useful report.
         </p>
         <p>
-          That failure taught me two important lessons about building AI agents. First, scope matters. I rewrote the prompt to explicitly tell the agent to observe the booking flow rather than complete a reservation. Second, I stopped relying on instructions given only at the beginning of the conversation. Instead, just before the interaction limit is reached, the framework injects another instruction telling the agent to stop exploring and produce its report.
+          That failure taught me two lessons about building AI agents. First, scope matters. I rewrote the prompt to explicitly tell the agent to observe the booking flow rather than complete a reservation. Second, I stopped relying on instructions given only at the beginning of the conversation. Instead, just before the interaction limit is reached, the framework injects another instruction telling the agent to stop exploring and produce its report.
         </p>
         <p>
-          That small change dramatically improved reliability. The same test now completes in 11 interactions that cost $0.50.
+          That small change improved reliability, the same test now completes in 11 interactions that cost $0.50.
         </p>
 
         <h2>What it costs</h2>
@@ -124,7 +124,7 @@
 
         <h2>What I'd build next</h2>
         <p>
-          This prototype currently evaluates the site as a first-time guest. I'd like to expand it with additional personas, including:
+          This prototype currently evaluates the site as a first-time guest. I'd like to expand it with additional personas, including,
         </p>
         <ul>
           <li>Budget traveller</li>
@@ -139,7 +139,7 @@
 
         <h2>Final thoughts</h2>
         <p>
-          Traditional automation verifies whether software behaves correctly. Agentic testing explores whether the experience makes sense to a user. Both of which complement each other.
+          Traditional automation verifies whether software behaves correctly. Agentic testing explores whether the experience makes sense to a user, both of which complement each other.
         </p>
         <p>
           In summary, building good agentic tests is about defining clear goals, controlling scope, managing cost, and designing guardrails so the agent knows when to stop exploring and start reporting.
