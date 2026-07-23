@@ -1,10 +1,7 @@
 # Kajuju Automation Framework
 
-Production inspired automation testing built from real operational workflows.
 
-Kajuju is a Playwright + TypeScript framework created to explore how modern QA evolves beyond UI automation into API validation, AI-assisted testing and production-quality workflows.
-
-Many scenarios are inspired by problems encountered while operating a real hospitality business.
+Kajuju is a Playwright + TypeScript framework created to explore how modern QA evolves beyond UI automation into API validation, AI-assisted testing and production-quality workflows, the project and scenarios are inspired by problems encountered while operating a hospitality business.
 
 
 🔗 **Live site:** Shared privately
@@ -27,27 +24,27 @@ Kajuju, a boutique property near Mt. Kenya, receives booking inquiries across Wh
 
 ## About
 
-Built by Sandra, a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business itself as the test subject.
+Built by Sandra, a QA engineer with 10 years of experience across manual and automation testing. This project is built during a career break running a hospitality business, using the operational challenges of the business as the test subject.
 
-The goal is twofold: solve real problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, serverless architecture,WhatsApp automation and AI trends in QA. 
+The goal is twofold, solve  problems encountered while running a new business, while staying up to date with a modern QA engineering stack — Playwright, TypeScript, REST API testing, CI/CD pipelines, serverless architecture,WhatsApp automation and AI trends in QA. 
 
 ## The Solution
 
-Traditional test automation proves software works. Modern QA needs to prove software keeps working when real customers behave unpredictably. Kajuju explores that shift. The project demonstrates:
+Traditional test automation proves software works, modern QA also proves software keeps working when customers behave unpredictably. The project demonstrates;
 
 - Playwright automation
-- Resilient page object models
+- Page object models
 - API validation
 - Production inspired edge cases
 - CI integration
 - Maintainable TypeScript architecture
-- AI-assisted test development
+- AI assisted test development
 
 ### Business Goals
 - Respond to all inquiries within 60 seconds
-- Eliminate double-booking risk with a central availability source
+- Eliminate double booking risk with a central availability source
 - Replace PDF rate cards with fast, mobile-first landing pages
-- Automate post-stay feedback and Google review solicitation
+- Automate post stay feedback and Google review solicitation
 - Reduce manual WhatsApp responses by 80% via AI FAQ handling
 - Keep human oversight for invoicing and payment confirmation
 
@@ -95,7 +92,7 @@ Traditional test automation proves software works. Modern QA needs to prove soft
 
 **Kajuju WhatsApp Bot** is deployed and running at `https://kajuju-production.up.railway.app`
 
-Every incoming WhatsApp message is automatically replied to with the welcome message, rates link, and booking link, with no manual intervention.
+Incoming WhatsApp messages are automatically replied to with the welcome message, rates link, and booking link, without manual intervention.
 
 **Architecture:**
 - Node.js + Express bot server (`apps/bot-server/index.js`)
@@ -302,7 +299,7 @@ node index.js
 
 ## Development Methodology
 
-Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner, working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging, including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double booking detection logic. This reflects how I work, AI handles the repetitive thinking, I own the decisions and the quality bar.
+Strategy, framework selection, system design, CI/CD architecture, and all decisions about what to build and why are mine. Claude is used as a thinking partner, working through edge cases and debugging. Code is reviewed, debugged, and validated by me before merging, including catching and fixing issues the AI introduced, such as a UTC midnight timezone bug in the double booking detection logic, reflecting how I work, AI handles the repetitive thinking, I own the decisions and the quality bar.
 
 ## What I'd build next
 
