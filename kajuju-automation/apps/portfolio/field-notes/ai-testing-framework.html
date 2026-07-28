@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Building an AI testing framework for hospitality assistants — Sandra K</title>
+  <meta name="description" content="The biggest risk isn't that these assistants fail, it's that they answer confidently while getting small but important details wrong." />
+  <link rel="canonical" href="https://sandra-qe-portfolio.vercel.app/field-notes/ai-testing-framework.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Building an AI testing framework for hospitality assistants — Sandra K" />
+  <meta property="og:description" content="The biggest risk isn't that these assistants fail, it's that they answer confidently while getting small but important details wrong." />
+  <meta property="og:url" content="https://sandra-qe-portfolio.vercel.app/field-notes/ai-testing-framework.html" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">Sandra K</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../projects.html">Projects</a></li>
+      <li><a href="../field-notes.html" aria-current="page">Engineering Insights</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <article>
+    <section class="article-header">
+      <h1>Building an AI testing framework for hospitality assistants</h1>
+      <p class="article-sub">The biggest risk isn't that these assistants fail, it's that they answer confidently while getting small but important details wrong.</p>
+      <p class="small">By Sandra K — QA &amp; Automation Engineer</p>
+    </section>
+
+    <section>
+      <div class="prose article-body">
+
+        <p>
+          Hotels are increasingly using AI assistants to answer questions about availability, rates, amenities, cancellation policies and local information. The biggest risk isn't that these assistants fail, it's that they answer confidently while getting small but important details wrong.
+        </p>
+
+        <p>
+          A guest who receives an incorrect cancellation policy, inaccurate pricing or the wrong directions may never know the answer was invented, they’ll simply assume the hotel made a mistake.
+        </p>
+
+        <p>
+          I wanted to evaluate an AI assistant the same way I'd evaluate any production system. For this project, I built and evaluated an AI assistant for Kajuju, a boutique hotel. While the hotel's identity has been anonymised, the local geography, landmarks and travel times remain accurate because that's the information real guests depend on.
+        </p>
+
+        <h2>My approach</h2>
+
+        <p>
+          Earlier in my development of tools to make our own hotel's communication with guests easier, I built an OpenAPI FAQ bot to work with WhatsApp. This time, I built a small retrieval-based AI assistant backed by a structured knowledge base and mocked business tools for availability and cancellation logic.
+        </p>
+
+        <p>
+          From there, I evaluated the assistant across six areas
+        </p>
+        <ul>
+          <li>Knowledge grounding – Does it answer only from information it actually knows?</li>
+          <li>Intent recognition – Does it correctly understand what the guest is asking?</li>
+          <li>Tool selection – Does it know when to use a tool instead of relying on the language model?</li>
+          <li>Hallucination resistance – Does it admit uncertainty instead of inventing answers?</li>
+          <li>Adversarial robustness – How well does it handle vague, messy or intentionally misleading prompts?</li>
+          <li>Regression testing – Do new changes introduce failures in previously working behaviour?</li>
+        </ul>
+
+        <h2>Building realistic test datasets</h2>
+        <p>
+          To make testing repeatable, I created several structured datasets. Each includes a hotel identifier so the same framework can be reused for multiple properties in future.
+        </p>
+        <p>
+          The datasets include
+        </p>
+        <ul>
+          <li>Around 100 realistic guest conversations covering bookings, pricing, amenities, family travel, cancellations and directions.</li>
+          <li>Expected intent labels for every conversation.</li>
+          <li>A hallucination dataset containing questions the assistant should never answer confidently because the information doesn't exist.</li>
+          <li>An adversarial dataset with approximately 50 challenging conversations containing spelling mistakes, emojis, contradictory requests, vague wording and prompt injection attempts.</li>
+        </ul>
+        <p>
+          This allowed me to evaluate behaviour consistently across multiple test runs instead of relying on ad hoc manual conversations.
+        </p>
+
+        <h2>How responses were evaluated</h2>
+        <p>
+          With generative AI, the wording naturally changes between responses, so every response was scored against a behaviour based rubric across
+        </p>
+        <ul>
+          <li>Correctness</li>
+          <li>Completeness</li>
+          <li>Helpfulness</li>
+          <li>Tone</li>
+          <li>Policy compliance</li>
+          <li>Hallucination risk</li>
+          <li>Appropriate tool usage</li>
+        </ul>
+        <p>
+          With this, I was checking whether the assistant retrieved the correct policy, avoided inventing missing amenities and answered the guest's question accurately.
+        </p>
+
+        <h2>Designing for reuse</h2>
+        <p>
+          The assistant uses Claude Sonnet 5 through the API, supported by mocked business tools, also, opted to keep the knowledge base and the automation completely independent, such that the answers are not specific to a hotel but rather, it evaluates whichever knowledge base and datasets are supplied.
+        </p>
+        <p>
+          Although only one hotel exists today, another property's knowledge base could be swapped in without changing the automation, which is similar to how a hospitality platform would need to validate hundreds of hotel assistants using a single testing framework.
+        </p>
+
+        <h2>What the testing uncovered</h2>
+        <p>
+          The most interesting part of the project was discovering where the assistant failed.
+        </p>
+
+        <h3>Round 1</h3>
+        <ul>
+          <li>The first evaluation exposed several usability and knowledge issues.</li>
+          <li>The assistant frequently explained its own uncertainty ("I don't want to guess...") instead of simply telling the guest the information wasn't available and offering the next step.</li>
+          <li>Guest responses also contained Markdown formatting, which looked unnatural outside a developer-oriented chat interface.</li>
+          <li>One particularly interesting issue involved geography. An overly broad anonymisation rule replaced a real local landmark with a fictional one, making the directions inaccurate despite the underlying knowledge being correct.</li>
+          <li>Testing also uncovered a genuine knowledge gap, the drive time to the nearest town simply wasn't documented anywhere in the knowledge base, which is a common question we get being based in a rural setting.</li>
+          <li>Each issue resulted in either prompt improvements or additional knowledge being added.</li>
+        </ul>
+
+        <h3>Round 2</h3>
+        <ul>
+          <li>The second evaluation revealed a different class of problems.</li>
+          <li>Internal tool responses were accidentally being displayed directly to the guest instead of being converted into natural language.</li>
+          <li>The assistant also mixed package inclusions from different room types, creating a genuine hallucination that could easily mislead a customer.</li>
+          <li>Finally, although formatting instructions had been updated, the assistant still occasionally reverted to unnecessary detail.</li>
+          <li>These issues reinforced an important lesson, prompt changes should always be regression tested because models don't consistently follow style guidance without reinforcement.</li>
+        </ul>
+
+        <h3>Round 3</h3>
+        <ul>
+          <li>The final significant issue centred around cancellation policies.</li>
+          <li>When asked whether a booking qualified for free cancellation, the assistant attempted to calculate the date difference itself and produced hesitant answers.</li>
+          <li>Instead of relying on the language model to perform date arithmetic, I moved that responsibility into a deterministic tool.</li>
+          <li>The assistant now receives the calculated result and simply explains it to the guest, removing ambiguity entirely.</li>
+        </ul>
+
+        <h3>Round 4</h3>
+        <p>
+          A fourth round of testing surfaced two more issues -
+        </p>
+        <ul>
+          <li>The assistant said the words knowledge base directly to a guest while answering a payment question. Internal system language like that should never reach a guest, so I added an explicit rule that the assistant only ever states the plain fact, never where the fact came from.</li>
+          <li>A separate response about pool construction still sounded stiff even after the tone fixes from Round 1. When I dug into why, the stiff wording was not coming from the prompt at all, it was sitting inside the knowledge base's own internal note, and the assistant was quoting it almost verbatim. That was a useful reminder that a bad sounding answer is not always a prompt problem. Sometimes the model is faithfully repeating exactly what the source data says, and the fix has to happen at the source rather than in the instructions layered on top of it.</li>
+          <li>Testing also caught a real missing fact, card payments accepted on site were not documented anywhere alongside the mobile money option that already existed in the knowledge base.</li>
+        </ul>
+
+        <h2>Balancing cost and reliability</h2>
+        <p>
+          Partway through a bulk automated test run across the adversarial and hallucination datasets, my API credit balance ran out, which was its own small lesson, watch your usage before kicking off a large automated pass.
+        </p>
+        <p>
+          It also prompted an architecture decision, where when I am reading every response myself, I kept the stronger model, and the bulk automated regression runs switched to a smaller, faster, cheaper model instead.
+        </p>
+        <p>
+          That switch then surfaced its own trade-off. The cheaper model held up fine on facts and policy compliance, but followed my strict formatting rules, no markdown, no dashes, less reliably than the stronger model did on the exact same prompt. Rather than spend more time prompting the cheaper model into better discipline, or pay for the stronger model at scale just to enforce formatting, I added a deterministic formatting sanitiser in code that runs on every response regardless of which model produced it.
+        </p>
+
+        <h2>Testing the tests</h2>
+        <p>
+          While building the regression suite itself, I found several bugs in my own evaluation logic rather than in the assistant. One check was flagging a genuinely correct multilingual cancellation answer as a failure, purely because its wording did not match an English phrase pattern I had written the check around. Another was scoring a perfectly good check-in question as a failed availability lookup, just because the message happened to contain the words check in and checkout without actually asking about timing. None of these were assistant bugs, they were bugs in the harness meant to catch assistant bugs.
+        </p>
+
+        <h2>Key lessons</h2>
+        <p>
+          Some of the biggest takeaways were
+        </p>
+        <ul>
+          <li>Deterministic facts, such as dates, calculations and availability, should be in code and not inside the language model.</li>
+          <li>Tool outputs are internal implementation details, guests should only ever see a natural, conversational response.</li>
+          <li>Clear boundaries matter, business identities can be anonymised without fictionalising real-world navigation or location data.</li>
+          <li>Prompt engineering is not a substitute for testing, every behavioural change needs regression coverage.</li>
+          <li>Separating orchestration from evaluation makes the framework much easier to evolve over time.</li>
+          <li>Designing for reusable knowledge bases from the beginning helps expose hidden assumptions and prevents hard-coded behaviour.</li>
+          <li>Running out of API credit mid-test is its own kind of failure worth planning around, not just a testing inconvenience.</li>
+          <li>Splitting model choice by use case, judgement-heavy manual testing versus high-volume automated runs, is a real cost lever, not just a technical detail.</li>
+          <li>A cheaper model can be reliable on facts while still being less reliable on style, and the fix for that gap is the same one as for date arithmetic, put it in code.</li>
+          <li>The evaluation harness itself can have bugs, and those need to be found and fixed with the same rigour as bugs in the thing being evaluated.</li>
+        </ul>
+
+        <h2>Final thoughts</h2>
+        <p>
+          This project started as an experiment in testing an AI hotel assistant, but it quickly became an exercise in applying traditional quality engineering principles.
+        </p>
+        <p>
+          The biggest lesson was that testing AI assistants is about verifying the assistant behaves reliably, knows when to use deterministic systems, and fails safely when it doesn't know the answer.
+        </p>
+      </div>
+    </section>
+  </article>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Sandra K</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/sandrawk/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/skambo" target="_blank" rel="noopener">GitHub</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
