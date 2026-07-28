@@ -1,0 +1,166 @@
+:root {
+  color-scheme: light dark;
+  --bg: #f7f4ee;
+  --fg: #2a2420;
+  --accent: #a0522d;
+  --bubble-user: #a0522d;
+  --bubble-user-fg: #fff;
+  --bubble-bot: #ffffff;
+  --bubble-bot-fg: #2a2420;
+  --border: #ddd4c5;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c1a17;
+    --fg: #ece6da;
+    --bubble-bot: #2c2823;
+    --bubble-bot-fg: #ece6da;
+    --border: #3a352e;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  padding: 1.25rem 1.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 1rem 1.25rem;
+  min-height: 0;
+}
+
+.chat {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.5rem 0.25rem;
+}
+
+.msg {
+  max-width: 80%;
+  padding: 0.6rem 0.85rem;
+  border-radius: 0.9rem;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+}
+
+.msg.user {
+  align-self: flex-end;
+  background: var(--bubble-user);
+  color: var(--bubble-user-fg);
+  border-bottom-right-radius: 0.2rem;
+}
+
+.msg.bot {
+  align-self: flex-start;
+  background: var(--bubble-bot);
+  color: var(--bubble-bot-fg);
+  border: 1px solid var(--border);
+  border-bottom-left-radius: 0.2rem;
+}
+
+.msg.error {
+  align-self: center;
+  background: transparent;
+  color: #b5433a;
+  border: 1px dashed #b5433a;
+  font-size: 0.85rem;
+}
+
+.debug-panel {
+  max-width: 720px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0.75rem 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.debug-panel h2 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin: 0 0 0.25rem;
+  opacity: 0.7;
+}
+
+.debug-note {
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin: 0 0 0.5rem;
+}
+
+.debug-entry {
+  font-size: 0.75rem;
+  opacity: 0.75;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  white-space: pre-wrap;
+  padding: 0.35rem 0;
+  border-bottom: 1px dashed var(--border);
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+#chat-input {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: var(--bubble-bot);
+  color: var(--fg);
+  font-size: 0.95rem;
+}
+
+button {
+  padding: 0.6rem 1.1rem;
+  border-radius: 0.6rem;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}

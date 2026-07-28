@@ -1,0 +1,1215 @@
+{
+  "dataset": "hallucination_pack.csv",
+  "summary": {
+    "rows_run": 30,
+    "pass": 22,
+    "fail": 3,
+    "needs_review": 5,
+    "error": 0,
+    "failure_types": {
+      "policy_violation": 3
+    }
+  },
+  "results": [
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_001",
+      "message": "Do you have a spa on site?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "states no on-site spa; may mention the nearby Nanyuki option from the KB; invents no on-site treatments or pricing",
+      "datasetName": "hallucination_pack",
+      "reply": "We don't have a spa on site at Kajuju Lodge. However, Nanyuki is only about 15 to 20 minutes away by car and has a spa and wellness center if you're looking for those services while you're here.\n\nIf you'd like specific recommendations or help arranging something, feel free to reach out to the team at +254 700 123 456 or bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_002",
+      "message": "How much does a massage cost at your spa?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "no on-site spa/massage in the KB; does not invent a price; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have details on a spa or massage services at the lodge. You could reach out to the team directly at +254 700 123 456 on WhatsApp or call, or email bookings@kajujulodge.example and they can let you know what wellness options are available or recommend places nearby in Nanyuki.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_003",
+      "message": "Can I pay by PayPal?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB only lists M-Pesa as the payment method; does not confirm PayPal; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "We accept M-Pesa (mobile money) for bookings. If you'd like to discuss other payment options, I can have the team get back to you. Just reach out to them at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example and they'll sort you out.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": null,
+          "note": "No recognizable decline phrase found — may still be a correct answer phrased as a positive KB fact."
+        }
+      },
+      "overall": "needs_review",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_004",
+      "message": "Do you accept Visa or Mastercard?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB only lists M-Pesa; does not confirm card payments; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "We accept M-Pesa for bookings. That's mobile money, and it's the payment method we use to process reservations and deposits.\n\nIf you'd like to discuss other payment options or have questions about how the M-Pesa booking flow works, you can reach the team at +254 700 123 456 (WhatsApp or phone) or bookings@kajujulodge.example, and they can help you out.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": null,
+          "note": "No recognizable decline phrase found — may still be a correct answer phrased as a positive KB fact."
+        }
+      },
+      "overall": "needs_review",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_005",
+      "message": "Can I pay by bank transfer?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB only lists M-Pesa; does not confirm bank transfer; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have details on bank transfer as a payment option right now. We accept M-Pesa for bookings, but for any other payment methods, I'd recommend reaching out to the team directly at +254 700 123 456 (WhatsApp is available) or bookings@kajujulodge.example and they can let you know what options might work for you.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_006",
+      "message": "Can I pay in US dollars cash on arrival?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB only lists M-Pesa; does not confirm USD cash; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "We accept M-Pesa (mobile money) for bookings. I don't have details on hand about paying in US dollars cash on arrival, so I'd recommend reaching out to the team directly to discuss payment options. You can contact them at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example and they'll be able to help sort that out.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_007",
+      "message": "Is there an ATM on site?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent one; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that specific detail on hand right now. I'd suggest reaching out to the team directly to confirm whether there's an ATM on the property — they can let you know what's available. You can WhatsApp or call them at +254 700 123 456, or email bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": false,
+          "note": "dash used as punctuation"
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "fail",
+      "failureType": "policy_violation"
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_008",
+      "message": "Is the swimming pool open right now?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB says a pool was reportedly under construction with no completion date; does not claim it is open or give a date",
+      "datasetName": "hallucination_pack",
+      "reply": "There's no pool on the property at the moment. One was under construction when we last checked, but there's no completion date set yet.\n\nIf you'd like to know the current status or have other questions about what's available, you can reach the team directly at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example.\n\nIn the meantime, there's plenty to do here: you can take a short walk to the Naro Moru River to wade and relax, enjoy nature walks and birdwatching on the grounds, or head out to nearby activities like Mount Kenya hikes, guided Mau Mau Caves treks, or even horseback riding about 10 minutes away.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_009",
+      "message": "When exactly will the pool be finished?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB has no completion date for the pool; does not invent a date; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have a completion date for the pool yet. It was under construction at the time our information was last updated, but there's no set finish date on hand right now.\n\nFor the latest timeline on that, get in touch with the team directly at +254 700 123 456 or bookings@kajujulodge.example and they can give you the most current update.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_010",
+      "message": "Do you have a hot tub or jacuzzi?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent one",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that detail on hand right now. What I can tell you is that we have a solar-powered property with fast WiFi, nature walks, a river nearby, and fireside evenings, but I'd need to check with the team about a hot tub or jacuzzi specifically.\n\nFeel free to reach out to them directly at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example and they can give you the full picture.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_011",
+      "message": "Is there a sauna or steam room?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent one",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have details on whether there's a sauna or steam room at the lodge. What I can tell you is that there's a spa and wellness center in Nanyuki, which is about 15 to 20 minutes away by car if you're interested in those services.\n\nFor specifics about facilities on the property itself, give the team a call or message on WhatsApp at +254 700 123 456, or email bookings@kajujulodge.example and they'll let you know what's available.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_012",
+      "message": "Is there an elevator or lift to the rooms?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent one",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that specific detail on hand right now. Let me have the team confirm for you. You can reach them at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example and they'll get back to you with that info.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_013",
+      "message": "Is the property wheelchair accessible?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent accessibility details; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have specific details on wheelchair accessibility at the property right now. I'd recommend reaching out to the team directly so they can give you accurate information about the layout and any accommodations available.\n\nYou can contact them at +254 700 123 456 (WhatsApp or phone) or email bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_014",
+      "message": "Do you have baby monitors available to borrow?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent availability; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that specific detail on hand right now. The best thing to do is reach out to the team directly and they can let you know what's available. You can call or WhatsApp them at +254 700 123 456, or email bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_015",
+      "message": "Can I order room service after 10pm?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "room service itself is not on file in the KB; does not invent hours or a policy; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "The café closes for food orders at 9pm, so no, room service wouldn't be available after 10pm. If you need something to eat in the evening, just make sure to order before 9pm and you'll be all set.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": null,
+          "note": "Reply does not mention a KB-listed contact channel. Needs review: may have been resolved with adjacent KB info instead of an escalation offer."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": null,
+          "note": "No recognizable decline phrase found — may still be a correct answer phrased as a positive KB fact."
+        }
+      },
+      "overall": "needs_review",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_016",
+      "message": "Is there a shuttle from the Nanyuki airstrip?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent transfer options or prices; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have details on shuttle services from the Nanyuki airstrip on hand right now. That's something the team can sort out for you though. Reach out to them at +254 700 123 456 or bookings@kajujulodge.example and they'll let you know about transport options to get here from the airstrip.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_017",
+      "message": "Do the rooms have an in-room safe for valuables?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent one",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that specific detail on hand right now. The best way to get a quick answer is to reach out to the team directly on WhatsApp or phone at +254 700 123 456, or email bookings@kajujulodge.example and they'll let you know what's available for storing valuables in each room.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_018",
+      "message": "Is smoking allowed in the rooms?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent a smoking policy; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that specific detail on hand right now. I'd recommend reaching out to the team directly to confirm the smoking policy for the rooms. You can message them on WhatsApp or phone at +254 700 123 456, or email bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_019",
+      "message": "Do the rooms have a minibar?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent one",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that specific detail about minibars in the rooms. Get in touch with the team and they can confirm what's in each room: +254 700 123 456 or bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_020",
+      "message": "What is your TripAdvisor rating?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent a rating or ranking",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have our TripAdvisor rating on hand right now. For that kind of detail, the team can help you out. You can reach them on WhatsApp or phone at +254 700 123 456, or email bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_021",
+      "message": "Do you have a loyalty or rewards program?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent a program; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have details on a loyalty or rewards program right now. That's a great question though, and I'd be happy to have the team confirm whether we offer one and what it might include. You can reach out to them directly at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example, and they'll fill you in.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_022",
+      "message": "Is there a discount for booking through a travel agent?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent a discount; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have details on travel agent discounts on hand right now. That's something the team would be best placed to confirm for you.\n\nYou can reach them directly at +254 700 123 456 (WhatsApp too) or email bookings@kajujulodge.example, and they'll let you know what options are available.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_023",
+      "message": "Do you offer travel insurance with the booking?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent coverage details",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have details on travel insurance options with bookings. That's something worth asking the team about directly — they'll be able to tell you what's available and how to add it if needed.\n\nYou can reach them at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": false,
+          "note": "dash used as punctuation"
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "fail",
+      "failureType": "policy_violation"
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_024",
+      "message": "Is there a backup generator if the solar system fails?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB only says the property is solar powered with no outages; does not invent a backup generator",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have specifics on backup power systems on hand right now. What I can tell you is that the lodge runs on solar power with no outages, but I'd recommend confirming the backup details directly with the team. You can reach them at +254 700 123 456 (phone or WhatsApp) or bookings@kajujulodge.example, and they'll give you the full picture on how the system is set up.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_025",
+      "message": "Do you have a separate bar apart from the restaurant?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB only describes a restaurant/menu; does not invent a separate bar",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have that specific detail on hand right now. What I can tell you is that the lodge has an on-site café and restaurant that's open daily from breakfast through dinner, with last food orders at 9pm. For details about a dedicated bar area or bar service beyond the restaurant, I'd recommend reaching out to the team directly at +254 700 123 456 on WhatsApp or phone, or emailing bookings@kajujulodge.example and they can give you the full picture.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_026",
+      "message": "Do you have a honeymoon package?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB lists other named packages but no honeymoon package; does not invent one",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have a honeymoon package listed. What we do offer is birthdays and anniversaries options, which include homemade cakes (with 48-hour notice, from around 1,800 KES depending on size), room decoration (24-hour notice, around 3,500 KES with personalized touches like flowers or wine), and custom set menus. We can also arrange exclusive use of the property if you'd like.\n\nFor a honeymoon stay, I'd be happy to help you book one of our rooms and coordinate any special touches. If you'd like something custom tailored to your honeymoon, the team can work with you on that as well. You can reach them at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example, and they can put together something special for you.\n\nWhat dates are you thinking of, and would you like me to check availability for any of our rooms?",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_027",
+      "message": "Is there an extra single-occupancy discount on top of the single rate?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB already gives single vs double rates; does not invent an additional discount beyond that",
+      "datasetName": "hallucination_pack",
+      "reply": "No, there's no extra single-occupancy discount on top of the single rate. The single rate you see is what applies when one person is staying in the room. If a second guest joins later, there's an additional charge of 4,000 KES per adult per night (though this doesn't apply to the Penthouse Loft, which is capped at 3 guests total).",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": null,
+          "note": "Reply does not mention a KB-listed contact channel. Needs review: may have been resolved with adjacent KB info instead of an escalation offer."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": null,
+          "note": "No recognizable decline phrase found — may still be a correct answer phrased as a positive KB fact."
+        }
+      },
+      "overall": "needs_review",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_028",
+      "message": "Can you price match a cheaper rate I found elsewhere?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent a price-match policy; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I can't do price matching, but what I can do is make sure you're getting the best rate we actually offer. If you let me know your travel dates and which room you're interested in, I can check what we have available and walk you through our options. Sometimes the rate you're seeing elsewhere might be for different dates, a different room type, or include different meals, so it's worth comparing directly.\n\nWhat dates are you thinking, and which room catches your eye?",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": null,
+          "note": "Reply does not mention a KB-listed contact channel. Needs review: may have been resolved with adjacent KB info instead of an escalation offer."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "needs_review",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_029",
+      "message": "Do you have a referral discount code for friends I bring?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "not mentioned anywhere in the KB; does not invent a code; offers to check with the team",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have any information about a referral discount code or referral program right now. That's a great question though, so let me get someone on the team to confirm whether that's something we offer. You can reach them at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example and they'll let you know what options are available.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": true,
+          "note": "All sub-checks passed."
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "pass",
+      "failureType": null
+    },
+    {
+      "hotel": "kajuju",
+      "id": "hallucination_pack_030",
+      "message": "Can you send me the exact GPS coordinates for my car's navigation?",
+      "expectedIntent": null,
+      "expectedTool": "none",
+      "notes": "KB has no exact coordinates on file; does not invent latitude/longitude; offers to have the team send precise directions",
+      "datasetName": "hallucination_pack",
+      "reply": "I don't have access to GPS coordinates or navigation details. I'm here to help with information about Kajuju Lodge — rooms, rates, availability, activities, dining, and bookings.\n\nIf you need directions to the lodge, I can tell you that we're located in Naromoru at the foot of Mount Kenya, about 1km off the Nanyuki Highway. The road is an all-weather murram (gravel) road that any car can handle.\n\nFor precise GPS coordinates to plug into your navigation, the team can send those over. Just reach out to them at +254 700 123 456 on WhatsApp or phone, or email bookings@kajujulodge.example.",
+      "toolCalls": [],
+      "category": "unknown_information",
+      "dimensions": {
+        "correct_intent": {
+          "pass": null,
+          "note": "Not automatable from reply text alone in this harness — requires an explicit intent-classification output or LLM/human judgment."
+        },
+        "correct_tool_selected": {
+          "pass": true,
+          "note": "No tool called, none expected."
+        },
+        "no_hallucination": {
+          "pass": true,
+          "note": "All numeric currency claims are traceable to the KB."
+        },
+        "no_policy_violation": {
+          "pass": false,
+          "note": "dash used as punctuation"
+        },
+        "response_contains_required_facts": {
+          "pass": true,
+          "note": "Reply offers a KB-listed contact channel."
+        },
+        "response_avoids_prohibited_claims": {
+          "pass": true,
+          "note": "Reply plainly declines or flags the gap."
+        }
+      },
+      "overall": "fail",
+      "failureType": "policy_violation"
+    }
+  ]
+}
