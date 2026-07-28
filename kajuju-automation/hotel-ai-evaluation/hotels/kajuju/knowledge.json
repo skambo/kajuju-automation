@@ -1,0 +1,273 @@
+{
+  "_meta": {
+    "name": "Kajuju Lodge knowledge base",
+    "purpose": "Grounding source for the evaluation assistant. The assistant must only answer from this file — if something is not here, it must say it doesn't know rather than invent an answer.",
+    "pseudonymized": true,
+    "source": "Pseudonymized from a crawl of a live boutique-lodge rate-card site. See docs/KnowledgeBase.md for the full source notes and ambiguity list.",
+    "currency": "KES",
+    "fx_note": "Approximate USD conversions in docs use ~130 KES/USD, illustrative only, not live."
+  },
+  "property": {
+    "name": "Kajuju Lodge",
+    "type": "Boutique lodge with a self-contained cottage and an on-site café",
+    "location": "Naromoru, at the foot of Mount Kenya, Nyeri County — about 1km off the Nanyuki Highway",
+    "audience": ["solo travelers", "couples", "families", "climbers/hikers", "remote workers", "small groups"],
+    "power": "Solar powered, no outages",
+    "internet": "Fast Starlink WiFi throughout the property",
+    "road_access": "1km off the highway on an all-weather murram (gravel) road; all car types can manage it, no 4x4 required",
+    "parking": "Free, secure, on-site"
+  },
+  "rooms": [
+    {
+      "id": "twin_garden",
+      "name": "Twin Garden Room",
+      "alt_name": "Pebble Room",
+      "capacity": 2,
+      "features": ["en-suite bathroom", "garden views", "WiFi", "solar power"],
+      "meal_included": "B&B",
+      "rates_kes": {
+        "weekday": {"single": 9000, "double": 10500},
+        "weekend": {"single": 10000, "double": 11500},
+        "peak": {"single": 11500, "double": 13000}
+      }
+    },
+    {
+      "id": "deluxe_balcony",
+      "name": "Deluxe Room with Balcony",
+      "alt_name": "Jade Room / Coral Room",
+      "capacity": 2,
+      "features": ["private balcony", "mountain views", "en-suite", "WiFi", "solar power"],
+      "meal_included": "B&B",
+      "rates_kes": {
+        "weekday": {"single": 10500, "double": 11500},
+        "weekend": {"single": 11500, "double": 13000},
+        "peak": {"single": 13000, "double": 14500}
+      }
+    },
+    {
+      "id": "penthouse_loft",
+      "name": "Penthouse Loft",
+      "capacity": 3,
+      "capacity_note": "up to 3 adults; extra-guest add-on does not apply here (capped at 3)",
+      "features": ["kitchen", "fireplace", "WiFi", "solar power", "free parking"],
+      "meal_included": "self-catering",
+      "rates_kes": {
+        "weekday": {"single": 12500, "double": 13500},
+        "weekend": {"single": 14000, "double": 15000},
+        "peak": {"single": 15500, "double": 16500}
+      }
+    },
+    {
+      "id": "cottage",
+      "name": "Cottage",
+      "alt_name": "3-Bedroom Cottage",
+      "capacity": 6,
+      "features": ["fireplace", "full kitchen", "outdoor space", "WiFi", "free parking"],
+      "meal_included": "self-catering",
+      "rates_kes": {
+        "weekday": {"whole_unit": 10000},
+        "weekend": {"whole_unit": 12000},
+        "peak": {"whole_unit": 18000}
+      }
+    },
+    {
+      "id": "full_lodge_buyout",
+      "name": "Full Lodge Buyout",
+      "description": "Exclusive use of the entire property",
+      "capacity": 8,
+      "minimum_stay_nights": {"festive_period": 3},
+      "rates_kes": {
+        "weekday": {"bnb": 45500, "self_catering": 35900},
+        "weekend": {"bnb": 55000},
+        "peak": {"bnb": 58500}
+      }
+    }
+  ],
+  "extra_guest_charge_kes_per_adult_per_night": 4000,
+  "extra_guest_charge_note": "Not applicable to the Penthouse Loft, which is capped at 3 guests.",
+  "meal_packages": [
+    {
+      "id": "bnb",
+      "name": "Bed & Breakfast",
+      "included_in": ["twin_garden", "deluxe_balcony"],
+      "details": "Daily breakfast and a tea tray. Included in the room rate for Twin Garden and Deluxe rooms. The complimentary barista coffee/day is a Workation package perk, not part of the standard B&B rate; see packages.workation.included."
+    },
+    {
+      "id": "half_board",
+      "name": "Half Board",
+      "price_kes_per_person_per_day": 2500,
+      "details": "Breakfast plus one main meal (lunch or dinner). Beverages beyond the included coffee/tea are extra."
+    },
+    {
+      "id": "full_board",
+      "name": "Full Board",
+      "price_kes_per_person_per_day": 3300,
+      "details": "Breakfast, lunch, and dinner — starter, main, and dessert per meal. Beverages extra."
+    },
+    {
+      "id": "self_catering",
+      "name": "Self-Catering",
+      "details": "Kitchen access, available in the Penthouse Loft and Cottage."
+    }
+  ],
+  "policies": {
+    "children": "Under 6: free. Ages 6–12: 50% of adult rate.",
+    "deposit": "50% required to confirm a booking; balance due on arrival.",
+    "cancellation": {
+      "full_refund": "72+ hours before arrival",
+      "no_refund": "within 48 hours of arrival",
+      "gap_48_to_72_hours": "unspecified in source material — assistant must not guess; say it will confirm with the team"
+    },
+    "minimum_stay": {
+      "standard_weekend": "none",
+      "easter_christmas_long_holidays": "2 nights",
+      "full_lodge_buyout_festive_period": "3 nights",
+      "workation_weekday": "2 nights"
+    },
+    "payment_method": "M-Pesa (mobile money)",
+    "check_in": {
+      "standard": "1:00 PM",
+      "early_check_in": "available on request, subject to availability (workation package lists a 1,500 KES early check-in fee at ~10am; no fixed fee is stated for standard stays)"
+    },
+    "check_out": {
+      "standard": "11:00 AM",
+      "late_check_out": "subject to availability; no fixed fee stated"
+    },
+    "pets": "Not allowed inside rooms. Leashed pets welcome in the restaurant and outdoor areas. Advance notice requested.",
+    "quiet_hours": "9:00 PM – 7:00 AM"
+  },
+  "booking_flow": {
+    "steps": [
+      "Guest submits a request with dates, room preference, guest count, and meal preference.",
+      "Lodge confirms availability and holds the dates for 24 hours.",
+      "An invoice with M-Pesa payment details is sent.",
+      "A 50% deposit secures the booking; the remaining balance is due at arrival."
+    ],
+    "required_fields": ["full_name", "phone_number", "email_address", "preferred_room", "number_of_guests", "dates", "meal_preference"],
+    "note": "The assistant cannot check live availability itself,  it must use the check_availability tool (mocked in this evaluation project) or tell the guest it will confirm with the team."
+  },
+  "activities": {
+    "on_property": [
+      "Short walk to the Naro Moru River — a spot to wade and relax",
+      "Nature walks and birdwatching on the grounds",
+      "Fireside evenings",
+      "Kids' corner: sandpit, safe grounds, board games",
+      "Complimentary morning river walks and evening nature trails (workation package)"
+    ],
+    "nearby": [
+      {
+        "name": "Mt Kenya National Park",
+        "distance": "~19km from the property to the nearest gate (Naromoru Gate); a second gate (Sirimon Gate) is roughly a 1-hour drive",
+        "offerings": "hiking trails, game drives, guided climbs"
+      },
+      {
+        "name": "Mau Mau Caves guided hike",
+        "distance": "8–13km trek",
+        "details": "Guided (fees apply), historic caves with the option to drive up to the waterfall section; meeting point coordinated via a local guiding partner"
+      },
+      {
+        "name": "E-bike rides",
+        "details": "Half/full day via a local e-bike partner",
+        "pricing_kes": {
+          "full_day_weekday": 4400,
+          "full_day_weekend": 5200,
+          "half_day_weekday": 3200,
+          "half_day_weekend": 3600,
+          "guide_addon": 1000
+        }
+      },
+      {"name": "Horseback riding", "distance": "~10 minutes from the property"},
+      {
+        "name": "Ol Pejeta Conservancy",
+        "distance": "~45 minutes",
+        "offerings": "game drives/safaris — rhinos, lions, chimpanzee sanctuary; vehicle rental available"
+      },
+      {
+        "name": "Nanyuki",
+        "distance": "~15–20 minutes by car",
+        "offerings": "local markets, shops, restaurants, a climbing gym, and a spa/wellness center"
+      },
+      {
+        "name": "Mount Kenya climbs & day hikes",
+        "details": "Guide coordination, packed lunches on request, early breakfasts arranged (Sirimon Route)"
+      }
+    ]
+  },
+  "packages": {
+    "mountain_climb": {
+      "name": "Mountain Climb Package",
+      "details": "Pre-climb night with dinner and breakfast, post-climb recovery meal and shower, guide coordination, transfer connections, day-hike organization, packed meals on request."
+    },
+    "workation": {
+      "name": "Workation Package",
+      "focus": "weekday-focused remote-work package",
+      "rates_kes_per_night": {
+        "deluxe_balcony": {"single": 12500, "double": 15000},
+        "twin_garden": {"single": 11000, "double": 14000},
+        "penthouse_loft": {"single": 12500, "double": 13500},
+        "team_cottage_whole_unit": 12000
+      },
+      "included": ["one complimentary barista coffee/day", "in-room tea service", "high-speed WiFi", "free parking", "morning river walks", "evening nature trails"],
+      "addons": "Half/full board available at standard rates",
+      "minimum_stay_nights": 2,
+      "note": "Weekend (Fri–Sat) rates available on inquiry",
+      "early_check_in_fee_kes": 1500,
+      "deposit_and_cancellation": "Same 50% deposit / cancellation policy as standard bookings",
+      "rate_discrepancy_note": "The general rate card lists a different Deluxe Room weekday single rate (10,500) than this workation-specific rate (12,500). Quote the rate matching the guest's stated use case; flag if genuinely ambiguous."
+    },
+    "long_stays": {
+      "name": "Long Stays (7+ nights)",
+      "details": "Discounted nightly rates; flexible meal arrangements; contact directly for a custom monthly quote."
+    },
+    "birthdays_anniversaries": {
+      "name": "Birthdays & Anniversaries",
+      "cake": "Homemade cakes, 48-hour notice, from ~1,800 KES depending on size, or by the slice",
+      "room_decoration": "24-hour notice, ~3,500 KES — balloons/decor, personalized touches (e.g. bouquet or wine) on request",
+      "other": "Custom set menus; exclusive-use option available"
+    },
+    "gatherings": {
+      "day_package": {
+        "typical_group_size": "up to 10 people (larger groups handled case-by-case, no fixed upper bound stated)",
+        "weekday_price_kes_per_person": 2500,
+        "weekend_price_kes_per_person": 4500,
+        "includes": ["reserved dining/lounge area", "chef-prepared set or family-style menu", "WiFi", "garden access", "free parking"]
+      },
+      "overnight_retreat": {
+        "capacity": 14,
+        "details": "Full-lodge takeover across the property's room types, exclusive grounds access, customizable meal plans"
+      }
+    }
+  },
+  "menu": {
+    "hours": "Open daily, breakfast through dinner. Last food orders at 9pm.",
+    "categories": [
+      {"name": "Breakfast", "price_range_kes": [500, 1500], "examples": ["English breakfast", "healthy option", "eggs Benedict", "avocado toast", "French toast", "pancakes", "omelets", "fruit bowl", "oatmeal"]},
+      {"name": "Soups", "price_range_kes": [650, 700], "examples": ["soup of the day", "chicken soup"]},
+      {"name": "Mains", "price_range_kes": [700, 1800], "examples": ["butter chicken", "grilled chicken", "stir-fries", "T-bone steak", "lamb chops", "pork chops", "red snapper", "tilapia", "vegetable stir-fry"], "note": "all include a side and seasonal vegetables"},
+      {"name": "Sharing meals", "price_range_kes": [3000, 5500], "examples": ["mixed grill for two", "mixed grill for four", "whole traditional-style chicken (1-hour prep time)"]},
+      {"name": "Pastas", "price_range_kes": [1200, 1400], "examples": ["carbonara", "bolognese", "arrabbiata"]},
+      {"name": "Salads", "price_range_kes": [950, 1050], "examples": ["garden protein salad", "greek salad"]},
+      {"name": "Starters", "price_range_kes": [350, 800], "examples": ["sandwiches", "samosas", "wings"]},
+      {"name": "Burgers", "price_range_kes": [1200, 1500], "examples": ["beef burgers with various toppings"]},
+      {"name": "Kids' corner", "price_range_kes": [650, 750], "examples": ["fish fingers", "chicken tenders", "spaghetti"]},
+      {"name": "Desserts", "price_range_kes": [250, 400], "examples": ["éclairs", "cake", "fruit", "ice cream"]},
+      {"name": "Beverages", "examples": ["coffee (200-350 KES)", "tea (150-400 KES)", "milkshakes/smoothies (350 KES)", "juice/soda (150-350 KES)"]}
+    ],
+    "dietary_notes": "Guests are asked to inform the chef of allergies or dietary requirements. Plant-based milk available for +150 KES. Grilled chicken strip add-on for +250 KES on some dishes."
+  },
+  "contact": {
+    "phone_whatsapp": "+254 700 123 456",
+    "email": "bookings@kajujulodge.example",
+    "rate_card_site": "https://rates.kajujulodge.example",
+    "booking_page": "https://rates.kajujulodge.example/book",
+    "note": "All contact details in this file are fictional placeholders for evaluation purposes."
+  },
+  "ambiguities": [
+    "Cancellation policy for the 48-72 hour window before arrival is not specified in source material.",
+    "Deluxe Room weekday single rate differs between the general rate card (10,500 KES) and the workation package page (12,500 KES) — quote based on stated use case.",
+    "No upper bound is given for 'larger groups on inquiry' for gatherings.",
+    "No pool/gym/spa on-site as of the crawl; a pool was under construction with no completion date given.",
+    "Exact calendar boundaries of the 'festive period' (used for minimum-stay rules) are not defined in source material.",
+    "No fixed fee for late checkout or early check-in on standard (non-workation) stays."
+  ]
+}

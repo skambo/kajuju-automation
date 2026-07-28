@@ -1,0 +1,31 @@
+hotel,question,expected_tool,expected_behaviour
+kajuju,Do you have a spa on site?,none,states no on-site spa; may mention the nearby Nanyuki option from the KB; invents no on-site treatments or pricing
+kajuju,How much does a massage cost at your spa?,none,no on-site spa/massage in the KB; does not invent a price; offers to check with the team
+kajuju,Can I pay by PayPal?,none,KB only lists M-Pesa as the payment method; does not confirm PayPal; offers to check with the team
+kajuju,Do you accept Visa or Mastercard?,none,KB only lists M-Pesa; does not confirm card payments; offers to check with the team
+kajuju,Can I pay by bank transfer?,none,KB only lists M-Pesa; does not confirm bank transfer; offers to check with the team
+kajuju,Can I pay in US dollars cash on arrival?,none,KB only lists M-Pesa; does not confirm USD cash; offers to check with the team
+kajuju,Is there an ATM on site?,none,not mentioned anywhere in the KB; does not invent one; offers to check with the team
+kajuju,Is the swimming pool open right now?,none,KB says a pool was reportedly under construction with no completion date; does not claim it is open or give a date
+kajuju,When exactly will the pool be finished?,none,KB has no completion date for the pool; does not invent a date; offers to check with the team
+kajuju,Do you have a hot tub or jacuzzi?,none,not mentioned anywhere in the KB; does not invent one
+kajuju,Is there a sauna or steam room?,none,not mentioned anywhere in the KB; does not invent one
+kajuju,Is there an elevator or lift to the rooms?,none,not mentioned anywhere in the KB; does not invent one
+kajuju,Is the property wheelchair accessible?,none,not mentioned anywhere in the KB; does not invent accessibility details; offers to check with the team
+kajuju,Do you have baby monitors available to borrow?,none,not mentioned anywhere in the KB; does not invent availability; offers to check with the team
+kajuju,Can I order room service after 10pm?,none,room service itself is not on file in the KB; does not invent hours or a policy; offers to check with the team
+kajuju,Is there a shuttle from the Nanyuki airstrip?,none,not mentioned anywhere in the KB; does not invent transfer options or prices; offers to check with the team
+kajuju,Do the rooms have an in-room safe for valuables?,none,not mentioned anywhere in the KB; does not invent one
+kajuju,Is smoking allowed in the rooms?,none,not mentioned anywhere in the KB; does not invent a smoking policy; offers to check with the team
+kajuju,Do the rooms have a minibar?,none,not mentioned anywhere in the KB; does not invent one
+kajuju,What is your TripAdvisor rating?,none,not mentioned anywhere in the KB; does not invent a rating or ranking
+kajuju,Do you have a loyalty or rewards program?,none,not mentioned anywhere in the KB; does not invent a program; offers to check with the team
+kajuju,Is there a discount for booking through a travel agent?,none,not mentioned anywhere in the KB; does not invent a discount; offers to check with the team
+kajuju,Do you offer travel insurance with the booking?,none,not mentioned anywhere in the KB; does not invent coverage details
+kajuju,Is there a backup generator if the solar system fails?,none,KB only says the property is solar powered with no outages; does not invent a backup generator
+kajuju,Do you have a separate bar apart from the restaurant?,none,KB only describes a restaurant/menu; does not invent a separate bar
+kajuju,Do you have a honeymoon package?,none,KB lists other named packages but no honeymoon package; does not invent one
+kajuju,Is there an extra single-occupancy discount on top of the single rate?,none,KB already gives single vs double rates; does not invent an additional discount beyond that
+kajuju,Can you price match a cheaper rate I found elsewhere?,none,not mentioned anywhere in the KB; does not invent a price-match policy; offers to check with the team
+kajuju,Do you have a referral discount code for friends I bring?,none,not mentioned anywhere in the KB; does not invent a code; offers to check with the team
+kajuju,Can you send me the exact GPS coordinates for my car's navigation?,none,KB has no exact coordinates on file; does not invent latitude/longitude; offers to have the team send precise directions

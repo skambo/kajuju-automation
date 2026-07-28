@@ -1,0 +1,17 @@
+{
+  "name": "hotel-ai-evaluation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "QA/evaluation harness for an AI hotel-booking assistant (pseudonymized as Kajuju Lodge)",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node assistant/server.js",
+    "eval": "node eval/run-eval.js",
+    "regression": "node eval/regression-suite.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1"
+  }
+}
