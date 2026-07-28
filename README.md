@@ -215,12 +215,11 @@ node index.js
 
 ## Current Test Status
 
-| Suite | Tests | Passing | Notes |
-|-------|-------|---------|-------|
-| health-check.spec.ts | 10 | 9 | Nav link needs data-testid — TODO |
-| booking-form.spec.ts | 8 | 7 | 2-night minimum — might need unit test approach |
-| availability.spec.ts | 3 | — | Pending channel manager rewrite |
-| **Total** | **21** | **16+** | Availability suite paused pending new channel manager |
+| Suite | Status | Notes |
+|-------|--------|-------|
+| health-check.spec.ts | Passing, with one skip | Nav link needs data-testid — TODO |
+| booking-form.spec.ts | Passing, with one skip | 2-night minimum — might need unit test approach |
+| availability.spec.ts | Paused | Pending channel manager rewrite |
 
 
 ## Tech Debt
