@@ -1,20 +1,17 @@
 # Kajuju Lodge — Knowledge Base (Source Notes)
 
-> **Pseudonymization notice:** This document is derived from a real, live boutique-lodge rate-card
-> site, crawled for this QA/evaluation project. Only the property name, domain, and contact details
-> (phone, email, booking links) have been replaced with fictional placeholders. Real geography —
-> town, mountain, county, gates, conservancy, nearby towns — is left as-is; hiding it would provide
-> no privacy benefit (it's public, widely-shared geography) and it's useful grounding-accuracy
-> content for the evaluation harness. The factual *shape* of the business (room count, rate tiers,
-> meal-package structure, cancellation policy, amenities) is also preserved. See the repo README for
-> the pseudonym mapping policy.
+> **Pseudonymization notice:** This document is derived from a boutique lodge rate card
+> site, crawled for this QA/evaluation project. The property name, domain, address, phone, email,
+> and every other identifying detail have been replaced with fictional placeholders. The factual
+> *shape* of the business (room count, rate tiers, meal-package structure, cancellation policy,
+> amenities) is preserved.
 
 ## Property Overview
 
 - **Name:** Kajuju Lodge
-- **Type:** Boutique lodge with a self-contained cottage and an on-site café
-- **Location:** Naromoru, at the foot of Mount Kenya, Nyeri County — about 1km off the Nanyuki
-  Highway
+- **Type:** Boutique lodge with a self contained cottage and an on-site café
+- **Location (fictional):** Marura, at the foot of Mount Amara, Amara County — about 1km off the
+  Marura–Sanga Highway
 - **Audience:** Solo travelers, couples, families, climbers/hikers, remote workers, small groups
 - **Reputation:** Well-reviewed on independent travel sites (no specific ranking claimed here —
   the real source page cited a ranking that is itself identifying and has been dropped)
@@ -65,9 +62,8 @@ guest add-on there).
 
 ## Meal Packages (add-ons to any room rate)
 
-- **Bed & Breakfast (B&B):** included in Twin Garden and Deluxe room rates. Covers daily breakfast
-  and a tea tray. The complimentary barista coffee/day is a Workation package perk only; it is not
-  part of the standard B&B rate.
+- **Bed & Breakfast (B&B):** included in Twin Garden and Deluxe room rates — daily breakfast, tea
+  tray, and one complimentary barista coffee.
 - **Half Board:** +2,500 KES/person/day — breakfast plus one main meal (lunch or dinner).
   Beverages beyond the included coffee/tea are extra.
 - **Full Board:** +3,300 KES/person/day — breakfast, lunch, and dinner (starter, main, dessert per
@@ -102,7 +98,7 @@ guests, dates, meal preference.
 
 ## On-Property Activities
 
-- Short walk to the Naro Moru River — a spot to wade and relax.
+- Short walk to a nearby river (fictionalized as "River Kelio") — a spot to wade and relax.
 - Nature walks and birdwatching on the grounds.
 - Fireside evenings (guests can arrange fireside gatherings).
 - Kids' corner: sandpit, safe grounds, board games.
@@ -112,13 +108,13 @@ guests, dates, meal preference.
 
 | Activity | Distance / notes |
 |---|---|
-| Mt Kenya National Park — hiking trails, game drives, guided climbs | ~19km from the property to the nearest gate (Naromoru Gate); a second, less-used gate (Sirimon Gate) is roughly a 1-hour drive |
-| Mau Mau Caves guided hike | 8–13km trek with a local guide (fees apply), historic caves with the option to drive up to the waterfall section |
+| Amara National Park — hiking trails, game drives, guided climbs | ~20km from the property to the nearest gate ("Marura Gate"); a second, less-used gate ("Sanga Gate") is roughly a 1-hour drive |
+| Kelio Caves guided hike | 8–13km trek with a local guide (fees apply), historic caves and a hidden waterfall, arranged via a local guiding partner |
 | E-bike rides (half/full day) | Via a local e-bike partner. Full day (06:00–19:00): 4,400 KES weekday / 5,200 KES weekend. Half day: 3,200 KES weekday / 3,600 KES weekend. Guide add-on: 1,000 KES. Discount code available on request. |
 | Horseback riding | ~10 minutes from the property |
-| Game drives / safaris | ~45 min to Ol Pejeta Conservancy — rhinos, lions, chimpanzee sanctuary. Vehicle rental available. |
-| Nanyuki (the larger nearby town) | ~15–20 minutes by car. Local markets, shops, restaurants, a climbing gym, and a spa/wellness center |
-| Mount Kenya climbs & day hikes (Sirimon Route) | Guide coordination, packed lunches on request, early breakfasts arranged |
+| Game drives / safaris | ~45 min to a nearby conservancy (fictionalized as "Amara Plains Conservancy") — rhinos, lions, chimpanzee sanctuary; or the Aberdare-equivalent ranges. Vehicle rental available. |
+| Sanga Town (the larger nearby town, ~20 min away) | Local markets, shops, restaurants, a climbing gym, and a spa/wellness center |
+| Mount Amara climbs & day hikes | Guide coordination, packed lunches on request, early breakfasts arranged |
 
 ## Packages
 
