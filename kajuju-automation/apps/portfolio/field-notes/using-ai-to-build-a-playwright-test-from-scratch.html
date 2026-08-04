@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using AI to Build a Playwright Test from Scratch — Sandra K</title>
+  <meta name="description" content="Using AI to build a Playwright suite for a pricing toggle." />
+  <link rel="canonical" href="https://sandra-qe-portfolio.vercel.app/field-notes/using-ai-to-build-a-playwright-test-from-scratch.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="Using AI to Build a Playwright Test from Scratch — Sandra K" />
+  <meta property="og:description" content="Using AI to build a Playwright suite for a pricing toggle." />
+  <meta property="og:url" content="https://sandra-qe-portfolio.vercel.app/field-notes/using-ai-to-build-a-playwright-test-from-scratch.html" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="site-nav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="nav-brand" href="../index.html">Sandra K</a>
+    <ul class="nav-links">
+      <li><a href="../index.html">Home</a></li>
+      <li><a href="../projects.html">Projects</a></li>
+      <li><a href="../field-notes.html" aria-current="page">Engineering Insights</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main id="main">
+  <article>
+    <section class="article-header">
+      <h1>Using AI to Build a Playwright Test</h1>
+      <p class="article-sub">Turning a feature into a Playwright suite with AI</p>
+      <p class="small">By Sandra K — QA &amp; Automation Engineer</p>
+    </section>
+
+    <section>
+      <div class="prose article-body">
+
+        <p>
+          I wanted to experiment with building an end-to-end Playwright test with AI. I started with a single feature on one of my own projects: the pricing period toggle a guest would use to check rates based on the dates of their intended stay.
+        </p>
+        <p>
+          The workflow ended up looking something like this.
+        </p>
+
+        <h2>1. Explore the feature</h2>
+        <p>
+          Instead of manually clicking through the page and writing notes (exploratory testing), I had the AI interact with the page, take snapshots, and document what it observed.
+        </p>
+        <p>
+          As we reviewed the output together, we found a couple of genuine issues, including pricing content disappearing for two of the periods. We also ended up checking the HTML to confirm whether the behaviour was truly happening or whether the AI was making assumptions.
+        </p>
+        <p>
+          That was probably the first lesson, the AI still needed someone to sanity check its report.
+        </p>
+
+        <h2>2. Generate the test plan</h2>
+        <p>
+          Once we'd explored the feature, we turned the observations into a proper test plan. That became the reference point for everything afterwards. Every future test had to map back to something that existed in the plan.
+        </p>
+        <p>
+          That made reviewing the generated code much easier, because I always knew where a scenario had come from.
+        </p>
+
+        <h2>3. Generate the Playwright automation</h2>
+        <p>
+          From the approved plan, we generated:
+        </p>
+        <ul>
+          <li>a reusable base page</li>
+          <li>a rates page object</li>
+          <li>a Playwright spec</li>
+        </ul>
+        <p>
+          At that point the code looked reasonable, but I didn't really trust it yet.
+        </p>
+
+        <h2>4. Review the generated code</h2>
+        <p>
+          This was where my QA experience mattered most. I wasn't looking for syntax errors, I was looking for the kinds of things I'd normally comment on during a code review.
+        </p>
+        <ul>
+          <li>Were the locators robust?</li>
+          <li>Were the assertions actually checking the right behaviour?</li>
+          <li>Was there duplicated logic that belonged in the page object instead?</li>
+          <li>Were the tests independent?</li>
+        </ul>
+        <p>
+          A couple of weak assertions came out of that review, even though the tests were passing.
+        </p>
+
+        <h2>5. Prove the tests are reliable</h2>
+        <p>
+          The first execution passed: 17 tests, 17 passes.
+        </p>
+        <p>
+          But I reran the suite repeatedly, initially I hit failures, but they turned out not to be flaky tests after all, I was running too many parallel browsers against a small live website. Once I fixed the way I was running the suite, the tests became stable. There was still one intermittent network assertion left, which I marked for further investigation.
+        </p>
+
+        <h2>Final thoughts</h2>
+        <p>
+          At the end of the afternoon, what I realized was that what took most of my time wasn't spent writing code, it was spent reviewing the observations, the test plan, the generated Playwright code, the execution results, and that takes time, experience and skill.
+        </p>
+        <p>
+          Turns out the typing was the easy part, while the human QA thinking was the work.
+        </p>
+
+      </div>
+    </section>
+  </article>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© 2026 Sandra K</p>
+    <div class="footer-links">
+      <a href="https://www.linkedin.com/in/sandrawk/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://github.com/skambo" target="_blank" rel="noopener">GitHub</a>
+      <a href="../contact.html">Contact</a>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
