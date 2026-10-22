@@ -21,7 +21,7 @@
     <a class="nav-brand" href="../index.html">Sandra K</a>
     <ul class="nav-links">
       <li><a href="../index.html">Home</a></li>
-      <li><a href="../projects.html" aria-current="page">Projects</a></li>
+      <li><a href="../projects.html" aria-current="page">Selected Work</a></li>
       <li><a href="../field-notes.html">Engineering Insights</a></li>
       <li><a href="../contact.html">Contact</a></li>
     </ul>
@@ -29,24 +29,8 @@
 </nav>
 
 <main id="main">
-  <section class="article-header">
-    <span class="pill">Case Study 02 — Featured</span>
+  <section class="article-header case-header">
     <h1>Kajuju: A Production Automation Framework</h1>
-    <p class="article-sub">Designing a Playwright + TypeScript automation framework, with CI-driven double-booking detection and synthetic monitoring, to run the booking, availability, and guest-communication systems of a live operational business.</p>
-    <div class="meta-row">
-      <div class="meta-item">
-        <span class="meta-label">Role</span>
-        <span class="meta-value">Automation engineer</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Stack</span>
-        <span class="meta-value">Playwright, TypeScript, Node.js, Express, Twilio</span>
-      </div>
-      <div class="meta-item">
-        <span class="meta-label">Infra</span>
-        <span class="meta-value">Vercel, Railway, GitHub Actions</span>
-      </div>
-    </div>
   </section>
 
   <section>
@@ -54,7 +38,7 @@
 
       <h2>The Engineering Challenge</h2>
       <p>
-        This project started as a way to keep my automation skills sharp against a real, live system rather than a tutorial app, using the operational challenges of a small hospitality business I'm involved with as the test subject. That business has to keep several systems in tandem: a channel manager tracking availability across booking platforms and a website, a booking form guests use directly, and a WhatsApp line where enquiries arrive alongside phone calls.
+        This project started as a way to keep my automation skills sharp against a real, live system rather than a tutorial app, using the operational challenges of the hospitality business I own and operate in Kenya as the test subject. That business has to keep several systems in tandem: a channel manager tracking availability across booking platforms and a website, a booking form guests use directly, and a WhatsApp line where enquiries arrive alongside phone calls.
       </p>
       <p>
         The engineering risk in that setup is double bookings and silent coordination failures: two systems disagreeing about availability, a slow or missed response losing a booking, or a workflow that's technically correct but too brittle for people to use efficiently under real conditions.
@@ -111,7 +95,9 @@ function datesOverlap(checkOut, checkIn) {
         The broader lesson generalizes past this one project: most production failures in a multi-system workflow live in the handoffs between systems, not inside any single one of them, and a monitoring suite only earns trust by staying quiet and accurate over a long stretch of time.
       </p>
 
+      <p><a href="hospitality-technology.html">← Back to Hospitality Technology &amp; Digital Operations</a></p>
       <p><a href="../field-notes/running-a-hotel.html">Read the related engineering write-up →</a></p>
+      <p><a href="../projects.html">← Back to Selected Work</a></p>
     </div>
   </section>
 </main>
