@@ -66,9 +66,6 @@
         strip.appendChild(item);
       });
       slot.appendChild(strip);
-      var more = button('gallery-link', '', cat, 0);
-      more.textContent = 'See more photos →';
-      slot.appendChild(more);
     }
     slot.classList.add('filled');
   });
@@ -93,10 +90,6 @@
       tile.appendChild(makeImg(p, '(max-width:600px) 45vw, 260px'));
       grid.appendChild(tile);
     });
-  });
-  document.querySelectorAll('[data-photo-count]').forEach(function (el) {
-    var n = (PHOTOS[el.getAttribute('data-photo-count')] || []).length;
-    if (n) el.textContent = el.textContent.replace('{n}', n);
   });
 
   /* ── Full screen viewer ── */

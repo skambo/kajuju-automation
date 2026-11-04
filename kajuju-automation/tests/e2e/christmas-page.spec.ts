@@ -61,7 +61,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
 
   test('3. every booking button uses data-hotelogix and passes the Hotelogix safety rules', async ({ page }) => {
     const buttons = page.locator('[data-hotelogix]');
-    await expect(buttons).toHaveCount(5);
+    await expect(buttons).toHaveCount(4);
     for (const button of await buttons.all()) {
       await expect(button).toHaveAttribute('href', HOTELOGIX_URL);
       await expect(button).toHaveAttribute('target', '_blank');
@@ -73,22 +73,22 @@ test.describe('Christmas page: /christmas-2026/', () => {
     expect(await page.locator('a[href*="staygrid"]:not([data-hotelogix])').count()).toBe(0);
   });
 
-  test('4. the four booking placements use the agreed wording and cta_location values', async ({ page }) => {
+  test('4. the booking placements use the agreed wording and cta_location values', async ({ page }) => {
     const buttons = page.getByRole('link', { name: BOOK_TEXT, exact: true });
-    await expect(buttons).toHaveCount(4);
+    await expect(buttons).toHaveCount(3);
     const locations = await page.$$eval('[data-hotelogix]', (els) => els.map((e) => e.getAttribute('data-cta')));
-    expect(locations).toEqual(['nav', 'hero', 'after_programme', 'after_rates', 'final']);
+    expect(locations).toEqual(['nav', 'hero', 'after_programme', 'final']);
 
-    // Programme CTA comes straight after the programme cards, rates CTA straight after the rates.
+    // One mid page CTA after the programme; no CTA directly before the final one.
     await expect(page.locator('#programme [data-cta="after_programme"]')).toBeVisible();
-    await expect(page.locator('#rates [data-cta="after_rates"]')).toBeVisible();
+    await expect(page.locator('[data-cta="after_rates"]')).toHaveCount(0);
     await expect(page.locator('#book [data-hotelogix][data-cta="final"]')).toBeVisible();
   });
 
   test('5. each booking click sends book_direct_click with its cta_location', async ({ page }) => {
     // Stop the new tab opening; the tracking listener still runs.
     await page.evaluate(() => document.addEventListener('click', (e) => e.preventDefault(), true));
-    for (const cta of ['nav', 'hero', 'after_programme', 'after_rates', 'final']) {
+    for (const cta of ['nav', 'hero', 'after_programme', 'final']) {
       await page.locator(`[data-hotelogix][data-cta="${cta}"]`).click();
     }
     const events = await page.evaluate(() =>
@@ -97,7 +97,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
         .filter((a) => a[0] === 'event' && a[1] === 'book_direct_click')
         .map((a) => (a[2] as any).cta_location)
     );
-    expect(events).toEqual(['nav', 'hero', 'after_programme', 'after_rates', 'final']);
+    expect(events).toEqual(['nav', 'hero', 'after_programme', 'final']);
 
     await page.locator('[data-whatsapp][data-cta="hero"]').click();
     const wa = await page.evaluate(() =>
@@ -182,14 +182,30 @@ test.describe('Christmas page: /christmas-2026/', () => {
   });
 
   test('11. highlights, facilities and festive programme cards are present', async ({ page }) => {
-    await expect(page.locator('#why .hl')).toHaveCount(4);
+    await expect(page.locator('#why .hl')).toHaveCount(3);
+    expect(await page.locator('#why .hl h3').allInnerTexts()).toEqual([
+      'A new way to spend Christmas at the Barn',
+      'Stay a little longer',
+      'Good food, festive moments',
+    ]);
     const why = page.locator('#why');
-    await expect(why).toContainText('salt chlorinated swimming pool');
-    await expect(why).toContainText('separate shallow baby pool');
-    await expect(why).toContainText('ensuite rooms, the Penthouse Loft or our self catering three bedroom cottage');
+    await expect(why).toContainText('Make a splash this festive season in our swimming pool, including a separate shallow pool for younger guests.');
+    await expect(why).toContainText('Settle into comfortable ensuite rooms, the Penthouse Loft or our private three-bedroom cottage. Enjoy a relaxed escape near Mount Kenya.');
+    await expect(why).toContainText('Enjoy freshly prepared festive meals, leisurely breakfasts and time together at the Barn.');
     await expect(why).toContainText('A baby cot is available on request, and indoor games are available for guests.');
-    await expect(why).toContainText('indoor games');
-    await expect(why).toContainText('outdoor space');
+    // Three different genuine photographs: pool, accommodation, café. None repeated in the Christmas gallery.
+    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+    await page.waitForLoadState('networkidle');
+    const name = (src: string) => src.split('/').pop()!.replace(/-\d+\.webp$/, '');
+    const whyPhotos = (await page.$$eval('#why .hl-img img', (i) => i.map((x) => (x as HTMLImageElement).currentSrc))).map(name);
+    expect(new Set(whyPhotos).size).toBe(3);
+    expect(whyPhotos.filter((n) => n.startsWith('pool')).length).toBe(1);
+    const gallery = (await page.$$eval('#gallery img', (i) => i.map((x) => (x as HTMLImageElement).currentSrc))).map(name);
+    expect(gallery).toHaveLength(5);
+    for (const n of whyPhotos) expect(gallery).not.toContain(n);
+    await expect(page.locator('#gallery p').first()).toHaveText(
+      "A little glimpse of Christmas at Idan, festive decorations, fireside moments, good food and time together. We're looking forward to welcoming you this season."
+    );
 
     const titles = await page.locator('#programme .prog-card h3').allInnerTexts();
     expect(titles).toEqual([
@@ -213,8 +229,8 @@ test.describe('Christmas page: /christmas-2026/', () => {
     await expect(dining.locator('> p').first()).toHaveText(
       'Celebrate Christmas and New Year with specially curated festive set menus, freshly prepared at our café.'
     );
+    // The set lunch and dining specials are listed in the programme, so they are not repeated here.
     expect(await dining.locator('.dine-list li').allInnerTexts()).toEqual([
-      'Christmas Day set lunch and selected festive dining specials.',
       'Half Board and Full Board guests enjoy their applicable festive meal as part of their package.',
       'Bed & Breakfast and self catering guests can reserve festive meals separately.',
     ]);
@@ -316,12 +332,14 @@ test.describe('Christmas page: confirmation switches', () => {
   test('LAZY_BREAKFAST_CONFIRMED=true: Lazy Breakfast appears on the approved dates only', async ({ page }) => {
     await openWithFlags(page, { lazy: true, pool: false });
     const cards = page.locator('#programme .prog-card');
-    for (const [i, expected] of [[0, false], [1, true], [2, true], [3, true], [4, false]] as const) {
+    for (const [i, expected] of [[0, false], [1, true], [2, true], [3, true]] as const) {
       const card = cards.nth(i);
       if (expected) await expect(card).toContainText('Lazy Breakfast until 11 am.');
       else await expect(card).not.toContainText('Lazy Breakfast');
     }
-    await expect(page.locator('#why')).toContainText('Enjoy freshly prepared meals at our café and special festive dining. Lazy Breakfast on selected festive mornings.');
+    await expect(cards.nth(4)).toContainText('Lazy Breakfast, an extended breakfast service.');
+    for (const banned of ['unlimited', 'brunch']) expect((await visibleText(page)).toLowerCase()).not.toContain(banned);
+    await expect(page.locator('#why')).not.toContainText('Lazy Breakfast');
     await expect(page.locator('#dining')).not.toContainText('Lazy Breakfast');
     expect(await visibleText(page)).not.toContain('a relaxed Lazy Breakfast');
   });
@@ -337,10 +355,25 @@ test.describe('Christmas page: confirmation switches', () => {
     await expect(page.locator('#why .hl').first()).toContainText('Children must be supervised by an adult at all times.');
   });
 
-  test('both switches ship as false in site-config.js', async ({ request }) => {
+  test('as shipped: Lazy Breakfast is on for the four approved dates, the pool supervision line is off', async ({ page, request }) => {
     const body = await (await request.get(`${baseUrl()}/site-config.js`)).text();
-    expect(body).toMatch(/LAZY_BREAKFAST_CONFIRMED: false/);
+    expect(body).toMatch(/LAZY_BREAKFAST_CONFIRMED: true/);
     expect(body).toMatch(/POOL_SUPERVISION_LINE_APPROVED: false/);
+    await page.goto(christmasUrl());
+    const cards = page.locator('#programme .prog-card');
+    await expect(cards.nth(0)).not.toContainText('Lazy Breakfast');
+    for (const i of [1, 2, 3]) await expect(cards.nth(i)).toContainText('Lazy Breakfast until 11 am.');
+    await expect(cards.nth(4)).toContainText('Lazy Breakfast');
+    expect((await page.locator('.prog-card li', { hasText: 'Lazy Breakfast' }).count())).toBe(4);
+    expect(await visibleText(page)).not.toContain('supervised');
+  });
+
+  test('the booking section explains the 50% M-Pesa deposit once, and booking stays on Hotelogix', async ({ page }) => {
+    await page.goto(christmasUrl());
+    const book = page.locator('#book');
+    await expect(book).toContainText('pay a 50% M-Pesa deposit within 48 hours of receiving your booking instructions');
+    await expect(book.locator('[data-hotelogix][data-cta="final"]')).toHaveText('Check Availability & Book');
+    expect(((await visibleText(page)).match(/M-Pesa/g) || []).length).toBe(1);
   });
 });
 
@@ -384,10 +417,8 @@ for (const [name, width, height] of [['mobile', 390, 844], ['desktop', 1280, 900
       expect(fifth!.x).toBeGreaterThanOrEqual(0);
       expect(fifth!.x + fifth!.width).toBeLessThanOrEqual(width + 1);
       await expect(photos.last()).toHaveAttribute('aria-label', /photo 5 of 5/);
-      const hint = page.locator('#gallery .strip-hint');
-      if (width < 700) await expect(hint).toContainText('Swipe to see all 5 photos');
-      else {
-        await expect(hint).toBeHidden();
+      await expect(page.locator('#gallery .strip-hint, #gallery .gallery-link')).toHaveCount(0);
+      if (width >= 700) {
         // all five fit without scrolling on desktop
         const strip = await page.locator('#gallery .photo-strip').evaluate((e) => e.scrollWidth - e.clientWidth);
         expect(strip).toBeLessThanOrEqual(0);
@@ -397,7 +428,7 @@ for (const [name, width, height] of [['mobile', 390, 844], ['desktop', 1280, 900
       await expect(page.locator('dialog.viewer[open] figcaption')).toContainText('5 of 5');
       await page.keyboard.press('Escape');
 
-      for (const cta of ['hero', 'after_programme', 'after_rates', 'final']) {
+      for (const cta of ['hero', 'after_programme', 'final']) {
         const btn = page.locator(`[data-hotelogix][data-cta="${cta}"]`);
         await btn.scrollIntoViewIfNeeded();
         await expect(btn).toBeVisible();

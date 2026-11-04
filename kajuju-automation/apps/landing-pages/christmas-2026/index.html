@@ -85,9 +85,7 @@
     .strip-item{flex:0 0 auto;scroll-snap-align:start}
     .strip-item img{height:260px;width:auto;border-radius:8px}
     .photo-strip{scrollbar-width:thin;scrollbar-color:#2d5a27 #e8efe3}
-    .strip-hint{font-size:.82rem;color:#555;font-family:sans-serif;margin:.25rem 0 .4rem}
-    @media(min-width:700px){.photo-strip{overflow-x:visible}.strip-item{flex:1 1 0;min-width:0}.strip-item img{width:100%;height:260px;object-fit:cover}.strip-hint{display:none}}
-    .gallery-link{font-size:.82rem;color:#2d5a27;background:none;border:none;padding:0;cursor:pointer;font-family:sans-serif}
+    @media(min-width:700px){.photo-strip{overflow-x:visible}.strip-item{flex:1 1 0;min-width:0}.strip-item img{width:100%;height:260px;object-fit:cover}}
 
     .note{background:#f4faf0;border:0.5px solid #b0cba8;border-left:4px solid #2d5a27;padding:.9rem 1.1rem;border-radius:6px;font-size:.88rem;color:#333;line-height:1.65;margin-bottom:1rem}
     .note p{font-size:.88rem;margin-bottom:.4rem}
@@ -140,7 +138,6 @@
     a:focus-visible,button:focus-visible{outline:3px solid #fff;outline-offset:2px;box-shadow:0 0 0 6px #1a1a1a}
     .hero .dates{font-size:1.05rem;font-weight:bold;color:#fff;margin-bottom:1.1rem}
     .hero p.dates{margin-bottom:1.1rem}
-    .hl-grid.four{grid-template-columns:repeat(2,1fr)}
     .also{font-size:.88rem;color:#444;margin:.9rem 0 0}
     .prog-grid{display:grid;grid-template-columns:1fr;gap:.75rem;margin-top:.25rem}
     @media(min-width:700px){.prog-grid{grid-template-columns:repeat(6,1fr)}.prog-card{grid-column:span 2}.prog-card:nth-child(4){grid-column:2/span 2}.prog-card:nth-child(5){grid-column:4/span 2}}
@@ -154,7 +151,7 @@
     .dine-list{list-style:none;display:grid;gap:.4rem;margin:0 0 1rem}
     .dine-list li{font-size:.9rem;color:#333;padding-left:1.1rem;position:relative}
     .dine-list li::before{content:"";position:absolute;left:0;top:.55em;width:.45rem;height:.45rem;border-radius:50%;background:#b0cba8}
-    @media(max-width:700px){.hl-grid,.hl-grid.four{grid-template-columns:1fr;gap:.6rem}.hl{flex-direction:row}.hl-img{flex:0 0 112px;aspect-ratio:auto}.hl-body{padding:.7rem .9rem}.hl-body h3{font-size:.95rem}.hl-body p{font-size:.82rem}}
+    @media(max-width:700px){.hl-grid{grid-template-columns:1fr;gap:.6rem}.hl{flex-direction:row}.hl-img{flex:0 0 112px;aspect-ratio:auto}.hl-body{padding:.7rem .9rem}.hl-body h3{font-size:.95rem}.hl-body p{font-size:.82rem}}
     @media(max-width:520px){.hero h1{font-size:1.8rem}.strip-item img{height:220px}}
   </style>
 </head>
@@ -192,22 +189,18 @@
 
 <section id="why">
   <h2>Why Christmas at the Barn?</h2>
-  <div class="hl-grid four">
+  <div class="hl-grid">
     <div class="hl">
       <div class="hl-img" data-photo-cover="pool:0"></div>
-      <div class="hl-body"><h3>Pool days for the whole family</h3><p>Enjoy our new salt chlorinated swimming pool, with a separate shallow baby pool for younger guests. <span data-flag-copy="pool-supervision" hidden></span></p></div>
+      <div class="hl-body"><h3>A new way to spend Christmas at the Barn</h3><p>Make a splash this festive season in our swimming pool, including a separate shallow pool for younger guests. <span data-flag-copy="pool-supervision" hidden></span></p></div>
     </div>
     <div class="hl">
-      <div class="hl-img" data-photo-cover="pool:1"></div>
-      <div class="hl-body"><h3>Cosy stays in Naromoru</h3><p>Choose from comfortable ensuite rooms, the Penthouse Loft or our self catering three bedroom cottage.</p></div>
+      <div class="hl-img" data-photo-cover="penthouse:0"></div>
+      <div class="hl-body"><h3>Stay a little longer</h3><p>Settle into comfortable ensuite rooms, the Penthouse Loft or our private three-bedroom cottage. Enjoy a relaxed escape near Mount Kenya.</p></div>
     </div>
     <div class="hl">
       <div class="hl-img" data-photo-cover="cafe:0"></div>
-      <div class="hl-body"><h3>Festive food and relaxed mornings</h3><p>Enjoy freshly prepared meals at our café and special festive dining. <span data-flag-copy="lazy-selected" hidden></span></p></div>
-    </div>
-    <div class="hl">
-      <div class="hl-img" data-photo-cover="grounds:2"></div>
-      <div class="hl-body"><h3>Family friendly atmosphere</h3><p>A welcoming countryside setting for families, couples and friends, with outdoor space, games and time to unwind.</p></div>
+      <div class="hl-body"><h3>Good food, festive moments</h3><p>Enjoy freshly prepared festive meals, leisurely breakfasts and time together at the Barn.</p></div>
     </div>
   </div>
   <p class="also">A baby cot is available on request, and indoor games are available for guests.</p>
@@ -253,6 +246,7 @@
         <li>Welcome 2027 at the Barn</li>
         <li>New Year&rsquo;s Day dining</li>
         <li>Poolside relaxation</li>
+        <li data-flag-copy="lazy-newyear" hidden></li>
       </ul>
     </div>
   </div>
@@ -264,7 +258,6 @@
   <h2>Festive Dining at the Barn</h2>
   <p>Celebrate Christmas and New Year with specially curated festive set menus, freshly prepared at our café.</p>
   <ul class="dine-list">
-    <li>Christmas Day set lunch and selected festive dining specials.</li>
     <li>Half Board and Full Board guests enjoy their applicable festive meal as part of their package.</li>
     <li>Bed &amp; Breakfast and self catering guests can reserve festive meals separately.</li>
   </ul>
@@ -273,8 +266,7 @@
 
 <section id="gallery">
   <h2>Christmas moments at the Barn</h2>
-  <p>A glimpse of Christmas celebrations at Idan, from twinkling lights and decorated trees to festive evenings around the café.</p>
-  <p class="strip-hint" data-photo-count="christmas">Swipe to see all {n} photos, or tap a photo to open the gallery.</p>
+  <p>A little glimpse of Christmas at Idan, festive decorations, fireside moments, good food and time together. We're looking forward to welcoming you this season.</p>
   <div data-photo-strip="christmas"></div>
 </section>
 
@@ -316,7 +308,7 @@
 
   <div class="room-card">
     <h3>Cottage (3 bedrooms)</h3>
-    <p class="room-desc">Private self catering accommodation for up to six guests.</p>
+    <p class="room-desc">Enjoy a private, self-catering retreat in Naro Moru. Our three-bedroom cottage accommodates up to six guests and features a fully equipped kitchen, a comfortable living area and access to the swimming pool. Ideal for families and small groups looking for a relaxed stay near Mount Kenya.</p>
     <p class="price-only">KES 18,000</p>
   </div>
 
@@ -338,12 +330,11 @@
   </div>
 
   <p class="links"><a href="/?tab=rates">See room photos and full accommodation details on our main rates page</a></p>
-  <div class="cta-row"><a href="#book" class="btn-book solid" data-hotelogix data-cta="after_rates" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Check Availability &amp; Book</a></div>
 </section>
 
 <section class="final" id="book">
   <h2>Ready for Christmas at the Barn?</h2>
-  <p>Choose your dates, check availability and book your stay directly with us.</p>
+  <p>Choose your dates, check availability and book your stay directly with us. Reserve online, then pay a 50% M-Pesa deposit within 48 hours of receiving your booking instructions to secure it.</p>
   <a href="#book" class="btn-book" data-hotelogix data-cta="final" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Check Availability &amp; Book</a>
   <p class="contact"><a href="#book" data-whatsapp="christmas" data-cta="final" target="_blank" rel="noopener">Chat with Us on WhatsApp</a> or <a href="tel:+254762004417" data-cta="final">call <strong>+254 762 004417</strong></a>.</p>
 </section>

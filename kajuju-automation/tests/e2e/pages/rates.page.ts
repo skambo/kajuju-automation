@@ -21,7 +21,7 @@ export const PERIOD_BUTTON_LABEL: Record<RatePeriod, string> = {
   peak: 'Peak / Festive',
 };
 
-const PERIOD_SECTION_ID: Record<RatePeriod, string> = {
+const PERIOD_PANEL_ID: Record<RatePeriod, string> = {
   weekday: 'offpeak-wd',
   weekend: 'offpeak-we',
   peak: 'peak',
@@ -31,12 +31,11 @@ export const ALL_PERIODS: RatePeriod[] = ['weekday', 'weekend', 'peak'];
 
 /**
  * Page object for the rates microsite's "Select your travel period" toggle
- * and the room cards whose price/description content it switches between.
+ * and the room cards whose prices it switches.
  *
- * The toggle has no shared data model: each period is an independently
- * pre-built `.rate-section` block, and `showRates()` just moves an `.active`
- * class between them. See tests/e2e/rates-period-toggle.plan.md for the
- * root-cause note this reflects.
+ * Each room has ONE card (one description, one set of amenity chips, one photo strip) holding
+ * three `.rate-grid[data-period]` panels. `showRates()` moves an `.active` class between the
+ * panels and updates `aria-pressed` on the toggle buttons; the description is never touched.
  */
 export class RatesPage extends BasePage {
   async goto() {
@@ -51,13 +50,14 @@ export class RatesPage extends BasePage {
     await this.periodButton(period).click();
   }
 
-  section(period: RatePeriod): Locator {
-    return this.page.locator(`#${PERIOD_SECTION_ID[period]}`);
+  /** The rate panels (one per toggled room) for a period. */
+  panels(period: RatePeriod): Locator {
+    return this.page.locator(`.rate-grid[data-period="${PERIOD_PANEL_ID[period]}"]`);
   }
 
-  /** The single `.rate-section` currently marked active. */
-  activeSection(): Locator {
-    return this.page.locator('.rate-section.active');
+  /** The rate panels currently shown, one per toggled room. */
+  activePanels(): Locator {
+    return this.page.locator('.rate-grid[data-period].active');
   }
 
   /** The single toggle button currently marked active. */
@@ -65,10 +65,16 @@ export class RatesPage extends BasePage {
     return this.page.locator('.rate-toggle button.active');
   }
 
-  roomCard(period: RatePeriod, roomName: string): Locator {
-    return this.section(period)
+  /** The one card for a room. The period argument is kept so existing call sites read the same. */
+  roomCard(_period: RatePeriod, roomName: string): Locator {
+    return this.page
       .locator('.room-card')
       .filter({ has: this.page.getByRole('heading', { level: 3, name: roomName }) });
+  }
+
+  /** The rate panel for one room and period. */
+  panel(period: RatePeriod, roomName: string): Locator {
+    return this.roomCard(period, roomName).locator(`.rate-grid[data-period="${PERIOD_PANEL_ID[period]}"]`);
   }
 
   roomDescription(period: RatePeriod, roomName: string): Locator {
@@ -81,7 +87,7 @@ export class RatesPage extends BasePage {
 
   /** The `.amount` cell (KES price + USD span) for one rate row, e.g. rateLabel = "Single B&B". */
   roomRate(period: RatePeriod, roomName: string, rateLabel: string): Locator {
-    return this.roomCard(period, roomName)
+    return this.panel(period, roomName)
       .locator('.rate-item')
       .filter({ has: this.page.locator('.label', { hasText: rateLabel }) })
       .locator('.amount');
@@ -91,13 +97,7 @@ export class RatesPage extends BasePage {
     return this.roomRate(period, roomName, rateLabel).locator('.usd');
   }
 
-  /**
-   * Cards outside the toggle entirely (Penthouse Loft, Cottage, Barn House
-   * Buyout) — none of these sit inside a .rate-section, so they render
-   * identically regardless of the selected period. They don't share one
-   * wrapper class (Penthouse Loft/Cottage use .room-card, Barn House Buyout
-   * uses .buyout-card), so this walks up from the heading instead.
-   */
+  /** The card of a room that is not governed by the toggle (Penthouse Loft, Cottage, Barn House Buyout). */
   selfCateringRoomCard(roomName: string): Locator {
     return this.page
       .getByRole('heading', { level: 3, name: roomName })
