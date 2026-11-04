@@ -68,8 +68,9 @@ test.describe('Rates page — period toggle', () => {
   test.describe('positive', () => {
     test('1. Weekday is the default active period on load', async () => {
       await expect(ratesPage.periodButton('weekday')).toHaveClass(/active/);
-      await expect(ratesPage.section('weekday')).toHaveClass(/active/);
-      await expect(ratesPage.activeSection()).toHaveAttribute('id', 'offpeak-wd');
+      await expect(ratesPage.activePanels()).toHaveCount(2);
+      await expect(ratesPage.panel('weekday', TWIN_GARDEN)).toHaveClass(/active/);
+      await expect(ratesPage.panel('weekday', DELUXE)).toHaveClass(/active/);
     });
 
     test('2. selecting Weekend updates Twin Garden and Deluxe prices', async () => {
@@ -94,7 +95,7 @@ test.describe('Rates page — period toggle', () => {
       for (const period of ALL_PERIODS) {
         await ratesPage.selectPeriod(period);
         await expect(ratesPage.activeToggleButton()).toHaveCount(1);
-        await expect(ratesPage.activeSection()).toHaveCount(1);
+        await expect(ratesPage.activePanels()).toHaveCount(2); // one per toggled room
         await expect(ratesPage.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL[period]);
       }
     });
@@ -166,7 +167,7 @@ test.describe('Rates page — period toggle', () => {
       await ratesPage.periodButton('weekend').click();
       await ratesPage.periodButton('peak').click();
       await expect(ratesPage.activeToggleButton()).toHaveCount(1);
-      await expect(ratesPage.activeSection()).toHaveCount(1);
+      await expect(ratesPage.activePanels()).toHaveCount(2);
       await expect(ratesPage.activeToggleButton()).toHaveText('Peak / Festive');
       await expect(ratesPage.roomRate('peak', TWIN_GARDEN, 'Single B&B')).toHaveText(
         `${RATES.peak[TWIN_GARDEN]['Single B&B'].kes} ${RATES.peak[TWIN_GARDEN]['Single B&B'].usd}`
@@ -174,7 +175,7 @@ test.describe('Rates page — period toggle', () => {
 
       await ratesPage.periodButton('weekend').dblclick();
       await expect(ratesPage.activeToggleButton()).toHaveCount(1);
-      await expect(ratesPage.activeSection()).toHaveCount(1);
+      await expect(ratesPage.activePanels()).toHaveCount(2);
       await expect(ratesPage.activeToggleButton()).toHaveText('Weekend (Fri–Sat)');
       await expect(ratesPage.roomRate('weekend', TWIN_GARDEN, 'Single B&B')).toHaveText(
         `${RATES.weekend[TWIN_GARDEN]['Single B&B'].kes} ${RATES.weekend[TWIN_GARDEN]['Single B&B'].usd}`
@@ -182,18 +183,18 @@ test.describe('Rates page — period toggle', () => {
     });
 
     test('3. clicking the already-active toggle button is a no-op', async () => {
-      const before = await ratesPage.activeSection().innerHTML();
+      const before = await ratesPage.activePanels().evaluateAll((els) => els.map((e) => e.innerHTML));
       await ratesPage.selectPeriod('weekday');
-      await expect(ratesPage.activeSection()).toHaveCount(1);
-      const after = await ratesPage.activeSection().innerHTML();
-      expect(after).toBe(before);
+      await expect(ratesPage.activePanels()).toHaveCount(2);
+      const after = await ratesPage.activePanels().evaluateAll((els) => els.map((e) => e.innerHTML));
+      expect(after).toEqual(before);
     });
 
     test('4. reloading after selecting Weekend or Peak resets to Weekday', async () => {
       await ratesPage.selectPeriod('peak');
       await ratesPage.reload();
       await expect(ratesPage.periodButton('weekday')).toHaveClass(/active/);
-      await expect(ratesPage.section('weekday')).toHaveClass(/active/);
+      await expect(ratesPage.panel('weekday', TWIN_GARDEN)).toHaveClass(/active/);
       await expect(ratesPage.roomRate('weekday', TWIN_GARDEN, 'Single B&B')).toHaveText(
         `${RATES.weekday[TWIN_GARDEN]['Single B&B'].kes} ${RATES.weekday[TWIN_GARDEN]['Single B&B'].usd}`
       );
@@ -205,21 +206,21 @@ test.describe('Rates page — period toggle', () => {
       await ratesPage.periodButton('weekend').focus();
       await expect(ratesPage.periodButton('weekend')).toBeFocused();
       await page.keyboard.press('Enter');
-      await expect(ratesPage.section('weekend')).toHaveClass(/active/);
+      await expect(ratesPage.panel('weekend', TWIN_GARDEN)).toHaveClass(/active/);
 
       await ratesPage.periodButton('peak').focus();
       await expect(ratesPage.periodButton('peak')).toBeFocused();
       await page.keyboard.press(' ');
-      await expect(ratesPage.section('peak')).toHaveClass(/active/);
+      await expect(ratesPage.panel('peak', TWIN_GARDEN)).toHaveClass(/active/);
     });
 
-    test('6. [accessibility] active toggle button exposes state via aria-pressed', async () => {
-      test.fail(
-        true,
-        'Known gap: toggle buttons carry no aria-pressed (or other programmatic state) — only the visual ' +
-          '.active class. See negative case 6 in rates-period-toggle.plan.md.'
-      );
-      await expect(ratesPage.activeToggleButton()).toHaveAttribute('aria-pressed', 'true');
+    test('6. [accessibility] active toggle button exposes state via aria-pressed', async ({ page }) => {
+      // The known gap (no aria-pressed) is fixed: the pressed state follows the selection.
+      for (const period of ALL_PERIODS) {
+        await ratesPage.selectPeriod(period);
+        await expect(ratesPage.activeToggleButton()).toHaveAttribute('aria-pressed', 'true');
+        await expect(page.locator('.rate-toggle button[aria-pressed="true"]')).toHaveCount(1);
+      }
     });
 
     test.skip('7. toggle interaction introduces no new console errors or failed requests', async () => {
@@ -239,7 +240,7 @@ test.describe('Rates page — period toggle', () => {
         await expect(ratesPage.periodButton(period)).toBeVisible();
       }
       await ratesPage.selectPeriod('weekend');
-      await expect(ratesPage.section('weekend')).toHaveClass(/active/);
+      await expect(ratesPage.panel('weekend', TWIN_GARDEN)).toHaveClass(/active/);
     });
   });
 });

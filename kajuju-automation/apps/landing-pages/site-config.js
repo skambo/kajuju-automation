@@ -7,14 +7,15 @@ var SITE = {
   WHATSAPP_TEXT_CHRISTMAS: "Hi, I'd like to enquire about Christmas at Idan Barn Suites.",
   WHATSAPP_TEXT_DINING: "Hi, I'd like to reserve festive meals at Idan Barn Suites.",
 
-  /* Confirmation switches for the Christmas page. Both stay false until the content is approved.
+  /* Confirmation switches for the Christmas page. A switch stays false until its content is approved.
+     LAZY_BREAKFAST_CONFIRMED was approved for 25, 26 and 31 December and 1 January.
      To enable one, change false to true below. The wording lives in FLAG_COPY, so while a switch
      is false that wording is not in the page at all. */
-  LAZY_BREAKFAST_CONFIRMED: false,
+  LAZY_BREAKFAST_CONFIRMED: true,
   POOL_SUPERVISION_LINE_APPROVED: false,
   FLAG_COPY: {
-    'lazy-selected': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast on selected festive mornings.' },
     'lazy-until': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast until 11 am.' },
+    'lazy-newyear': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast, an extended breakfast service.' },
     'pool-supervision': { flag: 'POOL_SUPERVISION_LINE_APPROVED', text: 'Children must be supervised by an adult at all times.' }
   }
 };

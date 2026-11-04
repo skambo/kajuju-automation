@@ -38,7 +38,7 @@
   </script>
 
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where to stay before climbing Mt Kenya?","acceptedAnswer":{"@type":"Answer","text":"Idan Barn Suites in Naromoru is a popular Mt Kenya base camp stopover, just 30 minutes from the Naro Moru park gate. We offer affordable rooms, a self-contained cottage, and hearty meals to fuel your climb."}},{"@type":"Question","name":"What is included in the rate at Idan Barn Suites?","acceptedAnswer":{"@type":"Answer","text":"Our Twin Garden and Deluxe Rooms are available on Bed & Breakfast, Half Board or Full Board terms. Half Board includes breakfast and one three course lunch or dinner. Full Board includes breakfast, lunch and dinner. Drinks are charged separately. Children aged 11 and under may share their parents' room and existing bedding at no accommodation charge."}},{"@type":"Question","name":"Do you offer long stay or monthly rates?","acceptedAnswer":{"@type":"Answer","text":"Yes, we offer special rates for extended stays across all our accommodation options. Contact us directly to discuss availability and pricing for longer stays."}},{"@type":"Question","name":"How do I book direct at Idan Barn Suites?","acceptedAnswer":{"@type":"Answer","text":"Use the Check Availability & Book button to view availability and make a reservation online. You can also WhatsApp or call us on +254 762 004417 for assistance."}},{"@type":"Question","name":"Is Idan Barn Suites good for budget travellers?","acceptedAnswer":{"@type":"Answer","text":"Yes, we offer affordable rooms and packages in Naromoru with great value meals at our on-site café. One of the best value stays near Mt Kenya base camp."}}]}
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Where to stay before climbing Mt Kenya?","acceptedAnswer":{"@type":"Answer","text":"Idan Barn Suites in Naromoru is a popular Mt Kenya base camp stopover, just 30 minutes from the Naro Moru park gate. We offer affordable rooms, a self-contained cottage, and hearty meals to fuel your climb."}},{"@type":"Question","name":"Do you offer long stay or monthly rates?","acceptedAnswer":{"@type":"Answer","text":"Yes, we offer special rates for extended stays across all our accommodation options. Contact us directly to discuss availability and pricing for longer stays."}},{"@type":"Question","name":"How do I book direct at Idan Barn Suites?","acceptedAnswer":{"@type":"Answer","text":"Use the Check Availability & Book button to view availability and make a reservation online. You can also WhatsApp or call us on +254 762 004417 for assistance."}}]}
   </script>
 
   <script type="application/ld+json">
@@ -119,16 +119,14 @@
     .rate-toggle{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
     .rate-toggle button{padding:7px 16px;border-radius:20px;border:1.5px solid #2d5a27;background:#fff;color:#2d5a27;font-size:.8rem;cursor:pointer;font-family:Georgia,serif;transition:all .2s}
     .rate-toggle button.active{background:#2d5a27;color:#fff}
-    .rate-section{display:none}
-    .rate-section.active{display:block}
+    .rate-grid[data-period]{display:none}
+    .rate-grid[data-period].active{display:grid}
 
     /* ── ROOM CARDS ── */
     .room-card{background:#fff;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1rem;border:0.5px solid #d0ddc8}
     .room-card.featured{border:1.5px solid #2d5a27}
     .room-card h3{font-size:1rem;color:#1a1a1a;margin-bottom:.4rem}
     .room-card h3 .room-alias{font-size:.72rem;font-weight:normal;color:#888;font-family:sans-serif;letter-spacing:.2px}
-    .gallery-link{display:inline-block;font-size:.8rem;color:#2d5a27;text-decoration:none;font-family:sans-serif;margin-bottom:.6rem;background:none;border:none;padding:0;cursor:pointer}
-    .gallery-link:hover{text-decoration:underline}
     .room-desc{font-size:.87rem;color:#555;line-height:1.7;margin-bottom:.75rem}
     .room-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:.85rem}
     .rate-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-bottom:.5rem}
@@ -196,9 +194,9 @@
     .meal-plan-banner{border-radius:10px;padding:1.1rem 1.25rem;border:0.5px solid #d0ddc8}
     .meal-plan-banner.hb{background:#f9f9f6}
     .meal-plan-banner.fb{background:#eaf3de;border-color:#b0cba8}
-    .meal-plan-banner p{font-size:.87rem;color:#444;line-height:1.6;margin-bottom:.5rem}
-    .meal-plan-banner .price{font-size:1rem;font-weight:bold;color:#2d5a27}
-    .meal-plan-banner.fb .price{color:#3b6d11}
+    .meal-plan-banner h3{font-size:1.05rem;color:#2d5a27;margin-bottom:.4rem}
+    .meal-plan-banner.fb h3{color:#3b6d11}
+    .meal-plan-banner p{font-size:.87rem;color:#444;line-height:1.6;margin:0}
     @media(max-width:520px){.meal-plan-banners{grid-template-columns:1fr}}
 
     .menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
@@ -268,7 +266,6 @@
     .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.75rem}
     .grid-tile{aspect-ratio:1/1;overflow:hidden;border-radius:8px}
     .grid-tile img{width:100%;height:100%;object-fit:cover;display:block}
-    .gallery-more{display:inline-block;font-size:.85rem;color:#2d5a27;background:none;border:1.5px solid #2d5a27;border-radius:20px;padding:.4rem 1.1rem;cursor:pointer;font-family:sans-serif}
     .why-grid{display:grid;grid-template-columns:1fr 1fr;gap:.75rem}
     .why-item{background:#fff;border:0.5px solid #d8e8d0;border-radius:8px;padding:.9rem 1rem}
     .why-item strong{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;color:#2d5a27;margin-bottom:.25rem;font-family:sans-serif}
@@ -362,7 +359,6 @@
     <h2 class="sec-title" id="gallery">The property</h2>
     <p class="sec-sub">The pool, the grounds and the café are for all our guests.</p>
     <div class="photo-grid" data-photo-grid="shared" data-pick="pool:0,pool:1,pool:3,cafe:2,cafe:0,cafe:3,grounds:0,grounds:1,grounds:2"></div>
-    <button type="button" class="gallery-more" data-gallery-open="shared" data-index="0">See all <span data-photo-count="shared">{n}</span> photos</button>
 
     <h2 class="sec-title" id="why">Why stay at Idan</h2>
     <div class="why-grid">
@@ -387,27 +383,23 @@
 
     <!-- Period toggle -->
     <p style="font-size:.8rem;color:#666;margin-bottom:.5rem;font-family:sans-serif;letter-spacing:.3px">Select your travel period</p>
-    <div class="rate-toggle">
-      <button class="active" onclick="showRates('offpeak-wd',this)">Weekday (Sun–Thu)</button>
-      <button onclick="showRates('offpeak-we',this)">Weekend (Fri–Sat)</button>
-      <button onclick="showRates('peak',this)">Peak / Festive</button>
+    <div class="rate-toggle" role="group" aria-label="Select your travel period">
+      <button class="active" aria-pressed="true" onclick="showRates('offpeak-wd',this)">Weekday (Sun–Thu)</button>
+      <button aria-pressed="false" onclick="showRates('offpeak-we',this)">Weekend (Fri–Sat)</button>
+      <button aria-pressed="false" onclick="showRates('peak',this)">Peak / Festive</button>
     </div>
 
-    <!-- ── WEEKDAY OFF-PEAK ── -->
-    <div class="rate-section active" id="offpeak-wd">
-
-      <div class="room-card">
+    <!-- Room cards: one description per room, rates switch with the period selector -->
+      <div id="room-twin-garden" class="room-card">
         <h3>Twin Garden Room <span class="room-alias">(Pebble Room on booking calendar)</span></h3>
         <div class="photo-strip-slot" data-photo-strip="twin-garden"></div>
-        <p class="room-desc">A well-appointed twin room with garden views and direct access to the outdoor grounds. Comfortable for solo travellers and couples, with a calm, natural setting. En-suite bathroom, quality linens, and that quiet you came for. Also ideal for hikers looking for a no-frills, cosy room as a base for their ascents and early departures.</p>
+        <p class="room-desc">A well-appointed twin room with garden views and direct access to the outdoor grounds. Comfortable for solo travellers and couples, with a calm, natural setting, quality linens and the quiet you came for. Also ideal for hikers looking for a no-frills, cosy room as a base for their ascents and early departures.</p>
         <div class="room-chips">
           <span class="chip">En-suite bathroom</span>
           <span class="chip">Garden views</span>
-          <span class="chip">Starlink WiFi</span>
-          <span class="chip">Solar powered</span>
           <span class="chip">Hiker friendly</span>
         </div>
-        <div class="rate-grid">
+        <div class="rate-grid active" data-period="offpeak-wd" role="group" aria-label="Weekday rates">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 9,000 <span class="usd">~$69</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 10,500 <span class="usd">~$81</span></div></div>
           <div class="rate-item"><div class="label">Single H/B</div><div class="amount">Ksh 11,000 <span class="usd">~$85</span></div></div>
@@ -415,46 +407,7 @@
           <div class="rate-item"><div class="label">Single FB</div><div class="amount">Ksh 13,000 <span class="usd">~$100</span></div></div>
           <div class="rate-item"><div class="label">Double FB</div><div class="amount">Ksh 17,500 <span class="usd">~$135</span></div></div>
         </div>
-      </div>
-
-      <div class="room-card featured">
-        <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
-        <div class="photo-strip-slot" data-photo-strip="deluxe"></div>
-        <p class="room-desc">Our most popular room. A spacious deluxe room with a private balcony overlooking the property, one of the best seats in the house for Mt Kenya views on a clear morning. Ideal for couples and solo travellers who want a bit more space and that balcony moment with their morning coffee.</p>
-        <div class="room-chips">
-          <span class="chip">Private balcony</span>
-          <span class="chip">Mt Kenya views</span>
-          <span class="chip">En-suite bathroom</span>
-          <span class="chip">Starlink WiFi</span>
-          <span class="chip">Solar powered</span>
-        </div>
-        <div class="rate-grid">
-          <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 10,500 <span class="usd">~$81</span></div></div>
-          <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
-          <div class="rate-item"><div class="label">Single H/B</div><div class="amount">Ksh 12,500 <span class="usd">~$96</span></div></div>
-          <div class="rate-item"><div class="label">Double H/B</div><div class="amount">Ksh 15,000 <span class="usd">~$115</span></div></div>
-          <div class="rate-item"><div class="label">Single FB</div><div class="amount">Ksh 14,500 <span class="usd">~$112</span></div></div>
-          <div class="rate-item"><div class="label">Double FB</div><div class="amount">Ksh 18,500 <span class="usd">~$142</span></div></div>
-        </div>
-      </div>
-
-    </div><!-- /offpeak-wd -->
-
-    <!-- ── WEEKEND ── -->
-    <div class="rate-section" id="offpeak-we">
-
-      <div class="room-card">
-        <h3>Twin Garden Room <span class="room-alias">(Pebble Room on booking calendar)</span></h3>
-        <div class="photo-strip-slot" data-photo-strip="twin-garden"></div>
-                <p class="room-desc">A well-appointed twin room with garden views and direct access to the outdoor grounds. Comfortable for solo travellers and couples, with a calm, natural setting. En-suite bathroom, quality linens, and that quiet you came for. Also ideal for hikers looking for a no-frills, cosy room as a base for their ascents and early departures.</p>
-        <div class="room-chips">
-          <span class="chip">En-suite bathroom</span>
-          <span class="chip">Garden views</span>
-          <span class="chip">Starlink WiFi</span>
-          <span class="chip">Solar powered</span>
-          <span class="chip">Hiker friendly</span>
-        </div>
-<div class="rate-grid">
+        <div class="rate-grid" data-period="offpeak-we" role="group" aria-label="Weekend rates">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 10,000 <span class="usd">~$77</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
           <div class="rate-item"><div class="label">Single H/B</div><div class="amount">Ksh 12,000 <span class="usd">~$92</span></div></div>
@@ -462,20 +415,7 @@
           <div class="rate-item"><div class="label">Single FB</div><div class="amount">Ksh 14,000 <span class="usd">~$108</span></div></div>
           <div class="rate-item"><div class="label">Double FB</div><div class="amount">Ksh 18,500 <span class="usd">~$142</span></div></div>
         </div>
-      </div>
-
-      <div class="room-card featured">
-        <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
-        <div class="photo-strip-slot" data-photo-strip="deluxe"></div>
-                <p class="room-desc">Our most popular room. A spacious deluxe room with a private balcony overlooking the property, one of the best seats in the house for Mt Kenya views on a clear morning. Ideal for couples and solo travellers who want a bit more space and that balcony moment with their morning coffee.</p>
-        <div class="room-chips">
-          <span class="chip">Private balcony</span>
-          <span class="chip">Mt Kenya views</span>
-          <span class="chip">En-suite bathroom</span>
-          <span class="chip">Starlink WiFi</span>
-          <span class="chip">Solar powered</span>
-        </div>
-<div class="rate-grid">
+        <div class="rate-grid" data-period="peak" role="group" aria-label="Peak / Festive rates">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 13,000 <span class="usd">~$100</span></div></div>
           <div class="rate-item"><div class="label">Single H/B</div><div class="amount">Ksh 13,500 <span class="usd">~$104</span></div></div>
@@ -485,23 +425,24 @@
         </div>
       </div>
 
-    </div><!-- /offpeak-we -->
-
-    <!-- ── PEAK ── -->
-    <div class="rate-section" id="peak">
-
-      <div class="room-card">
-        <h3>Twin Garden Room <span class="room-alias">(Pebble Room on booking calendar)</span></h3>
-        <div class="photo-strip-slot" data-photo-strip="twin-garden"></div>
-                <p class="room-desc">A well-appointed twin room with garden views and direct access to the outdoor grounds. Comfortable for solo travellers and couples, with a calm, natural setting. En-suite bathroom, quality linens, and that quiet you came for. Also ideal for hikers looking for a no-frills, cosy room as a base for their ascents and early departures.</p>
+      <div id="room-deluxe" class="room-card featured">
+        <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
+        <div class="photo-strip-slot" data-photo-strip="deluxe"></div>
+        <p class="room-desc">Our most popular room. A spacious deluxe room with a private balcony overlooking the property, one of the best seats in the house for Mt Kenya views on a clear morning. Ideal for couples and solo travellers who want a bit more space and that balcony moment with their morning coffee.</p>
         <div class="room-chips">
+          <span class="chip">Private balcony</span>
+          <span class="chip">Mt Kenya views</span>
           <span class="chip">En-suite bathroom</span>
-          <span class="chip">Garden views</span>
-          <span class="chip">Starlink WiFi</span>
-          <span class="chip">Solar powered</span>
-          <span class="chip">Hiker friendly</span>
         </div>
-<div class="rate-grid">
+        <div class="rate-grid active" data-period="offpeak-wd" role="group" aria-label="Weekday rates">
+          <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 10,500 <span class="usd">~$81</span></div></div>
+          <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
+          <div class="rate-item"><div class="label">Single H/B</div><div class="amount">Ksh 12,500 <span class="usd">~$96</span></div></div>
+          <div class="rate-item"><div class="label">Double H/B</div><div class="amount">Ksh 15,000 <span class="usd">~$115</span></div></div>
+          <div class="rate-item"><div class="label">Single FB</div><div class="amount">Ksh 14,500 <span class="usd">~$112</span></div></div>
+          <div class="rate-item"><div class="label">Double FB</div><div class="amount">Ksh 18,500 <span class="usd">~$142</span></div></div>
+        </div>
+        <div class="rate-grid" data-period="offpeak-we" role="group" aria-label="Weekend rates">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 11,500 <span class="usd">~$88</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 13,000 <span class="usd">~$100</span></div></div>
           <div class="rate-item"><div class="label">Single H/B</div><div class="amount">Ksh 13,500 <span class="usd">~$104</span></div></div>
@@ -509,20 +450,7 @@
           <div class="rate-item"><div class="label">Single FB</div><div class="amount">Ksh 15,500 <span class="usd">~$119</span></div></div>
           <div class="rate-item"><div class="label">Double FB</div><div class="amount">Ksh 20,000 <span class="usd">~$154</span></div></div>
         </div>
-      </div>
-
-      <div class="room-card featured">
-        <h3>Deluxe Room with Balcony <span class="room-alias">(Jade Room / Coral Room on booking calendar)</span></h3>
-        <div class="photo-strip-slot" data-photo-strip="deluxe"></div>
-                <p class="room-desc">Our most popular room. A spacious deluxe room with a private balcony overlooking the property, one of the best seats in the house for Mt Kenya views on a clear morning. Ideal for couples and solo travellers who want a bit more space and that balcony moment with their morning coffee.</p>
-        <div class="room-chips">
-          <span class="chip">Private balcony</span>
-          <span class="chip">Mt Kenya views</span>
-          <span class="chip">En-suite bathroom</span>
-          <span class="chip">Starlink WiFi</span>
-          <span class="chip">Solar powered</span>
-        </div>
-<div class="rate-grid">
+        <div class="rate-grid" data-period="peak" role="group" aria-label="Peak / Festive rates">
           <div class="rate-item"><div class="label">Single B&amp;B</div><div class="amount">Ksh 13,000 <span class="usd">~$100</span></div></div>
           <div class="rate-item"><div class="label">Double B&amp;B</div><div class="amount">Ksh 14,500 <span class="usd">~$112</span></div></div>
           <div class="rate-item"><div class="label">Single H/B</div><div class="amount">Ksh 15,000 <span class="usd">~$115</span></div></div>
@@ -532,7 +460,6 @@
         </div>
       </div>
 
-    </div><!-- /peak -->
 
     <!-- ── SELF-CATERING ── -->
     <p class="section-label">Self-Catering Units</p>
@@ -540,13 +467,10 @@
     <div class="room-card">
       <h3>Penthouse Loft</h3>
       <div class="photo-strip-slot" data-photo-strip="penthouse"></div>
-      <p class="room-desc">A private, elevated loft unit with its own self-catering kitchen, living space, and bedroom. Features a cosy fireplace — perfect for cool Mt Kenya evenings. Up to 3 adults. Ideal for those who want their own space, privacy, and the freedom to come and go. Starlink WiFi, solar power, and free parking included.</p>
+      <p class="room-desc">A private, elevated loft unit with its own self-catering kitchen, living space, and bedroom. Features a cosy fireplace — perfect for cool Mt Kenya evenings. Ideal for those who want their own space, privacy, and the freedom to come and go.</p>
       <div class="room-chips">
         <span class="chip">Fireplace</span>
         <span class="chip">Self-catering kitchen</span>
-        <span class="chip">Starlink WiFi</span>
-        <span class="chip">Solar powered</span>
-        <span class="chip">Free parking</span>
         <span class="chip">Up to 3 adults</span>
       </div>
       <div class="penthouse-rates">
@@ -562,15 +486,13 @@
     <div class="room-card">
       <h3>Cottage — 3 bedrooms</h3>
       <div class="photo-strip-slot" data-photo-strip="cottage"></div>
-      <p class="room-desc">Our self-contained 3-bedroom cottage sleeps up to 6 guests — ideal for families, groups, and longer stays. Features a fireplace in the living area, a fully equipped self-catering kitchen, and a private outdoor space. Starlink WiFi and free parking included.</p>
+      <p class="room-desc">Enjoy a private, self-catering retreat in Naro Moru. Our three-bedroom cottage accommodates up to six guests and features a fully equipped kitchen, a comfortable living area and access to the swimming pool. Ideal for families and small groups looking for a relaxed stay near Mount Kenya.</p>
       <div class="room-chips">
         <span class="chip">Fireplace</span>
         <span class="chip">3 bedrooms</span>
         <span class="chip">Sleeps up to 6</span>
         <span class="chip">Self-catering kitchen</span>
         <span class="chip">Outdoor space</span>
-        <span class="chip">Starlink WiFi</span>
-        <span class="chip">Free parking</span>
       </div>
       <div class="cottage-grid">
         <div class="cottage-period">
@@ -628,10 +550,8 @@
     <h2 class="sec-title" id="faqs">Frequently asked questions</h2>
     <div class="faq">
       <details><summary>Where to stay before climbing Mt Kenya?</summary><p>Idan Barn Suites in Naromoru is a popular Mt Kenya base camp stopover, just 30 minutes from the Naro Moru park gate. We offer affordable rooms, a self-contained cottage, and hearty meals to fuel your climb.</p></details>
-      <details><summary>What is included in the rate at Idan Barn Suites?</summary><p>Our Twin Garden and Deluxe Rooms are available on Bed &amp; Breakfast, Half Board or Full Board terms. Half Board includes breakfast and one three course lunch or dinner. Full Board includes breakfast, lunch and dinner. Drinks are charged separately. Children aged 11 and under may share their parents' room and existing bedding at no accommodation charge.</p></details>
       <details><summary>Do you offer long stay or monthly rates?</summary><p>Yes, we offer special rates for extended stays across all our accommodation options. Contact us directly to discuss availability and pricing for longer stays.</p></details>
       <details><summary>How do I book direct at Idan Barn Suites?</summary><p>Use the Check Availability &amp; Book button to view availability and make a reservation online. You can also WhatsApp or call us on +254 762 004417 for assistance.</p></details>
-      <details><summary>Is Idan Barn Suites good for budget travellers?</summary><p>Yes, we offer affordable rooms and packages in Naromoru with great value meals at our on-site café. One of the best value stays near Mt Kenya base camp.</p></details>
     </div>
 
   </div>
@@ -795,15 +715,13 @@
 
       <div class="activity-card">
         <h3>Mt Kenya — climb and day hikes</h3>
-        <p>We're located 19km from the Naromoru gate into Mt Kenya National Park, and approximately 1 hour from Sirimon gate, giving you flexibility on your chosen route. Whether you're going for the summit or a day hike into the mountain, we can help coordinate local cab transfers and connect you with registered guides for whichever route you choose.</p>
+        <p>Whether you're going for the summit or a day hike into the mountain, we can help coordinate local cab transfers and connect you with registered guides for whichever route you choose.</p>
         <div class="activity-note">See Mt Kenya Climb Package for full details.</div>
       </div>
 
     </div>
 
     <p class="activity-disclaimer">Prices for guided activities, park entry, e-bike hire, and horse riding are estimates and subject to change. Always confirm current rates with the entrance gate, your guide, or the activity provider directly before your visit.</p>
-
-    <p class="activity-disclaimer" style="margin-top:.75rem"><em>Planning a Mt Kenya climb or day hike? We're 19km from the Naromoru gate and approximately 1 hour from Sirimon gate. We can help coordinate guides and transfers. See our Mt Kenya Climb Package for details.</em></p>
 
     <div class="blog-section" style="padding-left:0;padding-right:0;margin-top:2rem">
       <h2>Planning Your Mt Kenya Climb?</h2>
@@ -844,14 +762,14 @@
       <h2>Our café menu</h2>
     </div>
 
-    <div class="meal-plan-banners">
+    <div class="meal-plan-banners" role="group" aria-label="Meal plan supplements">
       <div class="meal-plan-banner hb">
-        <p>Breakfast and one three course lunch or dinner. Beverages extra.</p>
-        <div class="price">Ksh 2,500 per adult</div>
+        <h3>Half Board — KES 2,500 per adult</h3>
+        <p>Breakfast and one three-course lunch or dinner. Beverages charged separately.</p>
       </div>
       <div class="meal-plan-banner fb">
-        <p>Breakfast, lunch, and dinner — starter, main, and dessert per meal. Beverages extra.</p>
-        <div class="price">Ksh 3,300 per adult</div>
+        <h3>Full Board — KES 3,300 per adult</h3>
+        <p>Breakfast, lunch and dinner, with a starter, main course and dessert for lunch and dinner. Beverages charged separately.</p>
       </div>
     </div>
 
@@ -1045,10 +963,9 @@
 
   /* ── Rate period toggle ── */
   function showRates(period, btn) {
-    document.querySelectorAll('.rate-section').forEach(function(el){ el.classList.remove('active'); });
-    document.querySelectorAll('.rate-toggle button').forEach(function(el){ el.classList.remove('active'); });
-    document.getElementById(period).classList.add('active');
-    if (btn) btn.classList.add('active');
+    document.querySelectorAll('.rate-grid[data-period]').forEach(function(el){ el.classList.toggle('active', el.getAttribute('data-period') === period); });
+    document.querySelectorAll('.rate-toggle button').forEach(function(el){ el.classList.remove('active'); el.setAttribute('aria-pressed', 'false'); });
+    if (btn) { btn.classList.add('active'); btn.setAttribute('aria-pressed', 'true'); }
   }
 
   /* ── Package expand/collapse ── */
