@@ -14,6 +14,7 @@ var SITE = {
   LAZY_BREAKFAST_CONFIRMED: true,
   POOL_SUPERVISION_LINE_APPROVED: false,
   FLAG_COPY: {
+    'lazy-card': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast until 11 a.m. is planned for 25, 26 and 31 December and 1 January, subject to kitchen capacity.' },
     'lazy-until': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast until 11 am.' },
     'lazy-newyear': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast, an extended breakfast service.' },
     'pool-supervision': { flag: 'POOL_SUPERVISION_LINE_APPROVED', text: 'Children must be supervised by an adult at all times.' }
