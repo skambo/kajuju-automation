@@ -16,7 +16,7 @@ function pageUrl(path: string): string {
 // so every booking link must send no Referer.
 for (const [name, path, expected] of [
   ['homepage', '/', 4],
-  ['Christmas page', '/christmas-2026/', 3],
+  ['Christmas page', '/christmas-2026/', 5],
 ] as const) {
   test.describe(`Hotelogix links: ${name}`, () => {
     test('every booking link has the exact URL and sends no Referer', async ({ page }) => {

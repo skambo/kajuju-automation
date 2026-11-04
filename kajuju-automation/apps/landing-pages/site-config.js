@@ -4,7 +4,19 @@ var SITE = {
   HOTELOGIX_URL: 'https://booking.staygrid.com/webv2/index/home/c/WWhSOTFXNlQvRUhodTdsRDlYNCtKUzZXNjhka3BiZU9ObzJ3dEJTdWhMZDlWVU0yNTQ3WHlRSUt4NjA4QU5lODdYbkZDNkFRZkwrUUlpU1pUUU11UkJJQTBKRzM2a0hkZkRObDcwZ1FaVGRtdm9wNlFQa1pyZ2had3A3SXFwM2s/language/en',
   WHATSAPP: 'https://wa.me/254762004417',
   WHATSAPP_TEXT: "Hello, I'd like to enquire about booking at Idan Barn Suites.",
-  WHATSAPP_TEXT_CHRISTMAS: "Hello, I'd like to enquire about Christmas at Idan Barn Suites."
+  WHATSAPP_TEXT_CHRISTMAS: "Hi, I'd like to enquire about Christmas at Idan Barn Suites.",
+  WHATSAPP_TEXT_DINING: "Hi, I'd like to reserve festive meals at Idan Barn Suites.",
+
+  /* Confirmation switches for the Christmas page. Both stay false until the content is approved.
+     To enable one, change false to true below. The wording lives in FLAG_COPY, so while a switch
+     is false that wording is not in the page at all. */
+  LAZY_BREAKFAST_CONFIRMED: false,
+  POOL_SUPERVISION_LINE_APPROVED: false,
+  FLAG_COPY: {
+    'lazy-selected': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast on selected festive mornings.' },
+    'lazy-until': { flag: 'LAZY_BREAKFAST_CONFIRMED', text: 'Lazy Breakfast until 11 am.' },
+    'pool-supervision': { flag: 'POOL_SUPERVISION_LINE_APPROVED', text: 'Children must be supervised by an adult at all times.' }
+  }
 };
 
 /* Sends a GA4 event only if the Google tag is on the page. Does nothing otherwise. */
@@ -24,9 +36,21 @@ function track(name, params) {
     a.rel = 'noopener noreferrer';
     a.referrerPolicy = 'no-referrer';
   });
+  /* Flag controlled copy: <span data-flag-copy="key"></span> is filled when its switch is true
+     and removed when it is false, so the wording never reaches the page while a switch is off. */
+  document.querySelectorAll('[data-flag-copy]').forEach(function (el) {
+    var c = SITE.FLAG_COPY[el.getAttribute('data-flag-copy')];
+    if (c && SITE[c.flag] === true) {
+      el.textContent = c.text;
+      el.hidden = false;
+    } else {
+      el.remove();
+    }
+  });
   document.querySelectorAll('[data-whatsapp]').forEach(function (a) {
-    /* data-whatsapp="christmas" uses the Christmas message */
-    var text = a.getAttribute('data-whatsapp') === 'christmas' ? SITE.WHATSAPP_TEXT_CHRISTMAS : SITE.WHATSAPP_TEXT;
+    /* data-whatsapp="christmas" and "dining" use their own messages */
+    var kind = a.getAttribute('data-whatsapp');
+    var text = kind === 'christmas' ? SITE.WHATSAPP_TEXT_CHRISTMAS : kind === 'dining' ? SITE.WHATSAPP_TEXT_DINING : SITE.WHATSAPP_TEXT;
     a.href = SITE.WHATSAPP + '?text=' + encodeURIComponent(text);
   });
 
