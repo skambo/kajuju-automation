@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
 const BASE_URL = 'https://kajuju-automation.vercel.app';
+const HOTELOGIX_URL =
+  'https://booking.staygrid.com/webv2/index/home/c/WWhSOTFXNlQvRUhodTdsRDlYNCtKUzZXNjhka3BiZU9ObzJ3dEJTdWhMZDlWVU0yNTQ3WHlRSUt4NjA4QU5lODdYbkZDNkFRZkwrUUlpU1pUUU11UkJJQTBKRzM2a0hkZkRObDcwZ1FaVGRtdm9wNlFQa1pyZ2had3A3SXFwM2s/language/en';
 
 test.describe('Kajuju Rate Card Page — Synthetic Monitor', () => {
 
@@ -75,8 +77,21 @@ test.describe('Kajuju Rate Card Page — Synthetic Monitor', () => {
     expect(loadTime).toBeLessThan(5000);
   });
 
-  test('navigation links present on all pages', async ({ page }) => {
-    for (const path of ['/', '/workation', '/book']) {
+  test('home page booking buttons point to the Hotelogix booking engine', async ({ page }) => {
+    await page.goto(BASE_URL);
+    await page.waitForLoadState('domcontentloaded');
+    const nav = page.locator('.nav-links a.nav-book');
+    await expect(nav).toBeVisible({ timeout: 10000 });
+    await expect(nav).toHaveText('Book Now');
+    await expect(nav).toHaveAttribute('href', HOTELOGIX_URL);
+    await expect(nav).toHaveAttribute('target', '_blank');
+    await expect(nav).toHaveAttribute('rel', /noopener/);
+    await expect(nav).toHaveAttribute('rel', /noreferrer/);
+  });
+
+  test('navigation links present on pages that share nav.js', async ({ page }) => {
+    // /workation and /book still use the shared nav.js, which keeps the old booking link.
+    for (const path of ['/workation', '/book']) {
       await page.goto(`${BASE_URL}${path}`);
       await page.waitForLoadState('domcontentloaded');
       await expect(page.locator('a[href="https://idanbarnsuites.com/hotel-booking"]').first()).toBeVisible({ timeout: 10000 });

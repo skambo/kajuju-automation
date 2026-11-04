@@ -152,13 +152,6 @@ test.describe('Rates page — period toggle', () => {
 
   test.describe('negative / edge', () => {
     test('1. [regression] description and amenity tags remain visible in all three toggle states', async () => {
-      test.fail(
-        true,
-        'Known bug: the description paragraph and amenity-tag pills for Twin Garden Room and Deluxe Room ' +
-          'are genuinely absent from the static markup for Weekend/Peak (confirmed via page source, not just ' +
-          'a rendering issue). See "Known bug found during exploration" in rates-period-toggle.plan.md. ' +
-          'Remove this test.fail() once the missing markup is added.'
-      );
       for (const period of ALL_PERIODS) {
         await ratesPage.selectPeriod(period);
         for (const room of [TWIN_GARDEN, DELUXE]) {
