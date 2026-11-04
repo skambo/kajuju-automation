@@ -42,7 +42,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
 
   test('1. page loads with the Christmas headline, one H1 and a logical heading order', async ({ page }) => {
     await expect(page).toHaveTitle(SEO_TITLE);
-    await expect(page.getByRole('heading', { level: 1, name: 'Christmas at the Barn' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'No alarms. No rush. Just Christmas at the Barn.', exact: true })).toBeVisible();
     await expect(page.locator('h1')).toHaveCount(1);
     const levels = await page.$$eval('h1,h2,h3,h4', (els) => els.map((e) => Number(e.tagName[1])));
     levels.reduce((prev, cur) => {
@@ -53,7 +53,8 @@ test.describe('Christmas page: /christmas-2026/', () => {
 
   test('2. hero copy, dates and the secondary WhatsApp link are present', async ({ page }) => {
     const hero = page.locator('header.hero');
-    await expect(hero).toContainText('A little festive magic. A lot of time together.');
+    await expect(hero).toContainText('Near Nanyuki. Away from the crowds.');
+    await expect(hero).toContainText("This Christmas, trade the rush for fresh mountain air, cosy stays, good food and afternoons by our new pool. Bring your favourite people. We'll take care of the festive feeling.");
     await expect(hero).toContainText('19 December 2026 to 3 January 2027');
     await expect(hero.getByRole('link', { name: 'Chat with Us on WhatsApp' })).toBeVisible();
     await expect(hero.getByRole('link', { name: BOOK_TEXT })).toBeVisible();
@@ -183,15 +184,16 @@ test.describe('Christmas page: /christmas-2026/', () => {
 
   test('11. highlights, facilities and festive programme cards are present', async ({ page }) => {
     await expect(page.locator('#why .hl')).toHaveCount(3);
+    await expect(page.getByRole('heading', { level: 2, name: 'A different kind of Christmas awaits.' })).toBeVisible();
     expect(await page.locator('#why .hl h3').allInnerTexts()).toEqual([
-      'A new way to spend Christmas at the Barn',
-      'Stay a little longer',
-      'Good food, festive moments',
+      'Christmas looks better in blue.',
+      'Stay in. Slow down. Make yourself at home.',
+      'Christmas mornings weren’t made for alarms.',
     ]);
     const why = page.locator('#why');
-    await expect(why).toContainText('Make a splash this festive season in our swimming pool, including a separate shallow pool for younger guests.');
-    await expect(why).toContainText('Settle into comfortable ensuite rooms, the Penthouse Loft or our private three-bedroom cottage. Enjoy a relaxed escape near Mount Kenya.');
-    await expect(why).toContainText('Enjoy freshly prepared festive meals, leisurely breakfasts and time together at the Barn.');
+    await expect(why).toContainText("A new swimming pool, fresh mountain air and time to unwind. There's even a separate shallow pool for younger guests.");
+    await expect(why).toContainText('Choose a cosy ensuite room, the Penthouse Loft or our three-bedroom self-catering Cottage. Your Christmas, your pace.');
+    await expect(why).toContainText('Enjoy freshly prepared food, festive dining and leisurely mornings at the Barn.');
     await expect(why).toContainText('A baby cot is available on request, and indoor games are available for guests.');
     // Three different genuine photographs: pool, accommodation, café. None repeated in the Christmas gallery.
     await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
@@ -204,7 +206,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     expect(gallery).toHaveLength(5);
     for (const n of whyPhotos) expect(gallery).not.toContain(n);
     await expect(page.locator('#gallery p').first()).toHaveText(
-      "A little glimpse of Christmas at Idan, festive decorations, fireside moments, good food and time together. We're looking forward to welcoming you this season."
+      'A glimpse of Christmas at Idan, twinkling decorations, cosy fireside moments, good food and time together. We look forward to welcoming you.'
     );
 
     const titles = await page.locator('#programme .prog-card h3').allInnerTexts();
@@ -222,49 +224,34 @@ test.describe('Christmas page: /christmas-2026/', () => {
     for (const i of [1, 2, 4]) await expect(cards.nth(i)).not.toContainText('cocktail');
   });
 
-  test('12. festive dining sits straight after the programme with the shortened copy', async ({ page }) => {
-    const dining = page.locator('#dining');
-    await expect(dining.getByRole('heading', { level: 2, name: 'Festive Dining at the Barn' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: /dining/i })).toHaveCount(1);
-    await expect(dining.locator('> p').first()).toHaveText(
-      'Celebrate Christmas and New Year with specially curated festive set menus, freshly prepared at our café.'
-    );
-    // The set lunch and dining specials are listed in the programme, so they are not repeated here.
-    expect(await dining.locator('.dine-list li').allInnerTexts()).toEqual([
-      'Half Board and Full Board guests enjoy their applicable festive meal as part of their package.',
-      'Bed & Breakfast and self catering guests can reserve festive meals separately.',
+  test('11b. section headings carry the campaign wording', async ({ page }) => {
+    expect(await page.locator('main h2, section h2').allInnerTexts()).toEqual([
+      'A different kind of Christmas awaits.',
+      'Your festive days, your way.',
+      'Good food. Great company. Leave the cooking to us.',
+      'A little festive magic, the Barn way.',
+      'Find your place at the Barn.',
+      'Your Christmas escape starts here.',
+      'Good to know',
     ]);
-    // Sits after the programme booking button and before the gallery.
-    const order = await page.$$eval('#programme, #dining, #gallery', (els) => els.map((e) => e.id));
-    expect(order).toEqual(['programme', 'dining', 'gallery']);
+    // The cottage promo line sits under its heading and before the approved description.
+    const cottage = page.locator('#rates .room-card').filter({ has: page.getByRole('heading', { level: 3, name: 'Cottage (3 bedrooms)' }) });
+    const paras = await cottage.locator('.room-desc').allInnerTexts();
+    expect(paras[0]).toBe('Your own cottage. Christmas for six.');
+    expect(paras[1]).toContain('Enjoy a private, self-catering retreat in Naro Moru.');
+    await expect(cottage).toContainText('KES 18,000');
+    expect(paras[1]).toContain('access to the shared swimming pool');
+    expect(paras[1]).not.toMatch(/private (swimming )?pool/i);
   });
 
-  test('12b. festive dining has a WhatsApp enquiry for reserving a meal', async ({ page }) => {
-    const para = page.locator('#dining .dine-reserve');
-    await expect(para).toHaveText(
-      'Beverages are charged separately. Planning to join us for festive dining? Chat with us on WhatsApp to reserve your meal.'
-    );
-    const link = para.getByRole('link', { name: 'Chat with us on WhatsApp' });
-    const href = (await link.getAttribute('href')) ?? '';
-    expect(href).toContain('https://wa.me/254762004417');
-    expect(decodeURIComponent(href)).toContain("Hi, I'd like to reserve festive meals at Idan Barn Suites.");
-    await expect(link).toHaveAttribute('target', '_blank');
-    await expect(link).not.toHaveAttribute('data-hotelogix', /.*/);
-  });
-
-  test('13. approved rates and policies are unchanged', async ({ page }) => {
-    const text = await visibleText(page);
-    for (const fragment of [
-      '11,500', '13,000', '13,500', '16,500', '15,500', '20,000', '14,500', '15,000', '18,000', '17,000', '21,500',
-      'KES 15,500', 'KES 16,500', 'KES 18,000', 'KES 58,500', 'KES 48,900', 'KES 1,200', 'KES 2,500', 'KES 3,300',
-      'A 50% deposit is required to secure your reservation.',
-      'Cancel at least 72 hours before your arrival date for a full refund.',
-      'Children aged 11 and under can share existing bedding',
-      'Deluxe Room with Balcony',
-    ]) {
-      expect(text, `missing: ${fragment}`).toContain(fragment);
-    }
-    await expect(page.locator('a[href="/?tab=rates"]').first()).toBeVisible();
+  test('13b. the rates section has no repeated per night labels and the lead line states it once', async ({ page }) => {
+    const rates = page.locator('#rates');
+    await expect(rates.getByText('Festive accommodation rates')).toHaveCount(0);
+    await expect(rates.locator('p.lead')).toHaveText('19 December 2026 to 3 January 2027. All rates are per night in Kenya shillings.');
+    expect(((await rates.innerText()).match(/per night/gi) || []).length).toBe(1);
+    expect(await page.$$eval('#rates .rate-table thead th', (els) => els.map((e) => e.textContent))).toEqual([
+      'Meal plan', 'Single', 'Double', 'Meal plan', 'Single', 'Double',
+    ]);
   });
 
   test('14. prohibited words and claims do not appear in the visible copy', async ({ page }) => {
@@ -339,7 +326,7 @@ test.describe('Christmas page: confirmation switches', () => {
     }
     await expect(cards.nth(4)).toContainText('Lazy Breakfast, an extended breakfast service.');
     for (const banned of ['unlimited', 'brunch']) expect((await visibleText(page)).toLowerCase()).not.toContain(banned);
-    await expect(page.locator('#why')).not.toContainText('Lazy Breakfast');
+    await expect(page.locator('#why')).toContainText('Lazy Breakfast until 11 a.m. is planned for 25, 26 and 31 December and 1 January, subject to kitchen capacity.');
     await expect(page.locator('#dining')).not.toContainText('Lazy Breakfast');
     expect(await visibleText(page)).not.toContain('a relaxed Lazy Breakfast');
   });

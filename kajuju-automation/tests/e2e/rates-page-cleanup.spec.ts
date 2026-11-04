@@ -126,7 +126,7 @@ const FIXED_RATES: [string, string][] = [
 ];
 
 const COTTAGE_DESCRIPTION =
-  'Enjoy a private, self-catering retreat in Naro Moru. Our three-bedroom cottage accommodates up to six guests and features a fully equipped kitchen, a comfortable living area and access to the swimming pool. Ideal for families and small groups looking for a relaxed stay near Mount Kenya.';
+  'Enjoy a private, self-catering retreat in Naro Moru. Our three-bedroom cottage accommodates up to six guests and features a fully equipped kitchen, a comfortable living area and access to the shared swimming pool. Ideal for families and small groups looking for a relaxed stay near Mount Kenya.';
 
 function baseUrl(): string {
   const base = process.env.BASE_URL;
