@@ -57,10 +57,11 @@
     .back-link a{color:#4a5240;text-decoration:none}
     .back-link a:hover{text-decoration:underline}
     .hero{position:relative;background:#111;color:#fff;min-height:340px;display:flex;align-items:flex-end}
-    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55}
-    .hero-inner{position:relative;max-width:860px;margin:0 auto;padding:3rem 1.5rem 2.5rem;width:100%}
+    .hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;z-index:0}
+    .hero::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(to right,rgba(10,10,10,.82) 0%,rgba(10,10,10,.55) 45%,rgba(10,10,10,.12) 100%)}
+    .hero-inner{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:3rem 1.5rem 2.5rem;width:100%}
     .hero h1{font-size:2.2rem;line-height:1.2;margin-bottom:.75rem}
-    .hero .sub{font-size:1.05rem;font-weight:bold;color:#fff;max-width:560px;margin-bottom:.6rem}
+    .hero .sub{font-size:1.05rem;font-weight:bold;color:#D7C49D;max-width:560px;margin-bottom:.6rem}
     .hero p{font-size:1rem;color:rgba(255,255,255,.92);max-width:560px;margin-bottom:1.4rem}
 
     .facts{background:#1e3d1a;color:#fff}
@@ -72,6 +73,7 @@
     h2{font-size:1.35rem;color:#2d5a27;margin-bottom:.9rem}
     p{font-size:.95rem;color:#333;margin-bottom:.75rem}
     .lead{font-size:.95rem;color:#555;margin-bottom:1.1rem}
+    .stay-note{font-size:.85rem;color:#2d5a27;margin:-.5rem 0 1rem}
 
     .hl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
     .hl{background:#fff;border:0.5px solid #d8e8d0;border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
@@ -172,35 +174,29 @@
 <header class="hero">
   <img src="/images/christmas/christmas-lights-1200.webp" srcset="/images/christmas/christmas-lights-800.webp 800w, /images/christmas/christmas-lights-1200.webp 1200w" sizes="100vw" width="1200" height="900" alt="Café terrace tables with star shaped Christmas lights at night" fetchpriority="high" />
   <div class="hero-inner">
-    <h1>No alarms. No rush. Just Christmas at the Barn.</h1>
-    <p class="sub">Near Nanyuki. Away from the crowds.</p>
-    <p>This Christmas, trade the rush for fresh mountain air, cosy stays, good food and afternoons by our new pool. Bring your favourite people. We'll take care of the festive feeling.</p>
+    <h1>No alarms. No rush. Just time together.</h1>
+    <p class="sub">Near Nanyuki. Away from the bustle.</p>
+    <p>Fresh mountain air, cosy stays, good food and afternoons by the pool. Gather your favourite people and settle into the festive season at the Barn.</p>
     <p class="dates">19 December 2026 to 3 January 2027</p>
     <a href="#book" class="btn-book" data-hotelogix data-cta="hero" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Check Availability &amp; Book</a>
     <div class="cta-secondary"><a href="#book" data-whatsapp="christmas" data-cta="hero" data-testid="whatsapp-cta" target="_blank" rel="noopener">Chat with Us on WhatsApp</a></div>
   </div>
 </header>
 
-<div class="facts">
-  <div>
-    <p>Minimum 2 nights. Full property buyouts require 3 nights.</p>
-  </div>
-</div>
-
 <section id="why">
-  <h2>A different kind of Christmas awaits.</h2>
+  <h2>The good things, all in one place.</h2>
   <div class="hl-grid">
     <div class="hl">
       <div class="hl-img" data-photo-cover="pool:0"></div>
-      <div class="hl-body"><h3>Christmas looks better in blue.</h3><p>A new swimming pool, fresh mountain air and time to unwind. There's even a separate shallow pool for younger guests. <span data-flag-copy="pool-supervision" hidden></span></p></div>
+      <div class="hl-body"><h3>Pool days, your way.</h3><p>A new swimming pool, fresh mountain air and time to unwind. There's even a separate shallow pool for younger guests. <span data-flag-copy="pool-supervision" hidden></span></p></div>
     </div>
     <div class="hl">
       <div class="hl-img" data-photo-cover="penthouse:0"></div>
-      <div class="hl-body"><h3>Stay in. Slow down. Make yourself at home.</h3><p>Choose a cosy ensuite room, the Penthouse Loft or our three-bedroom self-catering Cottage. Your Christmas, your pace.</p></div>
+      <div class="hl-body"><h3>Stay in. Slow down. Make yourself at home.</h3><p>Choose a cosy ensuite room, the Penthouse Loft or our three-bedroom self-catering Cottage. Your stay, your pace.</p></div>
     </div>
     <div class="hl">
       <div class="hl-img" data-photo-cover="cafe:0"></div>
-      <div class="hl-body"><h3>Christmas mornings weren&rsquo;t made for alarms.</h3><p>Enjoy freshly prepared food, festive dining and leisurely mornings at the Barn. <span data-flag-copy="lazy-card" hidden></span></p></div>
+      <div class="hl-body"><h3>Good mornings start here.</h3><p>Enjoy freshly prepared food, festive dining and leisurely mornings at the Barn. <span data-flag-copy="lazy-card" hidden></span></p></div>
     </div>
   </div>
   <p class="also">A baby cot is available on request, and indoor games are available for guests.</p>
@@ -250,12 +246,12 @@
       </ul>
     </div>
   </div>
-  <p class="prog-note">The complimentary cocktail hours are for guests with an accommodation reservation for the night of 24 December or 31 December.</p>
+  <p class="prog-note">Join us for cocktails on 24 and 31 December. Complimentary drinks are offered to guests staying with us on those nights, and all visitors are welcome to enjoy the evening.</p>
   <div class="cta-row"><a href="#book" class="btn-book solid" data-hotelogix data-cta="after_programme" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Check Availability &amp; Book</a></div>
 </section>
 
 <section id="dining">
-  <h2>Good food. Great company. Leave the cooking to us.</h2>
+  <h2>Good food. Great company.</h2>
   <p>Celebrate the season with specially curated festive set menus, freshly prepared at our café.</p>
   <ul class="dine-list">
     <li>Half Board and Full Board guests enjoy their applicable festive meal as part of their package.</li>
@@ -265,14 +261,15 @@
 </section>
 
 <section id="gallery">
-  <h2>A little festive magic, the Barn way.</h2>
-  <p>A glimpse of Christmas at Idan, twinkling decorations, cosy fireside moments, good food and time together. We look forward to welcoming you.</p>
+  <h2>A glimpse of the season at Idan.</h2>
+  <p>Twinkling lights, cosy fireside moments, good food and time together.</p>
   <div data-photo-strip="christmas"></div>
 </section>
 
 <section id="rates">
   <h2>Find your place at the Barn.</h2>
   <p class="lead">19 December 2026 to 3 January 2027. All rates are per night in Kenya shillings.</p>
+  <p class="stay-note">Minimum stay: 2 nights · Full property buyouts: 3 nights</p>
 
   <div class="room-card">
     <h3>Twin Garden Room</h3>
@@ -301,22 +298,22 @@
   <div class="room-card">
     <h3>Penthouse Loft</h3>
     <p class="room-desc">Private self catering accommodation.</p>
-    <div class="rate-row"><span>Single</span><span>KES 15,500</span></div>
-    <div class="rate-row"><span>Double</span><span>KES 16,500</span></div>
+    <div class="rate-row"><span>Single</span><span>KES 15,500 per night</span></div>
+    <div class="rate-row"><span>Double</span><span>KES 16,500 per night</span></div>
   </div>
 
   <div class="room-card">
     <h3>Cottage (3 bedrooms)</h3>
     <p class="room-desc"><strong>Your own cottage. Christmas for six.</strong></p>
     <p class="room-desc">Enjoy a private, self-catering retreat in Naro Moru. Our three-bedroom cottage accommodates up to six guests and features a fully equipped kitchen, a comfortable living area and access to the shared swimming pool. Ideal for families and small groups looking for a relaxed stay near Mount Kenya.</p>
-    <p class="price-only">KES 18,000</p>
+    <p class="price-only">KES 18,000 per night</p>
   </div>
 
   <div class="room-card">
     <h3>Barn House Buyout</h3>
     <p class="room-desc">Enjoy the whole property for your group, with a minimum stay of three nights.</p>
-    <div class="rate-row"><span>Bed &amp; Breakfast</span><span>KES 58,500</span></div>
-    <div class="rate-row"><span>Self catering</span><span>KES 48,900</span></div>
+    <div class="rate-row"><span>Bed &amp; Breakfast</span><span>KES 58,500 per night</span></div>
+    <div class="rate-row"><span>Self catering</span><span>KES 48,900 per night</span></div>
   </div>
 
   <div class="meals-note">
@@ -333,7 +330,7 @@
 </section>
 
 <section class="final" id="book">
-  <h2>Your Christmas escape starts here.</h2>
+  <h2>Your stay starts here.</h2>
   <p>Choose your dates, check availability and book your stay directly with us. Reserve online, then pay a 50% M-Pesa deposit within 48 hours of receiving your booking instructions to secure it.</p>
   <a href="#book" class="btn-book" data-hotelogix data-cta="final" target="_blank" rel="noopener noreferrer" referrerpolicy="no-referrer">Check Availability &amp; Book</a>
   <p class="contact"><a href="#book" data-whatsapp="christmas" data-cta="final" target="_blank" rel="noopener">Chat with Us on WhatsApp</a> or <a href="tel:+254762004417" data-cta="final">call <strong>+254 762 004417</strong></a>.</p>
