@@ -42,7 +42,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
 
   test('1. page loads with the Christmas headline, one H1 and a logical heading order', async ({ page }) => {
     await expect(page).toHaveTitle(SEO_TITLE);
-    await expect(page.getByRole('heading', { level: 1, name: 'No alarms. No rush. Just Christmas at the Barn.', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'No alarms. No rush. Just time together.', exact: true })).toBeVisible();
     await expect(page.locator('h1')).toHaveCount(1);
     const levels = await page.$$eval('h1,h2,h3,h4', (els) => els.map((e) => Number(e.tagName[1])));
     levels.reduce((prev, cur) => {
@@ -53,8 +53,8 @@ test.describe('Christmas page: /christmas-2026/', () => {
 
   test('2. hero copy, dates and the secondary WhatsApp link are present', async ({ page }) => {
     const hero = page.locator('header.hero');
-    await expect(hero).toContainText('Near Nanyuki. Away from the crowds.');
-    await expect(hero).toContainText("This Christmas, trade the rush for fresh mountain air, cosy stays, good food and afternoons by our new pool. Bring your favourite people. We'll take care of the festive feeling.");
+    await expect(hero).toContainText('Near Nanyuki. Away from the bustle.');
+    await expect(hero).toContainText('Fresh mountain air, cosy stays, good food and afternoons by the pool. Gather your favourite people and settle into the festive season at the Barn.');
     await expect(hero).toContainText('19 December 2026 to 3 January 2027');
     await expect(hero.getByRole('link', { name: 'Chat with Us on WhatsApp' })).toBeVisible();
     await expect(hero.getByRole('link', { name: BOOK_TEXT })).toBeVisible();
@@ -172,8 +172,12 @@ test.describe('Christmas page: /christmas-2026/', () => {
   });
 
   test('10. sections are in the agreed order and the minimum stay shows near the top', async ({ page }) => {
-    await expect(page.locator('.facts')).toContainText('2 nights');
-    await expect(page.locator('.facts')).toContainText('3 nights');
+    // The minimum stay bar is gone from the hero; the notice sits straight before the first rate card.
+    await expect(page.locator('.facts')).toHaveCount(0);
+    await expect(page.locator('header.hero')).not.toContainText('Minimum');
+    await expect(page.locator('#rates p.lead + p.stay-note + .room-card h3').first()).toHaveText('Twin Garden Room');
+    await expect(page.locator('#rates .stay-note')).toHaveText('Minimum stay: 2 nights · Full property buyouts: 3 nights');
+    await expect(page.locator('#good-to-know')).toContainText('Two nights between 19 December 2026 and 3 January 2027. Three nights for full property buyouts.');
     const ids = await page.$$eval('header, section', (els) => els.map((e) => e.id || e.tagName.toLowerCase()));
     expect(ids).toEqual(['header', 'why', 'programme', 'dining', 'gallery', 'rates', 'book', 'good-to-know']);
     await expect(page.locator('#property')).toHaveCount(0);
@@ -184,15 +188,15 @@ test.describe('Christmas page: /christmas-2026/', () => {
 
   test('11. highlights, facilities and festive programme cards are present', async ({ page }) => {
     await expect(page.locator('#why .hl')).toHaveCount(3);
-    await expect(page.getByRole('heading', { level: 2, name: 'A different kind of Christmas awaits.' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 2, name: 'The good things, all in one place.' })).toBeVisible();
     expect(await page.locator('#why .hl h3').allInnerTexts()).toEqual([
-      'Christmas looks better in blue.',
+      'Pool days, your way.',
       'Stay in. Slow down. Make yourself at home.',
-      'Christmas mornings weren’t made for alarms.',
+      'Good mornings start here.',
     ]);
     const why = page.locator('#why');
     await expect(why).toContainText("A new swimming pool, fresh mountain air and time to unwind. There's even a separate shallow pool for younger guests.");
-    await expect(why).toContainText('Choose a cosy ensuite room, the Penthouse Loft or our three-bedroom self-catering Cottage. Your Christmas, your pace.');
+    await expect(why).toContainText('Choose a cosy ensuite room, the Penthouse Loft or our three-bedroom self-catering Cottage. Your stay, your pace.');
     await expect(why).toContainText('Enjoy freshly prepared food, festive dining and leisurely mornings at the Barn.');
     await expect(why).toContainText('A baby cot is available on request, and indoor games are available for guests.');
     // Three different genuine photographs: pool, accommodation, café. None repeated in the Christmas gallery.
@@ -206,7 +210,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     expect(gallery).toHaveLength(5);
     for (const n of whyPhotos) expect(gallery).not.toContain(n);
     await expect(page.locator('#gallery p').first()).toHaveText(
-      'A glimpse of Christmas at Idan, twinkling decorations, cosy fireside moments, good food and time together. We look forward to welcoming you.'
+      'Twinkling lights, cosy fireside moments, good food and time together.'
     );
 
     const titles = await page.locator('#programme .prog-card h3').allInnerTexts();
@@ -222,16 +226,19 @@ test.describe('Christmas page: /christmas-2026/', () => {
       await expect(cards.nth(i)).toContainText('Complimentary cocktail hour, 6 to 8 pm');
     }
     for (const i of [1, 2, 4]) await expect(cards.nth(i)).not.toContainText('cocktail');
+    await expect(page.locator('#programme .prog-note')).toHaveText(
+      'Join us for cocktails on 24 and 31 December. Complimentary drinks are offered to guests staying with us on those nights, and all visitors are welcome to enjoy the evening.'
+    );
   });
 
   test('11b. section headings carry the campaign wording', async ({ page }) => {
     expect(await page.locator('main h2, section h2').allInnerTexts()).toEqual([
-      'A different kind of Christmas awaits.',
+      'The good things, all in one place.',
       'Your festive days, your way.',
-      'Good food. Great company. Leave the cooking to us.',
-      'A little festive magic, the Barn way.',
+      'Good food. Great company.',
+      'A glimpse of the season at Idan.',
       'Find your place at the Barn.',
-      'Your Christmas escape starts here.',
+      'Your stay starts here.',
       'Good to know',
     ]);
     // The cottage promo line sits under its heading and before the approved description.
@@ -244,14 +251,40 @@ test.describe('Christmas page: /christmas-2026/', () => {
     expect(paras[1]).not.toMatch(/private (swimming )?pool/i);
   });
 
-  test('13b. the rates section has no repeated per night labels and the lead line states it once', async ({ page }) => {
+  test('13b. room tables are unchanged and standalone prices say per night', async ({ page }) => {
     const rates = page.locator('#rates');
-    await expect(rates.getByText('Festive accommodation rates')).toHaveCount(0);
     await expect(rates.locator('p.lead')).toHaveText('19 December 2026 to 3 January 2027. All rates are per night in Kenya shillings.');
-    expect(((await rates.innerText()).match(/per night/gi) || []).length).toBe(1);
+    await expect(rates.getByText('Festive accommodation rates')).toHaveCount(0);
     expect(await page.$$eval('#rates .rate-table thead th', (els) => els.map((e) => e.textContent))).toEqual([
       'Meal plan', 'Single', 'Double', 'Meal plan', 'Single', 'Double',
     ]);
+    // Standalone accommodation prices carry "per night"; the amounts are unchanged.
+    const rows = page.locator('#rates .room-card .rate-row span:last-child, #rates .room-card .price-only');
+    expect(await rows.allInnerTexts()).toEqual([
+      'KES 15,500 per night', 'KES 16,500 per night', 'KES 18,000 per night', 'KES 58,500 per night', 'KES 48,900 per night',
+    ]);
+    // Meal supplements are per adult and stay as they were.
+    const meals = await page.locator('.meals-note .rate-row').allInnerTexts();
+    expect(meals.map((m) => m.replace(/\s+/g, ' '))).toEqual(['Breakfast KES 1,200', 'Half Board KES 2,500', 'Full Board KES 3,300']);
+    expect(meals.join(' ')).not.toContain('per night');
+  });
+
+  test('13c. the hero keeps its photo, gets a left to right gradient and a champagne tagline', async ({ page }) => {
+    await expect(page.locator('header.hero > img')).toBeVisible();
+    const style = await page.evaluate(() => {
+      const hero = document.querySelector('header.hero')!;
+      return {
+        gradient: getComputedStyle(hero, '::before').backgroundImage,
+        tagline: getComputedStyle(hero.querySelector('.sub')!).color,
+        h1: getComputedStyle(hero.querySelector('h1')!).color,
+        font: getComputedStyle(hero.querySelector('h1')!).fontFamily,
+      };
+    });
+    expect(style.gradient).toContain('linear-gradient');
+    expect(style.gradient).toContain('to right');
+    expect(style.tagline).toBe('rgb(215, 196, 157)'); // #D7C49D
+    expect(style.h1).toBe('rgb(255, 255, 255)');
+    expect(style.font).toContain('Georgia');
   });
 
   test('14. prohibited words and claims do not appear in the visible copy', async ({ page }) => {
