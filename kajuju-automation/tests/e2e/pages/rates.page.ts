@@ -1,18 +1,6 @@
 import { Locator } from '@playwright/test';
 import { BasePage } from './base.page';
 
-// Read lazily (inside goto(), not at module load) so it doesn't matter whether
-// the test file's dotenv.config() call has run yet by the time this module is
-// imported — this project runs as ESM ("type": "module" in package.json),
-// where import evaluation order isn't guaranteed relative to sibling body code.
-function requireEnv(name: string): string {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`${name} environment variable is required to run the rates page tests (set it in .env).`);
-  }
-  return value;
-}
-
 export type RatePeriod = 'weekday' | 'weekend' | 'peak';
 
 export const PERIOD_BUTTON_LABEL: Record<RatePeriod, string> = {
@@ -38,16 +26,8 @@ export const ALL_PERIODS: RatePeriod[] = ['weekday', 'weekend', 'peak'];
  * panels and updates `aria-pressed` on the toggle buttons; the description is never touched.
  */
 export class RatesPage extends BasePage {
-  async goto() {
-    await super.goto(requireEnv('BASE_URL'));
-  }
-
   periodButton(period: RatePeriod): Locator {
     return this.page.getByRole('button', { name: PERIOD_BUTTON_LABEL[period], exact: true });
-  }
-
-  async selectPeriod(period: RatePeriod) {
-    await this.periodButton(period).click();
   }
 
   /** The rate panels (one per toggled room) for a period. */
@@ -65,8 +45,8 @@ export class RatesPage extends BasePage {
     return this.page.locator('.rate-toggle button.active');
   }
 
-  /** The one card for a room. The period argument is kept so existing call sites read the same. */
-  roomCard(_period: RatePeriod, roomName: string): Locator {
+  /** The one card for a room. */
+  roomCard(roomName: string): Locator {
     return this.page
       .locator('.room-card')
       .filter({ has: this.page.getByRole('heading', { level: 3, name: roomName }) });
@@ -74,15 +54,15 @@ export class RatesPage extends BasePage {
 
   /** The rate panel for one room and period. */
   panel(period: RatePeriod, roomName: string): Locator {
-    return this.roomCard(period, roomName).locator(`.rate-grid[data-period="${PERIOD_PANEL_ID[period]}"]`);
+    return this.roomCard(roomName).locator(`.rate-grid[data-period="${PERIOD_PANEL_ID[period]}"]`);
   }
 
-  roomDescription(period: RatePeriod, roomName: string): Locator {
-    return this.roomCard(period, roomName).locator('.room-desc');
+  roomDescription(roomName: string): Locator {
+    return this.roomCard(roomName).locator('.room-desc');
   }
 
-  roomChips(period: RatePeriod, roomName: string): Locator {
-    return this.roomCard(period, roomName).locator('.room-chips .chip');
+  roomChips(roomName: string): Locator {
+    return this.roomCard(roomName).locator('.room-chips .chip');
   }
 
   /** The `.amount` cell (KES price + USD span) for one rate row, e.g. rateLabel = "Single B&B". */
@@ -100,7 +80,7 @@ export class RatesPage extends BasePage {
   /** The card of a room that is not governed by the toggle (Penthouse Loft, Cottage, Barn House Buyout). */
   selfCateringRoomCard(roomName: string): Locator {
     return this.page
-      .getByRole('heading', { level: 3, name: roomName })
-      .locator('xpath=..');
+      .locator('.room-card, .buyout-card')
+      .filter({ has: this.page.getByRole('heading', { level: 3, name: roomName }) });
   }
 }
