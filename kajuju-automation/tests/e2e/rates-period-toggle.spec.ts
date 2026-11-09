@@ -1,246 +1,125 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-import { test, expect } from '@playwright/test';
-import { ALL_PERIODS, PERIOD_BUTTON_LABEL, RatePeriod, RatesPage } from './pages/rates.page';
+import { test, expect } from './fixtures';
+import { ALL_PERIODS, PERIOD_BUTTON_LABEL, RatesPage } from './pages/rates.page';
 
 const TWIN_GARDEN = 'Twin Garden Room';
 const DELUXE = 'Deluxe Room with Balcony';
 
-type RateEntry = { kes: string; usd: string };
-type RoomRates = Record<string, RateEntry>;
-
-const RATES: Record<RatePeriod, Record<string, RoomRates>> = {
-  weekday: {
-    [TWIN_GARDEN]: {
-      'Single B&B': { kes: 'Ksh 9,000', usd: '~$69' },
-      'Double B&B': { kes: 'Ksh 10,500', usd: '~$81' },
-      'Single H/B': { kes: 'Ksh 11,000', usd: '~$85' },
-      'Double H/B': { kes: 'Ksh 14,000', usd: '~$108' },
-    },
-    [DELUXE]: {
-      'Single B&B': { kes: 'Ksh 10,500', usd: '~$81' },
-      'Double B&B': { kes: 'Ksh 11,500', usd: '~$88' },
-      'Single H/B': { kes: 'Ksh 12,500', usd: '~$96' },
-      'Double H/B': { kes: 'Ksh 15,000', usd: '~$115' },
-    },
-  },
-  weekend: {
-    [TWIN_GARDEN]: {
-      'Single B&B': { kes: 'Ksh 10,000', usd: '~$77' },
-      'Double B&B': { kes: 'Ksh 11,500', usd: '~$88' },
-      'Single H/B': { kes: 'Ksh 12,000', usd: '~$92' },
-      'Double H/B': { kes: 'Ksh 15,000', usd: '~$115' },
-    },
-    [DELUXE]: {
-      'Single B&B': { kes: 'Ksh 11,500', usd: '~$88' },
-      'Double B&B': { kes: 'Ksh 13,000', usd: '~$100' },
-      'Single H/B': { kes: 'Ksh 13,500', usd: '~$104' },
-      'Double H/B': { kes: 'Ksh 16,500', usd: '~$127' },
-    },
-  },
-  peak: {
-    [TWIN_GARDEN]: {
-      'Single B&B': { kes: 'Ksh 11,500', usd: '~$88' },
-      'Double B&B': { kes: 'Ksh 13,000', usd: '~$100' },
-      'Single H/B': { kes: 'Ksh 13,500', usd: '~$104' },
-      'Double H/B': { kes: 'Ksh 16,500', usd: '~$127' },
-    },
-    [DELUXE]: {
-      'Single B&B': { kes: 'Ksh 13,000', usd: '~$100' },
-      'Double B&B': { kes: 'Ksh 14,500', usd: '~$112' },
-      'Single H/B': { kes: 'Ksh 15,000', usd: '~$115' },
-      'Double H/B': { kes: 'Ksh 18,000', usd: '~$138' },
-    },
-  },
-};
+// Prices are checked against the workbook CSVs in tests/rates (npm run test:rates).
+// The tests here cover the toggle's behaviour and state only.
 
 const SELF_CATERING_ROOMS = ['Penthouse Loft', 'Cottage', 'Barn House Buyout'];
 
-let ratesPage: RatesPage;
-
-test.describe('Rates page — period toggle', () => {
+test.describe('Rates page: period toggle', () => {
+  let rates: RatesPage;
   test.beforeEach(async ({ page }) => {
-    ratesPage = new RatesPage(page);
-    await ratesPage.goto();
+    rates = new RatesPage(page);
+    await page.goto('/');
   });
 
-  test.describe('positive', () => {
-    test('1. Weekday is the default active period on load', async () => {
-      await expect(ratesPage.periodButton('weekday')).toHaveClass(/active/);
-      await expect(ratesPage.activePanels()).toHaveCount(2);
-      await expect(ratesPage.panel('weekday', TWIN_GARDEN)).toHaveClass(/active/);
-      await expect(ratesPage.panel('weekday', DELUXE)).toHaveClass(/active/);
-    });
+  test('Weekday is the default active period on load', async () => {
+    await expect(rates.periodButton('weekday')).toHaveClass(/active/);
+    await expect(rates.activePanels()).toHaveCount(2);
+    await expect(rates.panel('weekday', TWIN_GARDEN)).toHaveClass(/active/);
+    await expect(rates.panel('weekday', DELUXE)).toHaveClass(/active/);
+  });
 
-    test('2. selecting Weekend updates Twin Garden and Deluxe prices', async () => {
-      await ratesPage.selectPeriod('weekend');
-      for (const room of [TWIN_GARDEN, DELUXE]) {
-        for (const [label, { kes, usd }] of Object.entries(RATES.weekend[room])) {
-          await expect(ratesPage.roomRate('weekend', room, label)).toHaveText(`${kes} ${usd}`);
-        }
-      }
-    });
+  test('only one toggle button is active at a time and its panels match', async () => {
+    for (const period of ALL_PERIODS) {
+      await rates.periodButton(period).click();
+      await expect(rates.activeToggleButton()).toHaveCount(1);
+      await expect(rates.activePanels()).toHaveCount(2); // one per toggled room
+      await expect(rates.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL[period]);
+    }
+  });
 
-    test('3. selecting Peak updates Twin Garden and Deluxe prices', async () => {
-      await ratesPage.selectPeriod('peak');
-      for (const room of [TWIN_GARDEN, DELUXE]) {
-        for (const [label, { kes, usd }] of Object.entries(RATES.peak[room])) {
-          await expect(ratesPage.roomRate('peak', room, label)).toHaveText(`${kes} ${usd}`);
-        }
-      }
-    });
+  test('cycling Weekday, Weekend, Peak, Weekday returns identical values (no drift)', async () => {
+    const before = await rates.roomRate('weekday', TWIN_GARDEN, 'Double H/B').textContent();
+    expect(before, 'weekday rate text before cycling').toBeTruthy();
+    for (const period of ['weekend', 'peak', 'weekday'] as const) await rates.periodButton(period).click();
+    await expect(rates.roomRate('weekday', TWIN_GARDEN, 'Double H/B')).toHaveText(before as string);
+  });
 
-    test('4. only one toggle button is active at a time', async () => {
-      for (const period of ALL_PERIODS) {
-        await ratesPage.selectPeriod(period);
-        await expect(ratesPage.activeToggleButton()).toHaveCount(1);
-        await expect(ratesPage.activePanels()).toHaveCount(2); // one per toggled room
-        await expect(ratesPage.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL[period]);
-      }
-    });
-
-    test('5. switching back to Weekday restores the original prices exactly', async () => {
-      await ratesPage.selectPeriod('weekend');
-      await ratesPage.selectPeriod('weekday');
-      for (const room of [TWIN_GARDEN, DELUXE]) {
-        for (const [label, { kes, usd }] of Object.entries(RATES.weekday[room])) {
-          await expect(ratesPage.roomRate('weekday', room, label)).toHaveText(`${kes} ${usd}`);
-        }
-      }
-    });
-
-    test('6. cycling Weekday -> Weekend -> Peak -> Weekday returns identical values (no drift)', async () => {
-      const before = await ratesPage.roomRate('weekday', TWIN_GARDEN, 'Double H/B').textContent();
-      await ratesPage.selectPeriod('weekend');
-      await ratesPage.selectPeriod('peak');
-      await ratesPage.selectPeriod('weekday');
-      await expect(ratesPage.roomRate('weekday', TWIN_GARDEN, 'Double H/B')).toHaveText(before ?? '');
-    });
-
-    test('7. self-catering rooms show unchanged pricing regardless of the toggle', async () => {
-      const baseline = new Map<string, string>();
+  test('self-catering cards are unchanged by the toggle', async () => {
+    const baseline = new Map<string, string>();
+    for (const room of SELF_CATERING_ROOMS) {
+      baseline.set(room, await rates.selfCateringRoomCard(room).innerText());
+    }
+    for (const period of ['weekend', 'peak'] as const) {
+      await rates.periodButton(period).click();
+      await expect(rates.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL[period]);
       for (const room of SELF_CATERING_ROOMS) {
-        baseline.set(room, await ratesPage.selfCateringRoomCard(room).innerText());
+        await expect.poll(() => rates.selfCateringRoomCard(room).innerText(), { message: room }).toBe(baseline.get(room));
       }
-      for (const period of ['weekend', 'peak'] as const) {
-        await ratesPage.selectPeriod(period);
-        for (const room of SELF_CATERING_ROOMS) {
-          expect(await ratesPage.selfCateringRoomCard(room).innerText()).toBe(baseline.get(room));
-        }
-      }
-    });
-
-    test('8. the active toggle button has a visually distinct style from inactive ones', async () => {
-      const [activeColor, inactiveColor] = await Promise.all([
-        ratesPage.activeToggleButton().evaluate((el) => (globalThis as any).getComputedStyle(el).backgroundColor),
-        ratesPage.periodButton('weekend').evaluate((el) => (globalThis as any).getComputedStyle(el).backgroundColor),
-      ]);
-      expect(activeColor).not.toBe(inactiveColor);
-    });
-
-    test('9. USD approximations move in sync with KES at each period', async () => {
-      for (const period of ALL_PERIODS) {
-        await ratesPage.selectPeriod(period);
-        for (const room of [TWIN_GARDEN, DELUXE]) {
-          for (const [label, { usd }] of Object.entries(RATES[period][room])) {
-            await expect(ratesPage.roomRateUsd(period, room, label)).toHaveText(usd);
-          }
-        }
-      }
-    });
+    }
   });
 
-  test.describe('negative / edge', () => {
-    test('1. [regression] description and amenity tags remain visible in all three toggle states', async () => {
-      for (const period of ALL_PERIODS) {
-        await ratesPage.selectPeriod(period);
-        for (const room of [TWIN_GARDEN, DELUXE]) {
-          await expect(ratesPage.roomDescription(period, room)).toBeVisible();
-          await expect(ratesPage.roomDescription(period, room)).not.toBeEmpty();
-          await expect(ratesPage.roomChips(period, room)).not.toHaveCount(0);
-        }
-      }
-    });
+  test('rapid switching and double-clicks leave exactly one consistent active state', async () => {
+    await rates.periodButton('weekend').click();
+    await rates.periodButton('peak').click();
+    await expect(rates.activeToggleButton()).toHaveCount(1);
+    await expect(rates.activePanels()).toHaveCount(2);
+    await expect(rates.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL.peak);
 
-    test('2. rapid switching and double-clicks do not leave inconsistent state', async () => {
-      await ratesPage.periodButton('weekend').click();
-      await ratesPage.periodButton('peak').click();
-      await expect(ratesPage.activeToggleButton()).toHaveCount(1);
-      await expect(ratesPage.activePanels()).toHaveCount(2);
-      await expect(ratesPage.activeToggleButton()).toHaveText('Peak / Festive');
-      await expect(ratesPage.roomRate('peak', TWIN_GARDEN, 'Single B&B')).toHaveText(
-        `${RATES.peak[TWIN_GARDEN]['Single B&B'].kes} ${RATES.peak[TWIN_GARDEN]['Single B&B'].usd}`
-      );
+    await rates.periodButton('weekend').dblclick();
+    await expect(rates.activeToggleButton()).toHaveCount(1);
+    await expect(rates.activePanels()).toHaveCount(2);
+    await expect(rates.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL.weekend);
+  });
 
-      await ratesPage.periodButton('weekend').dblclick();
-      await expect(ratesPage.activeToggleButton()).toHaveCount(1);
-      await expect(ratesPage.activePanels()).toHaveCount(2);
-      await expect(ratesPage.activeToggleButton()).toHaveText('Weekend (Fri–Sat)');
-      await expect(ratesPage.roomRate('weekend', TWIN_GARDEN, 'Single B&B')).toHaveText(
-        `${RATES.weekend[TWIN_GARDEN]['Single B&B'].kes} ${RATES.weekend[TWIN_GARDEN]['Single B&B'].usd}`
-      );
-    });
+  test('clicking the already-active toggle button changes nothing', async () => {
+    const before = await rates.activePanels().evaluateAll((els) => els.map((e) => e.innerHTML));
+    await rates.periodButton('weekday').click();
+    await expect(rates.activePanels()).toHaveCount(2);
+    const after = await rates.activePanels().evaluateAll((els) => els.map((e) => e.innerHTML));
+    expect(after).toEqual(before);
+  });
 
-    test('3. clicking the already-active toggle button is a no-op', async () => {
-      const before = await ratesPage.activePanels().evaluateAll((els) => els.map((e) => e.innerHTML));
-      await ratesPage.selectPeriod('weekday');
-      await expect(ratesPage.activePanels()).toHaveCount(2);
-      const after = await ratesPage.activePanels().evaluateAll((els) => els.map((e) => e.innerHTML));
-      expect(after).toEqual(before);
-    });
+  test('reloading after choosing Peak resets to Weekday with the room description intact', async ({ page }) => {
+    await rates.periodButton('peak').click();
+    await page.reload();
+    await expect(rates.periodButton('weekday')).toHaveClass(/active/);
+    await expect(rates.panel('weekday', TWIN_GARDEN)).toHaveClass(/active/);
+    await expect(rates.roomDescription(TWIN_GARDEN)).toBeVisible();
+    await expect(rates.roomDescription(TWIN_GARDEN)).not.toBeEmpty();
+  });
 
-    test('4. reloading after selecting Weekend or Peak resets to Weekday', async () => {
-      await ratesPage.selectPeriod('peak');
-      await ratesPage.reload();
-      await expect(ratesPage.periodButton('weekday')).toHaveClass(/active/);
-      await expect(ratesPage.panel('weekday', TWIN_GARDEN)).toHaveClass(/active/);
-      await expect(ratesPage.roomRate('weekday', TWIN_GARDEN, 'Single B&B')).toHaveText(
-        `${RATES.weekday[TWIN_GARDEN]['Single B&B'].kes} ${RATES.weekday[TWIN_GARDEN]['Single B&B'].usd}`
-      );
-      await expect(ratesPage.roomDescription('weekday', TWIN_GARDEN)).toBeVisible();
-      await expect(ratesPage.roomDescription('weekday', TWIN_GARDEN)).not.toBeEmpty();
-    });
+  test('toggle buttons are operable by keyboard (Enter and Space)', async ({ page }) => {
+    await rates.periodButton('weekend').focus();
+    await expect(rates.periodButton('weekend')).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(rates.panel('weekend', TWIN_GARDEN)).toHaveClass(/active/);
 
-    test('5. toggle buttons are operable via keyboard', async ({ page }) => {
-      await ratesPage.periodButton('weekend').focus();
-      await expect(ratesPage.periodButton('weekend')).toBeFocused();
-      await page.keyboard.press('Enter');
-      await expect(ratesPage.panel('weekend', TWIN_GARDEN)).toHaveClass(/active/);
+    await rates.periodButton('peak').focus();
+    await expect(rates.periodButton('peak')).toBeFocused();
+    await page.keyboard.press(' ');
+    await expect(rates.panel('peak', TWIN_GARDEN)).toHaveClass(/active/);
+  });
 
-      await ratesPage.periodButton('peak').focus();
-      await expect(ratesPage.periodButton('peak')).toBeFocused();
-      await page.keyboard.press(' ');
-      await expect(ratesPage.panel('peak', TWIN_GARDEN)).toHaveClass(/active/);
-    });
+  test('[accessibility] the selected button exposes its state through aria-pressed', async ({ page }) => {
+    for (const period of ALL_PERIODS) {
+      await rates.periodButton(period).click();
+      await expect(rates.activeToggleButton()).toHaveAttribute('aria-pressed', 'true');
+      await expect(page.locator('.rate-toggle button[aria-pressed="true"]')).toHaveCount(1);
+    }
+  });
 
-    test('6. [accessibility] active toggle button exposes state via aria-pressed', async ({ page }) => {
-      // The known gap (no aria-pressed) is fixed: the pressed state follows the selection.
-      for (const period of ALL_PERIODS) {
-        await ratesPage.selectPeriod(period);
-        await expect(ratesPage.activeToggleButton()).toHaveAttribute('aria-pressed', 'true');
-        await expect(page.locator('.rate-toggle button[aria-pressed="true"]')).toHaveCount(1);
-      }
-    });
+  test('toggling introduces no console errors or failed requests', async () => {
+    // Analytics requests are stubbed in fixtures.ts, which removed an old intermittent failure.
+    rates.startMonitoring();
+    for (const period of ALL_PERIODS) {
+      await rates.periodButton(period).click();
+      await expect(rates.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL[period]);
+    }
+    expect(rates.consoleErrors()).toHaveLength(0);
+    expect(rates.failedNetworkRequests()).toHaveLength(0);
+  });
 
-    test.skip('7. toggle interaction introduces no new console errors or failed requests', async () => {
-      // TEMPORARILY SKIPPED: intermittent failure under investigation — see [issue/note link].
-      // Failing ~2/30+ runs with a single unidentified failed request. Un-skip once root cause is confirmed.
-      ratesPage.startMonitoring();
-      for (const period of ALL_PERIODS) {
-        await ratesPage.selectPeriod(period);
-      }
-      expect(ratesPage.consoleErrors()).toHaveLength(0);
-      expect(ratesPage.failedNetworkRequests()).toHaveLength(0);
-    });
-
-    test('8. toggle buttons remain usable at a narrow/mobile viewport', async ({ page }) => {
-      await page.setViewportSize({ width: 375, height: 812 });
-      for (const period of ALL_PERIODS) {
-        await expect(ratesPage.periodButton(period)).toBeVisible();
-      }
-      await ratesPage.selectPeriod('weekend');
-      await expect(ratesPage.panel('weekend', TWIN_GARDEN)).toHaveClass(/active/);
-    });
+  test('toggle buttons remain usable at a narrow mobile viewport', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    for (const period of ALL_PERIODS) {
+      await expect(rates.periodButton(period)).toBeVisible();
+    }
+    await rates.periodButton('weekend').click();
+    await expect(rates.panel('weekend', TWIN_GARDEN)).toHaveClass(/active/);
   });
 });

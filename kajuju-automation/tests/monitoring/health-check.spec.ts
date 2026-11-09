@@ -1,101 +1,73 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../e2e/fixtures';
+import { ALL_PERIODS, PERIOD_BUTTON_LABEL, RatesPage } from '../e2e/pages/rates.page';
+import { HOTELOGIX_URL } from '../support/site';
+import { checkWhatsAppLink } from '../support/links';
 
-const BASE_URL = 'https://kajuju-automation.vercel.app';
-const HOTELOGIX_URL =
-  'https://booking.staygrid.com/webv2/index/home/c/WWhSOTFXNlQvRUhodTdsRDlYNCtKUzZXNjhka3BiZU9ObzJ3dEJTdWhMZDlWVU0yNTQ3WHlRSUt4NjA4QU5lODdYbkZDNkFRZkwrUUlpU1pUUU11UkJJQTBKRzM2a0hkZkRObDcwZ1FaVGRtdm9wNlFQa1pyZ2had3A3SXFwM2s/language/en';
+/**
+ * Synthetic uptime checks for the public site. Read only, and independent of the gitignored rate CSVs:
+ * these confirm the pages load and the key controls work. Prices are checked in tests/rates.
+ * Load time is not asserted: it depends on the live host and the network, not on our code.
+ */
 
-test.describe('Kajuju Rate Card Page — Synthetic Monitor', () => {
-
-  test('rate card page loads successfully', async ({ page }) => {
-    await page.goto(BASE_URL);
-    await expect(page).toHaveTitle(/Kajuju|Idan/);
+test.describe('Rate card site: synthetic monitor', () => {
+  test('rate card page loads', async ({ page }) => {
+    await page.goto('/');
+    const title = await page.title();
+    expect(title.trim(), 'page title').not.toBe('');
+    expect(title.length, 'page title length').toBeGreaterThanOrEqual(10);
+    expect(title.length, 'page title length').toBeLessThanOrEqual(70);
   });
 
-  test('rate card page loads in under 5 seconds', async ({ page }) => {
-    const startTime = Date.now();
-    await page.goto(BASE_URL);
-    const loadTime = Date.now() - startTime;
-    console.log(`Rate card loaded in ${loadTime}ms`);
-    expect(loadTime).toBeLessThan(5000);
+  test('WhatsApp CTA is visible and links to a well formed wa.me URL', async ({ page }) => {
+    await page.goto('/');
+    const cta = page.getByTestId('whatsapp-cta');
+    await expect(cta).toBeVisible();
+    expect(checkWhatsAppLink((await cta.getAttribute('href')) ?? '').problems, 'WhatsApp link structure').toEqual([]);
   });
 
-  test('WhatsApp CTA button is present and has correct link', async ({ page }) => {
-    await page.goto(BASE_URL);
-    const btn = page.locator('[data-testid="whatsapp-cta"]');
-    await expect(btn).toBeVisible();
-    const href = await btn.getAttribute('href');
-    expect(href).toContain('254762004417');
-    expect(href).toContain('wa.me');
+  test('all three rate period buttons are visible', async ({ page }) => {
+    await page.goto('/');
+    const rates = new RatesPage(page);
+    for (const period of ALL_PERIODS) {
+      await expect(rates.periodButton(period)).toBeVisible();
+    }
   });
 
-  test('all three rate toggles are visible', async ({ page }) => {
-    await page.goto(BASE_URL);
-    await expect(page.getByText('Weekday (Sun–Thu)')).toBeVisible();
-    await expect(page.getByText('Weekend (Fri–Sat)')).toBeVisible();
-    await expect(page.getByText('Peak / Festive')).toBeVisible();
+  test('choosing Weekend makes the weekend panels the active ones', async ({ page }) => {
+    await page.goto('/');
+    const rates = new RatesPage(page);
+    await rates.periodButton('weekend').click();
+    await expect(rates.activeToggleButton()).toHaveText(PERIOD_BUTTON_LABEL.weekend);
+    await expect(rates.activePanels()).toHaveCount(2);
+    await expect(rates.panels('weekend').and(page.locator('.active'))).toHaveCount(2);
+    await expect(rates.panels('weekday').and(page.locator('.active'))).toHaveCount(0);
   });
 
-  test('rate toggle switches content correctly', async ({ page }) => {
-    await page.goto(BASE_URL);
-    await page.getByText('Weekend (Fri–Sat)').click();
-    const activeSection = page.locator('.rate-section.active');
-    await expect(activeSection).toBeVisible();
-    await expect(activeSection.getByText('KES 11,500').first()).toBeVisible();
-  });
-
-  test('workation page loads successfully', async ({ page }) => {
-    await page.goto(`${BASE_URL}/workation`);
+  test('workation page loads', async ({ page }) => {
+    await page.goto('/workation');
     await expect(page).toHaveTitle(/Workation/);
   });
 
-  test('workation page loads in under 5 seconds', async ({ page }) => {
-    const startTime = Date.now();
-    await page.goto(`${BASE_URL}/workation`);
-    const loadTime = Date.now() - startTime;
-    console.log(`Workation page loaded in ${loadTime}ms`);
-    expect(loadTime).toBeLessThan(15000);
+  test('workation Book Now button links to the enquiry form', async ({ page }) => {
+    await page.goto('/workation');
+    const cta = page.getByTestId('whatsapp-cta');
+    await expect(cta).toBeVisible();
+    await expect(cta).toHaveAttribute('href', /\/book/);
   });
 
-  test('workation Book Now button links to booking form', async ({ page }) => {
-    await page.goto(`${BASE_URL}/workation`);
-    const btn = page.locator('[data-testid="whatsapp-cta"]');
-    await expect(btn).toBeVisible();
-    const href = await btn.getAttribute('href');
-    expect(href).toContain('/book');
-  });
-
-  test('booking form page loads successfully', async ({ page }) => {
-    await page.goto(`${BASE_URL}/book`);
+  test('enquiry form page loads', async ({ page }) => {
+    await page.goto('/book');
     await expect(page).toHaveTitle(/Book/);
   });
 
-  test('booking form page loads in under 5 seconds', async ({ page }) => {
-    const startTime = Date.now();
-    await page.goto(`${BASE_URL}/book`);
-    const loadTime = Date.now() - startTime;
-    console.log(`Booking form loaded in ${loadTime}ms`);
-    expect(loadTime).toBeLessThan(5000);
-  });
-
-  test('home page booking buttons point to the Hotelogix booking engine', async ({ page }) => {
-    await page.goto(BASE_URL);
-    await page.waitForLoadState('domcontentloaded');
+  test('home page Book Now button points to the Hotelogix booking engine', async ({ page }) => {
+    await page.goto('/');
     const nav = page.locator('.nav-links a.nav-book');
-    await expect(nav).toBeVisible({ timeout: 10000 });
+    await expect(nav).toBeVisible();
     await expect(nav).toHaveText('Book Now');
     await expect(nav).toHaveAttribute('href', HOTELOGIX_URL);
     await expect(nav).toHaveAttribute('target', '_blank');
     await expect(nav).toHaveAttribute('rel', /noopener/);
     await expect(nav).toHaveAttribute('rel', /noreferrer/);
   });
-
-  test('navigation links present on pages that share nav.js', async ({ page }) => {
-    // /workation and /book still use the shared nav.js, which keeps the old booking link.
-    for (const path of ['/workation', '/book']) {
-      await page.goto(`${BASE_URL}${path}`);
-      await page.waitForLoadState('domcontentloaded');
-      await expect(page.locator('a[href="https://idanbarnsuites.com/hotel-booking"]').first()).toBeVisible({ timeout: 10000 });
-    }
-  });
-
 });

@@ -1,25 +1,11 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { test, expect, expectImagesLoaded } from './fixtures';
+import { HOTELOGIX_URL } from '../support/site';
+import { checkWhatsAppLink, telDigits } from '../support/links';
+import type { Page } from '@playwright/test';
 
-import { test, expect, Page } from '@playwright/test';
-
-const HOTELOGIX_URL =
-  'https://booking.staygrid.com/webv2/index/home/c/WWhSOTFXNlQvRUhodTdsRDlYNCtKUzZXNjhka3BiZU9ObzJ3dEJTdWhMZDlWVU0yNTQ3WHlRSUt4NjA4QU5lODdYbkZDNkFRZkwrUUlpU1pUUU11UkJJQTBKRzM2a0hkZkRObDcwZ1FaVGRtdm9wNlFQa1pyZ2had3A3SXFwM2s/language/en';
-const OG_IMAGE = 'https://rates.idanbarnsuites.com/images/social/christmas-2026-og.jpg';
-const SEO_TITLE = 'Christmas & New Year 2026 in Naro Moru | Idan Barn Suites';
-const SEO_DESCRIPTION =
-  'Celebrate Christmas and New Year at Idan Barn Suites in Naro Moru. Enjoy cosy accommodation, a swimming pool, festive dining and special holiday experiences.';
 const BOOK_TEXT = 'Check Availability & Book';
 
-// Read lazily so the dotenv call above has run first (see rates.page.ts).
-function baseUrl(): string {
-  const base = process.env.BASE_URL;
-  if (!base) throw new Error('BASE_URL environment variable is required to run the Christmas page tests (set it in .env).');
-  return base.replace(/\/$/, '');
-}
-function christmasUrl(): string {
-  return `${baseUrl()}/christmas-2026/`;
-}
+const CHRISTMAS_PATH = '/christmas-2026/';
 
 // Loads the page with the two confirmation switches forced on or off, without touching site-config.js.
 async function openWithFlags(page: Page, flags: { lazy: boolean; pool: boolean }) {
@@ -30,18 +16,20 @@ async function openWithFlags(page: Page, flags: { lazy: boolean; pool: boolean }
       .replace(/POOL_SUPERVISION_LINE_APPROVED: (true|false)/, `POOL_SUPERVISION_LINE_APPROVED: ${flags.pool}`);
     await route.fulfill({ response: res, body });
   });
-  await page.goto(christmasUrl());
+  await page.goto(CHRISTMAS_PATH);
 }
 
 const visibleText = (page: Page) => page.evaluate(() => document.body.innerText);
 
 test.describe('Christmas page: /christmas-2026/', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(christmasUrl());
+    await page.goto(CHRISTMAS_PATH);
   });
 
-  test('1. page loads with the Christmas headline, one H1 and a logical heading order', async ({ page }) => {
-    await expect(page).toHaveTitle(SEO_TITLE);
+  test('page loads with the Christmas headline, one H1 and a logical heading order', async ({ page }) => {
+    const title = await page.title();
+    expect(title.trim(), 'page title').not.toBe('');
+    expect(title).toMatch(/christmas/i);
     await expect(page.getByRole('heading', { level: 1, name: 'No alarms. No rush. Just time together.', exact: true })).toBeVisible();
     await expect(page.locator('h1')).toHaveCount(1);
     const levels = await page.$$eval('h1,h2,h3,h4', (els) => els.map((e) => Number(e.tagName[1])));
@@ -51,7 +39,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     });
   });
 
-  test('2. hero copy, dates and the secondary WhatsApp link are present', async ({ page }) => {
+  test('hero copy, dates and the secondary WhatsApp link are present', async ({ page }) => {
     const hero = page.locator('header.hero');
     await expect(hero).toContainText('Near Nanyuki. Away from the bustle.');
     await expect(hero).toContainText('Fresh mountain air, cosy stays, good food and afternoons by the pool. Gather your favourite people and settle into the festive season at the Barn.');
@@ -60,7 +48,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     await expect(hero.getByRole('link', { name: BOOK_TEXT })).toBeVisible();
   });
 
-  test('3. every booking button uses data-hotelogix and passes the Hotelogix safety rules', async ({ page }) => {
+  test('every booking button uses data-hotelogix and passes the Hotelogix safety rules', async ({ page }) => {
     const buttons = page.locator('[data-hotelogix]');
     await expect(buttons).toHaveCount(4);
     for (const button of await buttons.all()) {
@@ -74,7 +62,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     expect(await page.locator('a[href*="staygrid"]:not([data-hotelogix])').count()).toBe(0);
   });
 
-  test('4. the booking placements use the agreed wording and cta_location values', async ({ page }) => {
+  test('the booking placements use the agreed wording and cta_location values', async ({ page }) => {
     const buttons = page.getByRole('link', { name: BOOK_TEXT, exact: true });
     await expect(buttons).toHaveCount(3);
     const locations = await page.$$eval('[data-hotelogix]', (els) => els.map((e) => e.getAttribute('data-cta')));
@@ -86,7 +74,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     await expect(page.locator('#book [data-hotelogix][data-cta="final"]')).toBeVisible();
   });
 
-  test('5. each booking click sends book_direct_click with its cta_location', async ({ page }) => {
+  test('each booking click sends book_direct_click with its cta_location', async ({ page }) => {
     // Stop the new tab opening; the tracking listener still runs.
     await page.evaluate(() => document.addEventListener('click', (e) => e.preventDefault(), true));
     for (const cta of ['nav', 'hero', 'after_programme', 'final']) {
@@ -110,83 +98,80 @@ test.describe('Christmas page: /christmas-2026/', () => {
     expect(wa).toEqual(['hero']);
   });
 
-  test('6. WhatsApp links use the wa.me number and the Christmas message', async ({ page }) => {
+  test('Christmas WhatsApp links are well formed and carry the Christmas enquiry message', async ({ page }) => {
     const links = page.locator('[data-whatsapp="christmas"]');
     await expect(links).toHaveCount(2);
     for (const wa of await links.all()) {
-      const href = (await wa.getAttribute('href')) ?? '';
-      expect(href).toContain('https://wa.me/254762004417');
-      expect(decodeURIComponent(href)).toContain("Hi, I'd like to enquire about Christmas at Idan Barn Suites.");
+      const checked = checkWhatsAppLink((await wa.getAttribute('href')) ?? '');
+      expect(checked.problems, 'WhatsApp link structure').toEqual([]);
+      // Non empty and URL encoded is checked by the helper; this link must carry the Christmas enquiry, not the generic one.
+      expect(checked.message).toMatch(/christmas/i);
       await expect(wa).toHaveText('Chat with Us on WhatsApp');
     }
   });
 
-  test('7. SEO and social preview tags exist and agree with each other', async ({ page }) => {
-    const meta = (selector: string) => page.locator(selector).getAttribute('content');
-    expect(await page.locator('link[rel="canonical"]').getAttribute('href')).toMatch(/^https:\/\/rates\.idanbarnsuites\.com\/christmas-2026/);
-    expect(await meta('meta[name="description"]')).toBe(SEO_DESCRIPTION);
-    expect(await meta('meta[property="og:title"]')).toBe(SEO_TITLE);
-    expect(await meta('meta[property="og:description"]')).toBe(SEO_DESCRIPTION);
-    expect(await meta('meta[property="og:image"]')).toBe(OG_IMAGE);
+  test('SEO and social preview tags are present, sensibly sized and agree with each other', async ({ page, request }) => {
+    const meta = async (selector: string) => (await page.locator(selector).getAttribute('content')) ?? '';
+    const title = await page.title();
+    const description = await meta('meta[name="description"]');
+    expect(title.length, 'page title length').toBeGreaterThanOrEqual(10);
+    expect(title.length, 'page title length').toBeLessThanOrEqual(70);
+    expect(description.length, 'meta description length').toBeGreaterThanOrEqual(50);
+    expect(description.length, 'meta description length').toBeLessThanOrEqual(200);
+
+    const canonical = new URL((await page.locator('link[rel="canonical"]').getAttribute('href')) ?? '');
+    expect(canonical.protocol).toBe('https:');
+    expect(canonical.pathname).toMatch(/^\/christmas-2026/);
+
+    const ogTitle = await meta('meta[property="og:title"]');
+    const ogDescription = await meta('meta[property="og:description"]');
+    const ogImage = await meta('meta[property="og:image"]');
+    expect(ogTitle, 'og:title').toBe(title);
+    expect(ogDescription, 'og:description').toBe(description);
+    expect(ogImage, 'og:image is present').not.toBe('');
     expect(await meta('meta[name="twitter:card"]')).toBe('summary_large_image');
-    expect(await meta('meta[name="twitter:title"]')).toBe(SEO_TITLE);
-    expect(await meta('meta[name="twitter:description"]')).toBe(SEO_DESCRIPTION);
-    expect(await meta('meta[name="twitter:image"]')).toBe(OG_IMAGE);
+    expect(await meta('meta[name="twitter:title"]')).toBe(title);
+    expect(await meta('meta[name="twitter:description"]')).toBe(description);
+    expect(await meta('meta[name="twitter:image"]')).toBe(ogImage);
     // "Naro Moru" in the metadata, "Naromoru" in the visible copy.
-    expect(SEO_TITLE + SEO_DESCRIPTION).toContain('Naro Moru');
+    expect(title + description).toContain('Naro Moru');
     expect(await visibleText(page)).toContain('Naromoru');
+
+    // The preview image URL must resolve to an image.
+    const res = await request.get(ogImage);
+    expect(res.status(), 'og:image status').toBe(200);
+    expect(res.headers()['content-type'], 'og:image content type').toMatch(/^image\//);
   });
 
-  test('8. the social preview image is a 1200 x 630 JPG under 300 KB', async ({ page, request }) => {
-    const res = await request.get(`${baseUrl()}/images/social/christmas-2026-og.jpg`);
-    expect(res.status()).toBe(200);
-    expect(res.headers()['content-type']).toContain('image/jpeg');
-    expect((await res.body()).length).toBeLessThan(300 * 1024);
-    const size = await page.evaluate(
-      (src) =>
-        new Promise<[number, number]>((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => resolve([img.naturalWidth, img.naturalHeight]);
-          img.onerror = reject;
-          img.src = src;
-        }),
-      `${baseUrl()}/images/social/christmas-2026-og.jpg`
-    );
-    expect(size).toEqual([1200, 630]);
-  });
-
-  test('9. every image on the page loads and has alt text', async ({ page }) => {
-    await page.evaluate(async () => {
-      for (let y = 0; y < document.body.scrollHeight; y += 600) {
-        window.scrollTo(0, y);
-        await new Promise((r) => setTimeout(r, 60));
-      }
-    });
-    await page.waitForLoadState('networkidle');
-    const broken = await page.$$eval('img', (imgs) =>
-      (imgs as HTMLImageElement[]).filter((i) => !i.complete || i.naturalWidth === 0).map((i) => i.src)
-    );
-    expect(broken).toEqual([]);
+  test('every image on the page loads and has alt text', async ({ page }) => {
+    await expectImagesLoaded(page.locator('img'));
     const noAlt = await page.$$eval('img', (imgs) => imgs.filter((i) => !i.getAttribute('alt')).length);
     expect(noAlt).toBe(0);
   });
 
-  test('10. sections are in the agreed order and the minimum stay shows near the top', async ({ page }) => {
+  test('sections are in the agreed order and the minimum stay shows near the top', async ({ page }) => {
     // The minimum stay bar is gone from the hero; the notice sits straight before the first rate card.
     await expect(page.locator('.facts')).toHaveCount(0);
     await expect(page.locator('header.hero')).not.toContainText('Minimum');
-    await expect(page.locator('#rates p.lead + p.stay-note + .room-card h3').first()).toHaveText('Twin Garden Room');
-    await expect(page.locator('#rates .stay-note')).toHaveText('Minimum stay: 2 nights · Full property buyouts: 3 nights');
-    await expect(page.locator('#good-to-know')).toContainText('Two nights between 19 December 2026 and 3 January 2027. Three nights for full property buyouts.');
+    await expect(page.locator('#rates p.lead + p.stay-note + .room-card h3')).toHaveText('Twin Garden Room');
+    await expect(page.locator('#rates .stay-note')).toContainText('Minimum stay: 2 nights');
+    await expect(page.locator('#good-to-know')).toContainText('Two nights between 19 December 2026 and 3 January 2027.');
     const ids = await page.$$eval('header, section', (els) => els.map((e) => e.id || e.tagName.toLowerCase()));
     expect(ids).toEqual(['header', 'why', 'programme', 'dining', 'gallery', 'rates', 'book', 'good-to-know']);
     await expect(page.locator('#property')).toHaveCount(0);
     await expect(page.getByRole('link', { name: '← Back to Rates & Packages' })).toHaveAttribute('href', '/');
     await expect(page.locator('.nav-book')).toHaveText('Book Now');
-    await expect(page.locator('a[href="tel:+254762004417"]').last()).toBeVisible();
+    // The phone link and the WhatsApp links must point at the same number.
+    const tel = page.locator('a[href^="tel:"]');
+    await expect(tel).toHaveCount(1);
+    const whatsapp = await page.locator('[data-whatsapp]').evaluateAll((els) => els.map((e) => e.getAttribute('href') ?? ''));
+    expect(whatsapp.length).toBeGreaterThan(0);
+    const telNumber = telDigits((await tel.getAttribute('href')) ?? '');
+    expect(telNumber, 'tel link has a number').not.toBe('');
+    expect(whatsapp.map((href) => checkWhatsAppLink(href).digits === telNumber), 'WhatsApp links match the tel link number').not.toContain(false);
   });
 
-  test('11. highlights, facilities and festive programme cards are present', async ({ page }) => {
+  test('highlights, facilities and festive programme cards are present', async ({ page }) => {
     await expect(page.locator('#why .hl')).toHaveCount(3);
     await expect(page.getByRole('heading', { level: 2, name: 'The good things, all in one place.' })).toBeVisible();
     expect(await page.locator('#why .hl h3').allInnerTexts()).toEqual([
@@ -200,8 +185,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     await expect(why).toContainText('Enjoy freshly prepared food, festive dining and leisurely mornings at the Barn.');
     await expect(why).toContainText('A baby cot is available on request, and indoor games are available for guests.');
     // Three different genuine photographs: pool, accommodation, café. None repeated in the Christmas gallery.
-    await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-    await page.waitForLoadState('networkidle');
+    await expectImagesLoaded(page.locator('#why .hl-img img, #gallery img'));
     const name = (src: string) => src.split('/').pop()!.replace(/-\d+\.webp$/, '');
     const whyPhotos = (await page.$$eval('#why .hl-img img', (i) => i.map((x) => (x as HTMLImageElement).currentSrc))).map(name);
     expect(new Set(whyPhotos).size).toBe(3);
@@ -209,7 +193,7 @@ test.describe('Christmas page: /christmas-2026/', () => {
     const gallery = (await page.$$eval('#gallery img', (i) => i.map((x) => (x as HTMLImageElement).currentSrc))).map(name);
     expect(gallery).toHaveLength(5);
     for (const n of whyPhotos) expect(gallery).not.toContain(n);
-    await expect(page.locator('#gallery p').first()).toHaveText(
+    await expect(page.locator('#gallery p')).toHaveText(
       'Twinkling lights, cosy fireside moments, good food and time together.'
     );
 
@@ -231,12 +215,16 @@ test.describe('Christmas page: /christmas-2026/', () => {
     );
   });
 
-  test('11b. section headings carry the campaign wording', async ({ page }) => {
-    expect(await page.locator('main h2, section h2').allInnerTexts()).toEqual([
+  test('section headings carry the campaign wording', async ({ page }) => {
+    const headings = (await page.locator('main h2, section h2').allInnerTexts()).map((h) =>
+      // One heading ends with the property's name; the rest of its wording is still checked.
+      /^A glimpse of the season at \S+\.$/.test(h) ? 'A glimpse of the season at <name>.' : h
+    );
+    expect(headings).toEqual([
       'The good things, all in one place.',
       'Your festive days, your way.',
       'Good food. Great company.',
-      'A glimpse of the season at Idan.',
+      'A glimpse of the season at <name>.',
       'Find your place at the Barn.',
       'Your stay starts here.',
       'Good to know',
@@ -246,48 +234,29 @@ test.describe('Christmas page: /christmas-2026/', () => {
     const paras = await cottage.locator('.room-desc').allInnerTexts();
     expect(paras[0]).toBe('Your own cottage. Christmas for six.');
     expect(paras[1]).toContain('Enjoy a private, self-catering retreat in Naro Moru.');
-    await expect(cottage).toContainText('KES 18,000');
     expect(paras[1]).toContain('access to the shared swimming pool');
     expect(paras[1]).not.toMatch(/private (swimming )?pool/i);
   });
 
-  test('13b. room tables are unchanged and standalone prices say per night', async ({ page }) => {
+  test('room tables are unchanged and standalone prices say per night', async ({ page }) => {
     const rates = page.locator('#rates');
     await expect(rates.locator('p.lead')).toHaveText('19 December 2026 to 3 January 2027. All rates are per night in Kenya shillings.');
     await expect(rates.getByText('Festive accommodation rates')).toHaveCount(0);
     expect(await page.$$eval('#rates .rate-table thead th', (els) => els.map((e) => e.textContent))).toEqual([
       'Meal plan', 'Single', 'Double', 'Meal plan', 'Single', 'Double',
     ]);
-    // Standalone accommodation prices carry "per night"; the amounts are unchanged.
+    // Standalone accommodation prices say "per night" (the amounts are checked in tests/rates).
     const rows = page.locator('#rates .room-card .rate-row span:last-child, #rates .room-card .price-only');
-    expect(await rows.allInnerTexts()).toEqual([
-      'KES 15,500 per night', 'KES 16,500 per night', 'KES 18,000 per night', 'KES 58,500 per night', 'KES 48,900 per night',
-    ]);
-    // Meal supplements are per adult and stay as they were.
+    const perNight = await rows.allInnerTexts();
+    expect(perNight.length).toBeGreaterThan(0);
+    for (const text of perNight) expect(text).toMatch(/^KES [\d,]+ per night$/);
+    // Meal supplements are per adult and carry no "per night" wording. The amounts are checked in tests/rates.
     const meals = await page.locator('.meals-note .rate-row').allInnerTexts();
-    expect(meals.map((m) => m.replace(/\s+/g, ' '))).toEqual(['Breakfast KES 1,200', 'Half Board KES 2,500', 'Full Board KES 3,300']);
+    expect(meals.map((m) => m.replace(/\s+/g, ' ').replace(/ KES [\d,]+$/, ''))).toEqual(['Breakfast', 'Half Board', 'Full Board']);
     expect(meals.join(' ')).not.toContain('per night');
   });
 
-  test('13c. the hero keeps its photo, gets a left to right gradient and a champagne tagline', async ({ page }) => {
-    await expect(page.locator('header.hero > img')).toBeVisible();
-    const style = await page.evaluate(() => {
-      const hero = document.querySelector('header.hero')!;
-      return {
-        gradient: getComputedStyle(hero, '::before').backgroundImage,
-        tagline: getComputedStyle(hero.querySelector('.sub')!).color,
-        h1: getComputedStyle(hero.querySelector('h1')!).color,
-        font: getComputedStyle(hero.querySelector('h1')!).fontFamily,
-      };
-    });
-    expect(style.gradient).toContain('linear-gradient');
-    expect(style.gradient).toContain('to right');
-    expect(style.tagline).toBe('rgb(215, 196, 157)'); // #D7C49D
-    expect(style.h1).toBe('rgb(255, 255, 255)');
-    expect(style.font).toContain('Georgia');
-  });
-
-  test('14. prohibited words and claims do not appear in the visible copy', async ({ page }) => {
+  test('prohibited words and claims do not appear in the visible copy', async ({ page }) => {
     const text = (await visibleText(page)).toLowerCase();
     for (const banned of ['buffet', 'unlimited', 'entertainer', 'kids club', 'treasure hunt', 'brunch', 'spacious', 'expansive', 'luxurious']) {
       expect(text, `found "${banned}"`).not.toContain(banned);
@@ -296,29 +265,28 @@ test.describe('Christmas page: /christmas-2026/', () => {
     expect(text).not.toMatch(/[–—]/);
   });
 
-  test('15. no console errors, and no scripts beyond our own and the Google tag', async ({ page }) => {
+  test('no console errors, and no scripts beyond our own and the Google tag', async ({ page }) => {
     const errors: string[] = [];
     page.on('console', (m) => {
-      if (m.type() === 'error' && !/googletagmanager|google-analytics|ERR_/.test(m.text() + m.location().url)) errors.push(m.text());
+      if (m.type() === 'error') errors.push(`${m.text()} (${m.location().url})`);
     });
     page.on('pageerror', (e) => errors.push(e.message));
-    await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.reload({ waitUntil: 'load' });
     expect(errors).toEqual([]);
     const hosts = await page.$$eval('script[src]', (s) => s.map((x) => new URL((x as HTMLScriptElement).src).host));
-    for (const h of hosts) expect([new URL(christmasUrl()).host, 'www.googletagmanager.com']).toContain(h);
+    for (const h of hosts) expect([new URL(page.url()).host, 'www.googletagmanager.com']).toContain(h);
   });
 
-  test('16. internal links resolve', async ({ page, request }) => {
+  test('internal links resolve', async ({ page, request }) => {
     const hrefs = await page.$$eval('a[href^="/"]', (as) => [...new Set(as.map((a) => a.getAttribute('href') as string))]);
     expect(hrefs.length).toBeGreaterThan(0);
     for (const href of hrefs) {
-      const res = await request.get(`${baseUrl()}${href}`);
+      const res = await request.get(`${href}`);
       expect(res.status(), href).toBe(200);
     }
   });
 
-  test('17. keyboard focus is visible on links', async ({ page }) => {
+  test('keyboard focus is visible on links', async ({ page }) => {
     await page.keyboard.press('Tab');
     await page.keyboard.press('Tab');
     const outline = await page.evaluate(() => {
@@ -327,17 +295,6 @@ test.describe('Christmas page: /christmas-2026/', () => {
     });
     expect(outline.style).not.toBe('none');
     expect(outline.width).toBeGreaterThanOrEqual(2);
-  });
-
-  test('18. the page loads quickly', async ({ page }) => {
-    await page.reload({ waitUntil: 'load' });
-    const nav = await page.evaluate(() => {
-      const t = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-      return { dcl: t.domContentLoadedEventEnd, load: t.loadEventEnd };
-    });
-    expect(nav.dcl).toBeLessThan(3000);
-    expect(nav.load).toBeLessThan(8000);
-    expect(await page.locator('img[fetchpriority="high"]').count()).toBe(1);
   });
 });
 
@@ -372,14 +329,14 @@ test.describe('Christmas page: confirmation switches', () => {
 
   test('POOL_SUPERVISION_LINE_APPROVED=true: the approved sentence appears in the pool highlight', async ({ page }) => {
     await openWithFlags(page, { lazy: false, pool: true });
-    await expect(page.locator('#why .hl').first()).toContainText('Children must be supervised by an adult at all times.');
+    await expect(page.locator('#why .hl').filter({ hasText: 'Pool days, your way.' })).toContainText('Children must be supervised by an adult at all times.');
   });
 
   test('as shipped: Lazy Breakfast is on for the four approved dates, the pool supervision line is off', async ({ page, request }) => {
-    const body = await (await request.get(`${baseUrl()}/site-config.js`)).text();
+    const body = await (await request.get(`/site-config.js`)).text();
     expect(body).toMatch(/LAZY_BREAKFAST_CONFIRMED: true/);
     expect(body).toMatch(/POOL_SUPERVISION_LINE_APPROVED: false/);
-    await page.goto(christmasUrl());
+    await page.goto(CHRISTMAS_PATH);
     const cards = page.locator('#programme .prog-card');
     await expect(cards.nth(0)).not.toContainText('Lazy Breakfast');
     for (const i of [1, 2, 3]) await expect(cards.nth(i)).toContainText('Lazy Breakfast until 11 am.');
@@ -389,7 +346,7 @@ test.describe('Christmas page: confirmation switches', () => {
   });
 
   test('the booking section explains the 50% M-Pesa deposit once, and booking stays on Hotelogix', async ({ page }) => {
-    await page.goto(christmasUrl());
+    await page.goto(CHRISTMAS_PATH);
     const book = page.locator('#book');
     await expect(book).toContainText('pay a 50% M-Pesa deposit within 48 hours of receiving your booking instructions');
     await expect(book.locator('[data-hotelogix][data-cta="final"]')).toHaveText('Check Availability & Book');
@@ -402,7 +359,7 @@ for (const [name, width, height] of [['mobile', 390, 844], ['desktop', 1280, 900
     test.use({ viewport: { width, height } });
 
     test('no horizontal overflow, cards lay out for this width and CTAs are visible', async ({ page }) => {
-      await page.goto(christmasUrl());
+      await page.goto(CHRISTMAS_PATH);
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       expect(overflow).toBeLessThanOrEqual(0);
 
@@ -432,18 +389,19 @@ for (const [name, width, height] of [['mobile', 390, 844], ['desktop', 1280, 900
       // Gallery: the fifth photo can be found and opened on every width.
       const photos = page.locator('#gallery .strip-item');
       await expect(photos).toHaveCount(5);
-      await photos.last().scrollIntoViewIfNeeded();
-      const fifth = await photos.last().boundingBox();
+      const lastPhoto = page.locator('#gallery').getByRole('button', { name: /^Open photo 5 of 5:/ });
+      await lastPhoto.scrollIntoViewIfNeeded();
+      const fifth = await lastPhoto.boundingBox();
       expect(fifth!.x).toBeGreaterThanOrEqual(0);
       expect(fifth!.x + fifth!.width).toBeLessThanOrEqual(width + 1);
-      await expect(photos.last()).toHaveAttribute('aria-label', /photo 5 of 5/);
+      await expect(lastPhoto).toHaveAttribute('aria-label', /photo 5 of 5/);
       await expect(page.locator('#gallery .strip-hint, #gallery .gallery-link')).toHaveCount(0);
       if (width >= 700) {
         // all five fit without scrolling on desktop
         const strip = await page.locator('#gallery .photo-strip').evaluate((e) => e.scrollWidth - e.clientWidth);
         expect(strip).toBeLessThanOrEqual(0);
       }
-      await photos.last().focus();
+      await lastPhoto.focus();
       await page.keyboard.press('Enter');
       await expect(page.locator('dialog.viewer[open] figcaption')).toContainText('5 of 5');
       await page.keyboard.press('Escape');

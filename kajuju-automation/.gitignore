@@ -18,3 +18,6 @@ agentic/snap*.yml
 # Full raw API transcript written on every agentic run (diagnostics) —
 # contains real site content/URLs, uploaded as a CI artifact instead.
 agentic/transcript.json
+
+# Commercially sensitive rates workbook exports (repo is public) - never commit
+rates-reference/

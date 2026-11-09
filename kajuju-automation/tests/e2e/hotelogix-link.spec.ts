@@ -1,18 +1,8 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import { test, expect } from './fixtures';
+import { HOTELOGIX_URL } from '../support/site';
+import { checkWhatsAppLink } from '../support/links';
 
-import { test, expect } from '@playwright/test';
-
-const HOTELOGIX_URL =
-  'https://booking.staygrid.com/webv2/index/home/c/WWhSOTFXNlQvRUhodTdsRDlYNCtKUzZXNjhka3BiZU9ObzJ3dEJTdWhMZDlWVU0yNTQ3WHlRSUt4NjA4QU5lODdYbkZDNkFRZkwrUUlpU1pUUU11UkJJQTBKRzM2a0hkZkRObDcwZ1FaVGRtdm9wNlFQa1pyZ2had3A3SXFwM2s/language/en';
-
-function pageUrl(path: string): string {
-  const base = process.env.BASE_URL;
-  if (!base) throw new Error('BASE_URL environment variable is required (set it in .env).');
-  return `${base.replace(/\/$/, '')}${path}`;
-}
-
-// Hotelogix rejects visitors whose Referer is not idanbarnsuites.com (error EIUA),
+// Hotelogix rejects visitors whose Referer is not the hotel's own domain (error EIUA),
 // so every booking link must send no Referer.
 for (const [name, path, expected] of [
   ['homepage', '/', 4],
@@ -20,7 +10,7 @@ for (const [name, path, expected] of [
 ] as const) {
   test.describe(`Hotelogix links: ${name}`, () => {
     test('every booking link has the exact URL and sends no Referer', async ({ page }) => {
-      await page.goto(pageUrl(path));
+      await page.goto(path);
       const links = page.locator('[data-hotelogix]');
       await expect(links).toHaveCount(expected);
       for (const link of await links.all()) {
@@ -32,10 +22,14 @@ for (const [name, path, expected] of [
       }
     });
 
-    test('non Hotelogix links are untouched', async ({ page }) => {
-      await page.goto(pageUrl(path));
-      const wa = page.locator('[data-whatsapp]').first();
-      await expect(wa).not.toHaveAttribute('referrerpolicy', /.*/);
+    test('WhatsApp links are untouched by the Hotelogix rules and well formed', async ({ page }) => {
+      await page.goto(path);
+      const links = page.locator('[data-whatsapp]');
+      await expect(links).not.toHaveCount(0);
+      for (const wa of await links.all()) {
+        await expect(wa).not.toHaveAttribute('referrerpolicy', /.*/);
+        expect(checkWhatsAppLink((await wa.getAttribute('href')) ?? '').problems, 'WhatsApp link structure').toEqual([]);
+      }
     });
   });
 }
