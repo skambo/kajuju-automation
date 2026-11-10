@@ -1,7 +1,11 @@
 /* Shared config for the rates page and the Christmas page.
    Change the booking or WhatsApp link here and every button updates. */
 var SITE = {
-  HOTELOGIX_URL: 'https://booking.staygrid.com/webv2/index/home/c/WWhSOTFXNlQvRUhodTdsRDlYNCtKUzZXNjhka3BiZU9ObzJ3dEJTdWhMZDlWVU0yNTQ3WHlRSUt4NjA4QU5lODdYbkZDNkFRZkwrUUlpU1pUUU11UkJJQTBKRzM2a0hkZkRObDcwZ1FaVGRtdm9wNlFQa1pyZ2had3A3SXFwM2s/language/en',
+  /* TODO: TEMPORARY. Hotelogix/Staygrid is suspended until its rates, meal plans and policies are
+     configured correctly. To restore it: delete the BOOKING_URL line below, uncomment the
+     HOTELOGIX_URL line, and in the click-up block further down swap the two marked lines back. */
+  BOOKING_URL: 'https://rates.idanbarnsuites.com/book',
+  // HOTELOGIX_URL: 'https://booking.staygrid.com/webv2/index/home/c/WWhSOTFXNlQvRUhodTdsRDlYNCtKUzZXNjhka3BiZU9ObzJ3dEJTdWhMZDlWVU0yNTQ3WHlRSUt4NjA4QU5lODdYbkZDNkFRZkwrUUlpU1pUUU11UkJJQTBKRzM2a0hkZkRObDcwZ1FaVGRtdm9wNlFQa1pyZ2had3A3SXFwM2s/language/en',
   WHATSAPP: 'https://wa.me/254762004417',
   WHATSAPP_TEXT: "Hello, I'd like to enquire about booking at Idan Barn Suites.",
   WHATSAPP_TEXT_CHRISTMAS: "Hi, I'd like to enquire about Christmas at Idan Barn Suites.",
@@ -31,12 +35,16 @@ function track(name, params) {
 (function () {
   /* Fill every booking and WhatsApp link from the constants above. */
   document.querySelectorAll('[data-hotelogix]').forEach(function (a) {
-    a.href = SITE.HOTELOGIX_URL;
+    /* TODO: TEMPORARY. Restore once Hotelogix is correctly configured: use SITE.HOTELOGIX_URL
+       and re-enable the referrer lines below. */
+    a.href = SITE.BOOKING_URL;
+    // a.href = SITE.HOTELOGIX_URL;
     /* Hotelogix rejects visitors whose Referer is not idanbarnsuites.com (error EIUA),
        so these links must not send a Referer. Only Hotelogix links get this. */
     a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    a.referrerPolicy = 'no-referrer';
+    a.rel = 'noopener';
+    // a.rel = 'noopener noreferrer';
+    // a.referrerPolicy = 'no-referrer';
   });
   /* Flag controlled copy: <span data-flag-copy="key"></span> is filled when its switch is true
      and removed when it is false, so the wording never reaches the page while a switch is off. */
