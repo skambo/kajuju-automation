@@ -1,5 +1,5 @@
 import { test, expect, expectImagesLoaded } from './fixtures';
-import { HOTELOGIX_URL } from '../support/site';
+import { BOOKING_URL } from '../support/site';
 import { checkWhatsAppLink, telDigits } from '../support/links';
 import type { Page } from '@playwright/test';
 
@@ -52,11 +52,12 @@ test.describe('Christmas page: /christmas-2026/', () => {
     const buttons = page.locator('[data-hotelogix]');
     await expect(buttons).toHaveCount(4);
     for (const button of await buttons.all()) {
-      await expect(button).toHaveAttribute('href', HOTELOGIX_URL);
+      // TEMP-BOOKING: restore HOTELOGIX_URL and the noreferrer assertions when Hotelogix is back.
+      await expect(button).toHaveAttribute('href', BOOKING_URL);
       await expect(button).toHaveAttribute('target', '_blank');
       await expect(button).toHaveAttribute('rel', /noopener/);
-      await expect(button).toHaveAttribute('rel', /noreferrer/);
-      await expect(button).toHaveAttribute('referrerpolicy', 'no-referrer');
+      // await expect(button).toHaveAttribute('rel', /noreferrer/);
+      // await expect(button).toHaveAttribute('referrerpolicy', 'no-referrer');
     }
     // No plain Hotelogix link anywhere that is not driven by data-hotelogix.
     expect(await page.locator('a[href*="staygrid"]:not([data-hotelogix])').count()).toBe(0);

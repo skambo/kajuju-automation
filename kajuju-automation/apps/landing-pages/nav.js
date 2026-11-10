@@ -1,4 +1,9 @@
 (function () {
+  /* TODO: TEMPORARY. Hotelogix/Staygrid is suspended; Book Now goes to our own /book page.
+     Restore once Hotelogix is correctly configured: swap to the commented line below. The sister
+     site page below is the one that embeds the Staygrid booking engine. */
+  var BOOKING_URL = 'https://rates.idanbarnsuites.com/book';
+  // var BOOKING_URL = 'https://idanbarnsuites.com/hotel-booking';
   var currentPage = (document.currentScript && document.currentScript.getAttribute('data-page')) || '';
 
   var css = [
@@ -44,7 +49,7 @@
     '<a href="/?tab=activities"' + cls('activities') + '>Activities</a>' +
     '<a href="/?tab=menu"' + cls('menu') + '>Menu</a>' +
     '<a href="/plan"' + cls('plan', 'nav-plan') + '>Plan</a>' +
-    '<a href="https://idanbarnsuites.com/hotel-booking" class="nav-book" title="You\'re now leaving this page for our sister booking site to complete your reservation.">Book Now</a>' +
+    '<a href="' + BOOKING_URL + '" class="nav-book">Book Now</a>' +
     '</div></div></nav>';
 
   document.currentScript.insertAdjacentHTML('beforebegin', nav);

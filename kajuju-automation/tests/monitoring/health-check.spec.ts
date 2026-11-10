@@ -1,6 +1,6 @@
 import { test, expect } from '../e2e/fixtures';
 import { ALL_PERIODS, PERIOD_BUTTON_LABEL, RatesPage } from '../e2e/pages/rates.page';
-import { HOTELOGIX_URL } from '../support/site';
+import { BOOKING_URL } from '../support/site';
 import { checkWhatsAppLink } from '../support/links';
 
 /**
@@ -60,14 +60,14 @@ test.describe('Rate card site: synthetic monitor', () => {
     await expect(page).toHaveTitle(/Book/);
   });
 
-  test('home page Book Now button points to the Hotelogix booking engine', async ({ page }) => {
+  test('home page Book Now button points to the temporary /book page', async ({ page }) => {
     await page.goto('/');
     const nav = page.locator('.nav-links a.nav-book');
     await expect(nav).toBeVisible();
     await expect(nav).toHaveText('Book Now');
-    await expect(nav).toHaveAttribute('href', HOTELOGIX_URL);
+    await expect(nav).toHaveAttribute('href', BOOKING_URL); // TEMP-BOOKING: restore HOTELOGIX_URL
     await expect(nav).toHaveAttribute('target', '_blank');
     await expect(nav).toHaveAttribute('rel', /noopener/);
-    await expect(nav).toHaveAttribute('rel', /noreferrer/);
+    // await expect(nav).toHaveAttribute('rel', /noreferrer/);
   });
 });
